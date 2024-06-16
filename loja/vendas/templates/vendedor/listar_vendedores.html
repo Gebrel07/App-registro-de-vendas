@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Vendedores</title>
+</head>
+<body>
+    <h1>Lista de Vendedores</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Data de Nascimento</th>
+                <th>Matrícula</th>
+                <th>Data de Contratação</th>
+                <th>Ações</th> <!-- Adicionando uma coluna para ações -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for vendedor in vendedores_list %}
+                <tr>
+                    <td>{{ vendedor.id }}</td>
+                    <td>{{ vendedor.nome }}</td>
+                    <td>{{ vendedor.cpf }}</td>
+                    <td>{{ vendedor.data_nascimento }}</td>
+                    <td>{{ vendedor.matricula }}</td>
+                    <td>{{ vendedor.data_contratacao }}</td>
+                    <td>
+                        <a href="{% url 'editar_vendedor' vendedor.id %}">Editar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
