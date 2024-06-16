@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-06-16T18:18:27.732Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0" etag="JRMX1Fq26MGN0zTe_w6a" version="24.5.4" type="github">
+<mxfile host="app.diagrams.net" modified="2024-06-16T18:46:07.188Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0" etag="fQDX2YCutK92XW2HOjph" version="24.5.4" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="810" dy="483" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -79,18 +79,6 @@
         <mxCell id="zqI3vuXJs1LG3s6kCFIs-67" value="- comissao: float" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="zqI3vuXJs1LG3s6kCFIs-63" vertex="1">
           <mxGeometry y="104" width="150" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="zqI3vuXJs1LG3s6kCFIs-72" value="possui" style="endArrow=block;endFill=1;html=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=top;rounded=0;strokeColor=default;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;sourcePerimeterSpacing=6;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zqI3vuXJs1LG3s6kCFIs-25" target="zqI3vuXJs1LG3s6kCFIs-41" edge="1">
-          <mxGeometry x="0.8291" y="-31" relative="1" as="geometry">
-            <mxPoint x="620" y="396" as="sourcePoint" />
-            <mxPoint x="240" y="366" as="targetPoint" />
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="zqI3vuXJs1LG3s6kCFIs-73" value="1" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" parent="zqI3vuXJs1LG3s6kCFIs-72" connectable="0" vertex="1">
-          <mxGeometry x="-1" relative="1" as="geometry">
-            <mxPoint x="-100" y="39" as="offset" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="zqI3vuXJs1LG3s6kCFIs-74" value="possui" style="endArrow=block;endFill=1;html=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=top;rounded=0;strokeColor=default;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;sourcePerimeterSpacing=6;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zqI3vuXJs1LG3s6kCFIs-25" target="zqI3vuXJs1LG3s6kCFIs-63" edge="1">
           <mxGeometry x="-0.9512" y="15" relative="1" as="geometry">
             <mxPoint x="620" y="396" as="sourcePoint" />
@@ -158,6 +146,13 @@
           <mxGeometry width="160" relative="1" as="geometry">
             <mxPoint x="620" y="380" as="sourcePoint" />
             <mxPoint x="780" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1lRSZ_3cmi7X1p32SudD-2" value="1" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=0;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=bottom;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zqI3vuXJs1LG3s6kCFIs-25" target="zqI3vuXJs1LG3s6kCFIs-41">
+          <mxGeometry x="0.6748" y="19" relative="1" as="geometry">
+            <mxPoint x="190" y="310" as="sourcePoint" />
+            <mxPoint x="350" y="310" as="targetPoint" />
+            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
       </root>
