@@ -39,3 +39,15 @@ class Cliente(Pessoa):
 
     def __str__(self) -> str:
         return f"{super().__str__()}, email: {self.email}"
+
+
+class Produto(models.Model):
+    nome = models.CharField(max_length=255, null=False)
+    preco = models.FloatField(default=0, null=False)
+    cor = models.CharField(max_length=255, null=False)
+    tamanho = models.CharField(max_length=255, null=False)
+    referencia = models.CharField(max_length=255, null=True)
+
+    def __str__(self) -> str:
+        return f"id: {self.id}, nome: {self.nome}, preco: {self.preco}, \
+            cor: {self.cor}, tamanho: {self.tamanho}"
