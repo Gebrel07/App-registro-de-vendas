@@ -53,6 +53,7 @@ class Produto(models.Model):
             cor: {self.cor}, tamanho: {self.tamanho}"
 
 
+# TODO: incluir relação many to many entre Produto e Venda
 class Venda(models.Model):
     data_venda = models.DateField(null=False)
     quantidade = models.IntegerField(default=1, null=False)
