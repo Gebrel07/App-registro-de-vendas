@@ -6,6 +6,9 @@ class Pessoa(models.Model):
     cpf = models.CharField(max_length=11, null=False, unique=True)
     data_nascimento = models.DateField(null=False)
 
+    def __str__(self) -> str:
+        return f"id: {self.id}, nome: {self.nome}"
+
     class Meta:
         abstract = True
 
@@ -15,4 +18,5 @@ class Vendedor(Pessoa):
     data_contratacao = models.DateField(null=False)
 
     def __str__(self) -> str:
-        return f"id: {self.id}, nome: {self.nome}, matricula: {self.matricula}"
+        return f"{super().__str__()}, matricula: {self.matricula}"
+
