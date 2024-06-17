@@ -1,0 +1,7 @@
+{% extends 'vendas/partials/base.html' %}
+
+{% block content %}
+  <h3>PageVendas</h3>
+  <button onclick="location.href='{% url 'listar_vendedores' %}'">Vendedores</button>
+  <button onclick="location.href='{% url 'listar_clientes' %}'">Clientes</button>
+{% endblock %}

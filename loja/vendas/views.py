@@ -4,7 +4,11 @@ from .models import Vendedor,Cliente,Endereco
 
 
 def home(request):
-    return render(request,'vendas/home.html')   
+    return render(request,'vendas/pages/home.html')   
+
+def page_vendas(request):
+    return render(request,'vendas/pages/vendas.html')   
+
 
 def listar_clientes(request):
     clientes = Cliente.objects.all()
