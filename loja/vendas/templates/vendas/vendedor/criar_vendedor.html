@@ -1,29 +1,39 @@
 {% extends 'vendas/partials/base.html' %}
 {% block content %}
-<h1>Criar Vendedor</h1>
-<form method="post">
-    {% csrf_token %}
-    <p>
-        <label for="id_nome">Nome:</label>
-        {{ form.nome }}
-    </p>
-    <p>
-        <label for="id_cpf">CPF:</label>
-        {{ form.cpf }}
-    </p>
-    <p>
-        <label for="id_data_nascimento">Data de Nascimento:</label>
-        {{ form.data_nascimento }}
-    </p>
-    <p>
-        <label for="id_matricula">Matrícula:</label>
-        {{ form.matricula }}
-    </p>
-    <p>
-        <label for="id_data_contratacao">Data de Contratação:</label>
-        {{ form.data_contratacao }}
-    </p>
-    <button type="submit">Salvar</button>
-    <button onclick="location.href='{% url 'listar_vendedores' %}'">Sair</button>
-</form>
+<div
+    style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color:var(--wh);">
+    <div
+        style="background-color: #4CAF50; padding: 30px; border-radius: 15px; width: 500px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <h1 style="text-align: center; color: white; margin-bottom: 20px;">Criar Vendedor</h1>
+        <form method="post">
+            {% csrf_token %}
+            <p>
+                <label for="id_nome" style="color: white; font-weight: bold;">Nome:</label>
+                {{ form.nome }}
+            </p>
+            <p>
+                <label for="id_cpf" style="color: white; font-weight: bold;">CPF:</label>
+                {{ form.cpf }}
+            </p>
+            <p>
+                <label for="id_data_nascimento" style="color: white; font-weight: bold;">Data de Nascimento:</label>
+                {{ form.data_nascimento }}
+            </p>
+            <p>
+                <label for="id_matricula" style="color: white; font-weight: bold;">Matrícula:</label>
+                {{ form.matricula }}
+            </p>
+            <p>
+                <label for="id_data_contratacao" style="color: white; font-weight: bold;">Data de Contratação:</label>
+                {{ form.data_contratacao }}
+            </p>
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit"
+                    style="background-color: #45a049; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Salvar</button>
+                <button onclick="location.href='{% url 'listar_vendedores' %}'"
+                    style="background-color: #d32f2f; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Sair</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

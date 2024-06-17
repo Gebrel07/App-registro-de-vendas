@@ -1,33 +1,35 @@
 {% extends 'vendas/partials/base.html' %}
 {% block content %}
-<div class="container">
-    <h1>Editar Vendedor</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="id_nome" class="form-label">Nome:</label>
-            {{ form.nome }}
-        </div>
-        <div class="mb-3">
-            <label for="id_cpf" class="form-label">CPF:</label>
-            {{ form.cpf }}
-        </div>
-        <div class="mb-3">
-            <label for="id_data_nascimento" class="form-label">Data de Nascimento:</label>
-            {{ form.data_nascimento }}
-        </div>
-        <div class="mb-3">
-            <label for="id_matricula" class="form-label">Matrícula:</label>
-            {{ form.matricula }}
-        </div>
-        <div class="mb-3">
-            <label for="id_data_contratacao" class="form-label">Data de Contratação:</label>
-            {{ form.data_contratacao }}
-        </div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-    </form>
-
-    <!-- Botão de sair que redireciona para a página principal -->
-    <button onclick="location.href='{% url 'listar_vendedores' %}'" class="btn btn-secondary mt-3">Sair</button>
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: var(--white);">
+    <div style="background-color: #4CAF50; padding: 30px; border-radius: 15px; width: 500px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <h1 style="text-align: center; color: white; margin-bottom: 20px;">Editar Vendedor</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_nome" class="form-label" style="color: white; font-weight: bold;">Nome:</label>
+                {{ form.nome }}
+            </div>
+            <div class="mb-3">
+                <label for="id_cpf" class="form-label" style="color: white; font-weight: bold;">CPF:</label>
+                {{ form.cpf }}
+            </div>
+            <div class="mb-3">
+                <label for="id_data_nascimento" class="form-label" style="color: white; font-weight: bold;">Data de Nascimento:</label>
+                {{ form.data_nascimento }}
+            </div>
+            <div class="mb-3">
+                <label for="id_matricula" class="form-label" style="color: white; font-weight: bold;">Matrícula:</label>
+                {{ form.matricula }}
+            </div>
+            <div class="mb-3">
+                <label for="id_data_contratacao" class="form-label" style="color: white; font-weight: bold;">Data de Contratação:</label>
+                {{ form.data_contratacao }}
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" style="background-color: #45a049; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Salvar</button>
+                <button onclick="location.href='{% url 'listar_vendedores' %}'" style="background-color: #d32f2f; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Sair</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

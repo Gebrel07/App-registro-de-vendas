@@ -6,7 +6,17 @@ from .models import Vendedor
 def home(request):
     return render(request,'vendas/home.html')   
 
+def listar_clientes(request):
+    pass
+
+def criar_cliente(request):
+    pass
+
+def editar_cliente(request):
+    pass
+
 def listar_vendedores(request):
+
     vendedores = Vendedor.objects.all()
     return render(request, 'vendas/vendedor/listar_vendedores.html', {'vendedores_list': vendedores})
 
