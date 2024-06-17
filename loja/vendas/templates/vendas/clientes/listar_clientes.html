@@ -1,0 +1,41 @@
+{% extends 'vendas/partials/base.html' %}
+
+{% block content %}
+<div class="container-lg mt-4">
+    <h1>Lista de Clientes</h1>
+
+    <div class="mb-3">
+        <a href="{% url 'criar_cliente' %}" class="btn btn-primary me-2">Criar Cliente</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">CPF</th>
+                <th scope="col">Data de Nascimento</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Telefone</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes_list %}
+                <tr>
+                    <td>{{ cliente.id }}</td>
+                    <td>{{ cliente.nome }}</td>
+                    <td>{{ cliente.cpf }}</td>
+                    <td>{{ cliente.data_nascimento }}</td>
+                    <td>{{ cliente.email }}</td>
+                    <td>{{ cliente.telefone }}</td>
+                    <td>
+                        <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
+                        <!-- Adicione outros botões de ação conforme necessário -->
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
