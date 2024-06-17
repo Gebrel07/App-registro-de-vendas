@@ -27,4 +27,10 @@
             <label for="id_data_contratacao">Data de Contratação:</label>
             {{ form.data_contratacao }}
         </p>
-        <button type="submit">Sair
+        <button type="submit">Salvar</button>
+    </form>
+
+    <!-- Adicionando o botão de sair que redireciona para a página principal -->
+    <button onclick="location.href='{% url 'listar_vendedores' %}'">Sair</button>
+</body>
+</html>

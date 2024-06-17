@@ -4,10 +4,11 @@ from .models import Vendedor
 
 
 def home(request):
-    return redirect('listar_vendedores')  # Redireciona para a lista de vendedores
+    return render(request,'vendas/home.html')   
+
 def listar_vendedores(request):
     vendedores = Vendedor.objects.all()
-    return render(request, 'vendedor/listar_vendedores.html', {'vendedores_list': vendedores})
+    return render(request, 'vendas/vendedor/listar_vendedores.html', {'vendedores_list': vendedores})
 
 def criar_vendedor(request):
     if request.method == 'POST':
@@ -17,7 +18,7 @@ def criar_vendedor(request):
             return redirect('listar_vendedores')
     else:
         form = VendedorForm()
-    return render(request, 'vendedor/criar_vendedor.html', {'form': form})
+    return render(request, 'vendas/vendedor/criar_vendedor.html', {'form': form})
 
 def editar_vendedor(request, vendedor_id):
     vendedor = get_object_or_404(Vendedor, id=vendedor_id)
@@ -28,4 +29,4 @@ def editar_vendedor(request, vendedor_id):
             return redirect('listar_vendedores')
     else:
         form = VendedorForm(instance=vendedor)
-    return render(request, 'vendedor/editar_vendedor.html', {'form': form})
+    return render(request, 'vendas/vendedor/editar_vendedor.html', {'form': form})
