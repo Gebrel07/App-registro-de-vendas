@@ -1,24 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Vendedores</title>
-</head>
-<body>
+{% extends 'vendas/partials/base.html' %}
+{% block content %}
+<div class="container-lg mt-4">
     <h1>Lista de Vendedores</h1>
     
-    <!-- Adicionando o botão para criar vendedor -->
-    <button onclick="location.href='{% url 'criar_vendedor' %}'">Criar Vendedor</button>
+
+    <div class="mb-3">
+        <a href="{% url 'criar_vendedor' %}" class="btn btn-primary me-2">Criar Vendedor</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Home</a>
+    </div>
     
-    <table border="1">
+
+    <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>CPF</th>
-                <th>Data de Nascimento</th>
-                <th>Matrícula</th>
-                <th>Data de Contratação</th>
-                <th>Ações</th> <!-- Adicionando uma coluna para ações -->
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">CPF</th>
+                <th scope="col">Data de Nascimento</th>
+                <th scope="col">Matrícula</th>
+                <th scope="col">Data de Contratação</th>
+                <th scope="col">Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -31,11 +32,13 @@
                     <td>{{ vendedor.matricula }}</td>
                     <td>{{ vendedor.data_contratacao }}</td>
                     <td>
-                        <a href="{% url 'editar_vendedor' vendedor.id %}">Editar</a>
+                        <a href="{% url 'editar_vendedor' vendedor.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
+                      
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+</div>
+{% endblock %}
+ 

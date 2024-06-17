@@ -1,34 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Criar Vendedor</title>
-</head>
-<body>
-    <h1>Criar Vendedor</h1>
-    <form method="post">
-        {% csrf_token %}
-        <p>
-            <label for="id_nome">Nome:</label>
-            {{ form.nome }}
-        </p>
-        <p>
-            <label for="id_cpf">CPF:</label>
-            {{ form.cpf }}
-        </p>
-        <p>
-            <label for="id_data_nascimento">Data de Nascimento:</label>
-            {{ form.data_nascimento }}
-        </p>
-        <p>
-            <label for="id_matricula">Matrícula:</label>
-            {{ form.matricula }}
-        </p>
-        <p>
-            <label for="id_data_contratacao">Data de Contratação:</label>
-            {{ form.data_contratacao }}
-        </p>
-        <button type="submit">Salvar</button>
-        <button onclick="location.href='{% url 'listar_vendedores' %}'">Sair</button>
-    </form>
-</body>
-</html>
+{% extends 'vendas/partials/base.html' %}
+{% block content %}
+<h1>Criar Vendedor</h1>
+<form method="post">
+    {% csrf_token %}
+    <p>
+        <label for="id_nome">Nome:</label>
+        {{ form.nome }}
+    </p>
+    <p>
+        <label for="id_cpf">CPF:</label>
+        {{ form.cpf }}
+    </p>
+    <p>
+        <label for="id_data_nascimento">Data de Nascimento:</label>
+        {{ form.data_nascimento }}
+    </p>
+    <p>
+        <label for="id_matricula">Matrícula:</label>
+        {{ form.matricula }}
+    </p>
+    <p>
+        <label for="id_data_contratacao">Data de Contratação:</label>
+        {{ form.data_contratacao }}
+    </p>
+    <button type="submit">Salvar</button>
+    <button onclick="location.href='{% url 'listar_vendedores' %}'">Sair</button>
+</form>
+{% endblock %}
