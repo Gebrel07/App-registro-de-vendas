@@ -1,8 +1,5 @@
- 
 from django import forms
-from .models import Cliente,Vendedor,Produto,Endereco
- 
-
+from .models import Cliente, Vendedor, Produto, Endereco
 
 class VendedorForm(forms.ModelForm):
     class Meta:
@@ -16,14 +13,19 @@ class VendedorForm(forms.ModelForm):
             "data_contratacao",
         ]
         widgets = {
-            "data_nascimento": forms.DateInput(attrs={"type": "date"}),
-            "data_contratacao": forms.DateInput(attrs={"type": "date"}),
+            "data_nascimento": forms.DateInput(attrs={
+                "type": "date", 
+                'class': 'form-control medium-input'}),   
+            "data_contratacao": forms.DateInput(attrs={
+                "type": "date", 
+                'class': 'form-control medium-input'}),   
             "cpf": forms.TextInput(attrs={
                 'class': 'form-control',
                 'pattern': r'\d{11}', 
-                'title': 'Formato invalido'}),  
+                'title': 'Formato inválido. Deve conter 11 dígitos.'}),  
+            "nome": forms.TextInput(attrs={'class': 'form-control'}),
+            "matricula": forms.TextInput(attrs ={'class':'form-control'})
         }
-
 
 class EnderecoForm(forms.ModelForm):
     class Meta:
@@ -33,14 +35,16 @@ class EnderecoForm(forms.ModelForm):
             "cidade",
             "estado",
             "cep",
-        ] 
-        widgets={
+        ]
+        widgets = {
+            "rua": forms.TextInput(attrs={'class': 'form-control medium-input'}),
+            "cidade": forms.TextInput(attrs={'class': 'form-control medium-input'}),
+            "estado": forms.TextInput(attrs={'class': 'form-control medium-input'}),
             "cep": forms.TextInput(attrs={
-                'class': 'form-control', 
-                'pattern': r'\+?1?\d{8,15}', 
-                'title': 'Insira apenas números.'}),
+                'class': 'form-control medium-input',
+                'pattern': r'\d{8}',  # Supondo que o CEP tenha 8 dígitos
+                'title': 'Formato inválido. Deve conter 8 dígitos.'}),
         }
-
 
 class ClienteForm(forms.ModelForm):
     class Meta:
@@ -53,24 +57,20 @@ class ClienteForm(forms.ModelForm):
             "telefone"
         ]
         widgets = {
+            "nome": forms.TextInput(attrs={'class': 'form-control large-input'}),
+            "cpf": forms.TextInput(attrs={
+                'class': 'form-control medium-input',
+                'pattern': r'\d{11}', 
+                'title': 'Formato inválido. Deve conter 11 dígitos.'}), 
             "data_nascimento": forms.DateInput(attrs={
                 "type": "date", 
-                'class': 'form-control'
-                }),   
-            "email": forms.EmailInput(attrs={
-                'class': 'form-control'
-                }),  
-            "cpf": forms.TextInput(attrs={
-                'class': 'form-control',
-                'pattern': r'\d{11}', 
-                'title': 'Formato invalido'}),         
+                'class': 'form-control medium-input'}),   
+            "email": forms.EmailInput(attrs={'class': 'form-control large-input'}),  
             "telefone": forms.TextInput(attrs={
-                'class': 'form-control', 
-                'pattern': r'\+?1?\d{8,15}', 
-                'title': 'Insira apenas números.'}),  
+                'class': 'form-control medium-input', 
+                'pattern': r'\d{8,15}',  # Ajustado para um formato de telefone mais comum
+                'title': 'Formato inválido. Deve conter entre 8 e 15 dígitos.'}),
         }
-
-
 
 class ProdutoForm(forms.Form):
     nome_produto = forms.CharField(

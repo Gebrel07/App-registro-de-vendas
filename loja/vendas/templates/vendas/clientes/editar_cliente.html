@@ -1,62 +1,71 @@
 {% extends 'vendas/partials/base.html' %}
 
 {% block content %}
-<div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding-top: 50px; background-color: var(--wh);">
-    <div style="background-color: #4CAF50; padding: 50px; border-radius: 20px; width: 800px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-size: 1.2em;">
-        <h1 style="text-align: center; color: white; margin-bottom: 30px; font-size: 2em;">Editar Cliente</h1>
+<div style="background-color: #f4f4f4; min-height: 50vh; display: flex; justify-content: center; align-items: center; padding: 10px;">
+
+    <div style="background-color: #fff; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); width: 100%; max-width: 1400px; padding: 20px; text-align: left;">
+
+        <h1 style="font-size: 2em; margin-bottom: 20px; color: #3498db;">Editar Cliente</h1>
+
         <form method="post">
             {% csrf_token %}
-            <!-- Campos do formulário ClienteForm -->
-            <div style="display: flex; justify-content: space-between;">
-                <div style="width: 48%;">
-                    <p>
-                        <label for="id_nome" style="color: white; font-weight: bold; font-size: 1.2em;">Nome:</label><br>
-                        {{ cliente_form.nome }}
-                    </p>
-                    <p>
-                        <label for="id_cpf" style="color: white; font-weight: bold; font-size: 1.2em;">CPF:</label><br>
-                        {{ cliente_form.cpf }}
-                    </p>
-                    <p>
-                        <label for="id_data_nascimento" style="color: white; font-weight: bold; font-size: 1.2em;">Data de Nascimento:</label><br>
-                        {{ cliente_form.data_nascimento }}
-                    </p>
-                    <p>
-                        <label for="id_email" style="color: white; font-weight: bold; font-size: 1.2em;">E-mail:</label><br>
-                        {{ cliente_form.email }}
-                    </p>
-                    <p>
-                        <label for="id_telefone" style="color: white; font-weight: bold; font-size: 1.2em;">Telefone:</label><br>
-                        {{ cliente_form.telefone }}
-                    </p>
+
+            <div style="display: grid; gap: 20px; grid-template-columns: 1fr 1fr;">
+
+                <div>
+                    <label style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Nome:</label>
+                    {{ cliente_form.nome }}
                 </div>
-                <div style="width: 48%;">
-                    <!-- Campos do formulário EnderecoForm -->
-                    <p>
-                        <label for="id_rua" style="color: white; font-weight: bold; font-size: 1.2em;">Rua:</label><br>
-                        {{ endereco_form.rua }}
-                    </p>
-                    <p>
-                        <label for="id_cidade" style="color: white; font-weight: bold; font-size: 1.2em;">Cidade:</label><br>
-                        {{ endereco_form.cidade }}
-                    </p>
-                    <p>
-                        <label for="id_estado" style="color: white; font-weight: bold; font-size: 1.2em;">Estado:</label><br>
-                        {{ endereco_form.estado }}
-                    </p>
-                    <p>
-                        <label for="id_cep" style="color: white; font-weight: bold; font-size: 1.2em;">CEP:</label><br>
-                        {{ endereco_form.cep }}
-                    </p>
+
+                <div>
+                    <label style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">CPF:</label>
+                    {{ cliente_form.cpf }}
+                </div>
+
+                <div>
+                    <label style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Data de Nascimento:</label>
+                    {{ cliente_form.data_nascimento }}
+                </div>
+
+                <div>
+                    <label style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">E-mail:</label>
+                    {{ cliente_form.email }}
+                </div>
+
+                <div>
+                    <label style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Telefone:</label>
+                    {{ cliente_form.telefone }}
+                </div>
+
+                <div>
+                    <label style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Rua:</label>
+                    {{ endereco_form.rua }}
+                </div>
+
+                <div>
+                    <label style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Cidade:</label>
+                    {{ endereco_form.cidade }}
+                </div>
+
+                <div>
+                    <label style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Estado:</label>
+                    {{ endereco_form.estado }}
+                </div>
+
+                <div>
+                    <label style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">CEP:</label>
+                    {{ endereco_form.cep }}
+                </div>
+
+                <div style="display: flex; align-items: flex-end;">
+                    <button class='btn btn-primary btn-lg' type="submit" style="margin-left: 150px";>Salvar</button>
+                    <button class='btn btn-danger btn-lg' type="button" onclick="location.href='{% url 'listar_clientes' %}'" style="margin-left: 10px;">Sair</button>
                 </div>
             </div>
 
-            <!-- Botões de ação -->
-            <div style="text-align: center; margin-top: 30px;">
-                <button class ='btn btn-primary btn-lg' type ="submit">Salvar</button>
-                <button class ='btn btn-danger btn-lg' onclick="location.href='{% url 'listar_clientes' %}'">Sair </button>
-            </div>
         </form>
+
     </div>
+
 </div>
 {% endblock %}
