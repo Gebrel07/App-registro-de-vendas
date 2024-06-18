@@ -1,6 +1,7 @@
+from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import ClienteForm, EnderecoForm, VendedorForm
+from .forms import ClienteForm, EnderecoForm, ProdutoForm, VendedorForm
 from .models import Cliente, Endereco, Vendedor
 
 
@@ -106,3 +107,16 @@ def editar_vendedor(request, vendedor_id):
     return render(
         request, "vendas/vendedor/editar_vendedor.html", {"form": form}
     )
+
+
+def criar_produto(request: HttpRequest):
+    if request.method == "POST":
+        # TODO: finalizar route
+        raise NotImplementedError()
+    else:
+        form = ProdutoForm()
+        return render(
+            request=request,
+            template_name="vendas/produto/criar_produto.html",
+            context={"form": form},
+        )

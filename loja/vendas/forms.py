@@ -35,3 +35,32 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = ["nome", "cpf", "data_nascimento", "email", "telefone"]
+
+
+class ProdutoForm(forms.Form):
+    nome_produto = forms.CharField(
+        label="Nome do Produto",
+        max_length=255,
+        required=True,
+    )
+    preco_produto = forms.DecimalField(
+        label="Preço do Produto",
+        min_value=0,
+        decimal_places=2,
+        required=True,
+    )
+    cor_produto = forms.CharField(
+        label="Cor do Produto",
+        max_length=255,
+        required=True,
+    )
+    tamanho_produto = forms.CharField(
+        label="Tamanho do Produto",
+        max_length=255,
+        required=True,
+    )
+    referencia_produto = forms.CharField(
+        label="Referência do Produto",
+        max_length=255,
+        required=False,
+    )

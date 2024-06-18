@@ -21,4 +21,5 @@ urlpatterns = [
         views.editar_cliente,
         name="editar_cliente",
     ),
+    path("produtos/criar", views.criar_produto, name="criar_produto"),
 ]

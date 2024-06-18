@@ -1,0 +1,21 @@
+{% extends 'vendas/partials/base.html' %}
+
+{% load widget_tweaks %}
+
+{% comment %}
+# TODO: ajustar campos para duas colunas
+# TODO: remover setar up/down dos campos numericos via css global
+{% endcomment %}
+
+{% block content %}
+  <form method="POST" class="mt-3 border border-gray rounded p-4">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        <label for="id_nome_produto" class="form-label">{{ field.label }}</label>
+        {% render_field field class='form-control' %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Salvar</button>
+  </form>
+{% endblock %}
