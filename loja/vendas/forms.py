@@ -1,6 +1,7 @@
+ 
 from django import forms
-
-from .models import Cliente, Endereco, Vendedor
+from .models import Cliente,Vendedor,Produto,Endereco
+ 
 
 
 class VendedorForm(forms.ModelForm):
@@ -17,6 +18,10 @@ class VendedorForm(forms.ModelForm):
         widgets = {
             "data_nascimento": forms.DateInput(attrs={"type": "date"}),
             "data_contratacao": forms.DateInput(attrs={"type": "date"}),
+            "cpf": forms.TextInput(attrs={
+                'class': 'form-control',
+                'pattern': r'\d{11}', 
+                'title': 'Formato invalido'}),  
         }
 
 
@@ -28,13 +33,43 @@ class EnderecoForm(forms.ModelForm):
             "cidade",
             "estado",
             "cep",
-        ]  # Adicione os campos do modelo Endereco que deseja exibir
+        ] 
+        widgets={
+            "cep": forms.TextInput(attrs={
+                'class': 'form-control', 
+                'pattern': r'\+?1?\d{8,15}', 
+                'title': 'Insira apenas números.'}),
+        }
 
 
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ["nome", "cpf", "data_nascimento", "email", "telefone"]
+        fields = [
+            "nome", 
+            "cpf", 
+            "data_nascimento", 
+            "email", 
+            "telefone"
+        ]
+        widgets = {
+            "data_nascimento": forms.DateInput(attrs={
+                "type": "date", 
+                'class': 'form-control'
+                }),   
+            "email": forms.EmailInput(attrs={
+                'class': 'form-control'
+                }),  
+            "cpf": forms.TextInput(attrs={
+                'class': 'form-control',
+                'pattern': r'\d{11}', 
+                'title': 'Formato invalido'}),         
+            "telefone": forms.TextInput(attrs={
+                'class': 'form-control', 
+                'pattern': r'\+?1?\d{8,15}', 
+                'title': 'Insira apenas números.'}),  
+        }
+
 
 
 class ProdutoForm(forms.Form):
