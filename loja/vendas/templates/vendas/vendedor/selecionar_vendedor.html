@@ -2,24 +2,22 @@
 
 {% block content %}
 <div class="container">
-    <h3 id="XX">Selecione um Cliente</h3>
+    <h3 id="XX">Selecione um Vendedor</h3>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Nome</th>
                 <th>CPF</th>
-                <th>Telefone</th>
                 <th>Ação</th>
             </tr>
         </thead>
         <tbody>
-            {% for cliente in clientes %}
+            {% for vendedor in vendedores %}
             <tr>
-                <td>{{ cliente.nome }}</td>
-                <td>{{ cliente.cpf }}</td>
-                <td>{{ cliente.telefone }}</td>
+                <td>{{ vendedor.nome }}</td>
+                <td>{{ vendedor.cpf }}</td>
                 <td>
-                    <button class="btn btn-primary" onclick="selecionarCliente('{{ cliente.nome }}')">Selecionar</button>
+                    <button class="btn btn-primary" onclick="selecionarVendedor('{{ vendedor.nome }}')">Selecionar</button>
                 </td>
             </tr>
             {% endfor %}
@@ -28,8 +26,8 @@
 </div>
 
 <script>
-    function selecionarCliente(nome) {
-        localStorage.setItem('clienteNome', nome);
+    function selecionarVendedor(nome) {
+        localStorage.setItem('vendedorNome', nome);
         window.location.href = '{% url 'page_vendas' %}';
     }
 </script>

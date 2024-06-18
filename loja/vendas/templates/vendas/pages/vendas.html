@@ -1,29 +1,113 @@
 {% extends 'vendas/partials/base.html' %}
 
 {% block content %}
-  <div class="container">
-    <h3>PageVendas</h3>
-    
-    <!-- Campo e botão para Vendedores -->
-    <div class="form-group row mb-3 align-items-center">
-      <label for="vendedoresInput" class="col-form-label">Vendedor</label>
-      <div class="col-auto">
-        <button class="btn btn-primary ms-2 me-2" onclick="location.href='{% url 'listar_vendedores' %}'">Selecionar</button>
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" id="vendedoresInput" placeholder="Digite o nome do vendedor">
-      </div>
+
+<!-- Abas -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="aba-inicial-tab" data-bs-toggle="tab" data-bs-target="#aba-inicial" type="button" role="tab" aria-controls="aba-inicial" aria-selected="true">Inicial</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="aba-calculos-tab" data-bs-toggle="tab" data-bs-target="#aba-calculos" type="button" role="tab" aria-controls="aba-calculos" aria-selected="false">Cálculos</button>
+    </li>
+</ul>
+
+<!-- Conteúdo das Abas -->
+<div class="tab-content" id="myTabContent">
+    <!-- Aba Inicial -->
+    <div class="tab-pane fade show active" id="aba-inicial" role="tabpanel" aria-labelledby="aba-inicial-tab">
+        <div class="container my-4 p-3 border border-success">
+            <h3>Vendas</h3>
+
+            <!-- Campo e botão para Vendedores -->
+            <div class="form-group row mb-3 align-items-center">
+                <label for="vendedoresInput" class="col-auto col-form-label">Vendedor</label>
+                <div class="col-auto">
+                    <button class="btn btn-primary ms-2" onclick="location.href='{% url 'selecionar_vendedor' %}'">Selecionar</button>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" id="vendedoresInput" placeholder="Digite o nome do vendedor">
+                </div>
+            </div>
+
+            <!-- Campo e botão para Clientes -->
+            <div class="form-group row mb-3 align-items-center">
+                <label for="clientesInput" class="col-auto col-form-label">Cliente</label>
+                <div class="col-auto">
+                    <button class="btn btn-primary ms-2" onclick="location.href='{% url 'selecionar_cliente' %}'">Selecionar</button>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" id="clientesInput" placeholder="Digite o nome do cliente">
+                </div>
+            </div>
+
+            <!-- Container para Produtos -->
+            <div id="produtosContainer">
+                <div class="produto-container my-2 p-2 border border-primary">
+                    <div class="form-group row mb-2 align-items-center">
+                        <label for="produto1Input" class="col-auto col-form-label">Produto 1</label>
+                        <div class="col-auto">
+                            <button class="btn btn-primary ms-2" onclick="location.href='{% url 'home' %}'">Selecionar</button>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control produto-input" id="produto1Input" placeholder="Digite o nome do produto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão para adicionar novo produto -->
+            <button class="btn btn-primary mb-3" onclick="adicionarProduto()">Adicionar Produto</button>
+        </div>
     </div>
 
-    <!-- Campo e botão para Clientes -->
-    <div class="form-group row mb-3 align-items-center">
-      <label for="clientesInput" class="col-form-label">Cliente</label>
-      <div class="col-auto">
-        <button class="btn btn-secondary ms-2 me-2" onclick="location.href='{% url 'selecionar_cliente' %}'">Selecionar</button>
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" id="clientesInput" placeholder="Digite o nome do cliente">
-      </div>
+    <!-- Aba de Cálculos -->
+    <div class="tab-pane fade" id="aba-calculos" role="tabpanel" aria-labelledby="aba-calculos-tab">
+        <!-- Conteúdo da aba de cálculos -->
+        <div class="container my-4 p-3 border border-info">
+            <h3>Cálculos</h3>
+            <!-- Coloque aqui o conteúdo relacionado aos cálculos, se necessário -->
+        </div>
     </div>
-  </div>
+</div>
+
+<script>
+    // Contador para identificar o próximo número de produto a ser adicionado
+    let contadorProdutos = 1;
+
+    // Função para adicionar novo produto dinamicamente
+    function adicionarProduto() {
+        contadorProdutos++;
+
+        // Cria um novo container para o novo produto
+        let novoProduto = `
+        <div class="produto-container my-2 p-2 border border-primary">
+            <div class="form-group row mb-2 align-items-center">
+                <label for="produto${contadorProdutos}Input" class="col-auto col-form-label">Produto ${contadorProdutos}</label>
+                <div class="col-auto">
+                    <button class="btn btn-primary ms-2" onclick="location.href='{% url 'home' %}'">Selecionar</button>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control produto-input" id="produto${contadorProdutos}Input" placeholder="Digite o nome do produto">
+                </div>
+            </div>
+        </div>`;
+
+        // Adiciona o novo container ao div de produtos na aba inicial
+        document.getElementById('produtosContainer').insertAdjacentHTML('beforeend', novoProduto);
+    }
+
+    // Recupera os valores do localStorage quando a página é carregada
+    document.addEventListener('DOMContentLoaded', function() {
+        var clienteNome = localStorage.getItem('clienteNome');
+        var vendedorNome = localStorage.getItem('vendedorNome');
+        if (clienteNome) {
+            document.getElementById('clientesInput').value = clienteNome;
+        }
+        if (vendedorNome) {
+            document.getElementById('vendedoresInput').value = vendedorNome;
+        }
+    });
+</script>
+
 {% endblock %}
