@@ -70,7 +70,9 @@ def editar_cliente(request, cliente_id):
             "endereco_form": endereco_form,
         },
     )
-
+def selecionar_cliente(request):
+    clientes = Cliente.objects.all()
+    return render(request, 'vendas/clientes/selecionar_cliente.html', {'clientes': clientes})
 
 def listar_vendedores(request):
 

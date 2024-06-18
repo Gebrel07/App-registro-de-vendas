@@ -1,7 +1,29 @@
 {% extends 'vendas/partials/base.html' %}
 
 {% block content %}
-  <h3>PageVendas</h3>
-  <button onclick="location.href='{% url 'listar_vendedores' %}'">Vendedores</button>
-  <button onclick="location.href='{% url 'listar_clientes' %}'">Clientes</button>
+  <div class="container">
+    <h3>PageVendas</h3>
+    
+    <!-- Campo e botão para Vendedores -->
+    <div class="form-group row mb-3 align-items-center">
+      <label for="vendedoresInput" class="col-form-label">Vendedor</label>
+      <div class="col-auto">
+        <button class="btn btn-primary ms-2 me-2" onclick="location.href='{% url 'listar_vendedores' %}'">Selecionar</button>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" id="vendedoresInput" placeholder="Digite o nome do vendedor">
+      </div>
+    </div>
+
+    <!-- Campo e botão para Clientes -->
+    <div class="form-group row mb-3 align-items-center">
+      <label for="clientesInput" class="col-form-label">Cliente</label>
+      <div class="col-auto">
+        <button class="btn btn-secondary ms-2 me-2" onclick="location.href='{% url 'selecionar_cliente' %}'">Selecionar</button>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" id="clientesInput" placeholder="Digite o nome do cliente">
+      </div>
+    </div>
+  </div>
 {% endblock %}
