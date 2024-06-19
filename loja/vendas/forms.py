@@ -1,7 +1,6 @@
- 
 from django import forms
-from .models import Cliente,Vendedor,Produto,Endereco
- 
+
+from .models import Cliente, Endereco, Vendedor
 
 
 class VendedorForm(forms.ModelForm):
@@ -18,10 +17,13 @@ class VendedorForm(forms.ModelForm):
         widgets = {
             "data_nascimento": forms.DateInput(attrs={"type": "date"}),
             "data_contratacao": forms.DateInput(attrs={"type": "date"}),
-            "cpf": forms.TextInput(attrs={
-                'class': 'form-control',
-                'pattern': r'\d{11}', 
-                'title': 'Formato invalido'}),  
+            "cpf": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "pattern": r"\d{11}",
+                    "title": "Formato invalido",
+                }
+            ),
         }
 
 
@@ -33,68 +35,67 @@ class EnderecoForm(forms.ModelForm):
             "cidade",
             "estado",
             "cep",
-        ] 
-        widgets={
-            "cep": forms.TextInput(attrs={
-                'class': 'form-control', 
-                'pattern': r'\+?1?\d{8,15}', 
-                'title': 'Insira apenas números.'}),
+        ]
+        widgets = {
+            "cep": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "pattern": r"\+?1?\d{8,15}",
+                    "title": "Insira apenas números.",
+                }
+            ),
         }
 
 
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = [
-            "nome", 
-            "cpf", 
-            "data_nascimento", 
-            "email", 
-            "telefone"
-        ]
+        fields = ["nome", "cpf", "data_nascimento", "email", "telefone"]
         widgets = {
-            "data_nascimento": forms.DateInput(attrs={
-                "type": "date", 
-                'class': 'form-control'
-                }),   
-            "email": forms.EmailInput(attrs={
-                'class': 'form-control'
-                }),  
-            "cpf": forms.TextInput(attrs={
-                'class': 'form-control',
-                'pattern': r'\d{11}', 
-                'title': 'Formato invalido'}),         
-            "telefone": forms.TextInput(attrs={
-                'class': 'form-control', 
-                'pattern': r'\+?1?\d{8,15}', 
-                'title': 'Insira apenas números.'}),  
+            "data_nascimento": forms.DateInput(
+                attrs={"type": "date", "class": "form-control"}
+            ),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "cpf": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "pattern": r"\d{11}",
+                    "title": "Formato invalido",
+                }
+            ),
+            "telefone": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "pattern": r"\+?1?\d{8,15}",
+                    "title": "Insira apenas números.",
+                }
+            ),
         }
 
 
-
 class ProdutoForm(forms.Form):
-    nome_produto = forms.CharField(
+    nome = forms.CharField(
         label="Nome do Produto",
         max_length=255,
         required=True,
     )
-    preco_produto = forms.DecimalField(
+    preco = forms.DecimalField(
         label="Preço do Produto",
         min_value=0,
         decimal_places=2,
         required=True,
     )
-    cor_produto = forms.CharField(
+    cor = forms.CharField(
         label="Cor do Produto",
         max_length=255,
         required=True,
     )
-    tamanho_produto = forms.CharField(
+    tamanho = forms.CharField(
         label="Tamanho do Produto",
         max_length=255,
         required=True,
     )
-    referencia_produto = forms.CharField(
+    referencia = forms.CharField(
         label="Referência do Produto",
         max_length=255,
         required=False,
