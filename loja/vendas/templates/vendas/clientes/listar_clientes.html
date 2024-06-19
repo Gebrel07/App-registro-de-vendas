@@ -31,7 +31,10 @@
                     <td>{{ cliente.telefone }}</td>
                     <td>
                         <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
-                        <!-- Adicione outros botões de ação conforme necessário -->
+                        <form action="{% url 'deletar_cliente' cliente.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Deletar</button>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}
