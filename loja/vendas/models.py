@@ -1,5 +1,7 @@
 from django.db import models
 
+from .produto.models import Produto
+
 
 class Pessoa(models.Model):
     nome = models.CharField(max_length=255, null=False)
@@ -39,18 +41,6 @@ class Cliente(Pessoa):
 
     def __str__(self) -> str:
         return f"{super().__str__()}, email: {self.email}"
-
-
-class Produto(models.Model):
-    nome = models.CharField(max_length=255, null=False)
-    preco = models.DecimalField(default=0, max_digits=6, decimal_places=2, null=False)
-    cor = models.CharField(max_length=255, null=False)
-    tamanho = models.CharField(max_length=255, null=False)
-    referencia = models.CharField(max_length=255, null=True)
-
-    def __str__(self) -> str:
-        return f"id: {self.id}, nome: {self.nome}, preco: {self.preco}, \
-            cor: {self.cor}, tamanho: {self.tamanho}"
 
 
 # TODO: incluir relação many to many entre Produto e Venda
