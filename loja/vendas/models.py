@@ -43,7 +43,7 @@ class Cliente(Pessoa):
 
 class Produto(models.Model):
     nome = models.CharField(max_length=255, null=False)
-    preco = models.FloatField(default=0, null=False)
+    preco = models.DecimalField(default=0, max_digits=6, decimal_places=2, null=False)
     cor = models.CharField(max_length=255, null=False)
     tamanho = models.CharField(max_length=255, null=False)
     referencia = models.CharField(max_length=255, null=True)
