@@ -32,7 +32,9 @@ def criar_cliente(request: HttpRequest) -> render:
             cliente = cliente_form.save(commit=False)
             cliente.endereco = endereco  # Associa o endereço ao cliente
             cliente.save()
-            return redirect("listar_clientes")  # Redireciona para a lista de clientes
+            return redirect(
+                "listar_clientes"
+            )  # Redireciona para a lista de clientes
 
     else:
         cliente_form = ClienteForm()
@@ -72,7 +74,11 @@ def editar_cliente(request: HttpRequest, cliente_id: int) -> render:
 
 def selecionar_cliente(request: HttpRequest) -> render:
     clientes = Cliente.objects.all()
-    return render(request, 'vendas/clientes/selecionar_cliente.html', {'clientes': clientes})
+    return render(
+        request,
+        "vendas/clientes/selecionar_cliente.html",
+        {"clientes": clientes},
+    )
 
 
 def listar_vendedores(request: HttpRequest) -> render:
@@ -113,7 +119,11 @@ def editar_vendedor(request: HttpRequest, vendedor_id: int) -> render:
 
 def selecionar_vendedor(request: HttpRequest) -> render:
     vendedores = Vendedor.objects.all()
-    return render(request, 'vendas/vendedor/selecionar_vendedor.html', {'vendedores': vendedores})
+    return render(
+        request,
+        "vendas/vendedor/selecionar_vendedor.html",
+        {"vendedores": vendedores},
+    )
 
 
 def criar_produto(request: HttpRequest) -> render:
