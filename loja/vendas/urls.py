@@ -21,7 +21,15 @@ urlpatterns = [
         views.editar_cliente,
         name="editar_cliente",
     ),
-    path('vendas/selecionar_cliente',views.selecionar_cliente,name="selecionar_cliente"),
-    path('vendas/selecionar_vendedor',views.selecionar_vendedor,name="selecionar_vendedor"),
+    path(
+        "vendas/selecionar_cliente",
+        views.selecionar_cliente,
+        name="selecionar_cliente",
+    ),
+    path(
+        "vendas/selecionar_vendedor",
+        views.selecionar_vendedor,
+        name="selecionar_vendedor",
+    ),
     path("produtos/criar", views.criar_produto, name="criar_produto"),
 ]
