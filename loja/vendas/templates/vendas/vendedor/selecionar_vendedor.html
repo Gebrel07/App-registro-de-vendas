@@ -17,7 +17,7 @@
                 <td>{{ vendedor.nome }}</td>
                 <td>{{ vendedor.cpf }}</td>
                 <td>
-                    <button class="btn btn-primary" onclick="selecionarVendedor('{{ vendedor.nome }}')">Selecionar</button>
+                    <button class="btn btn-primary" onclick="selecionarVendedor('{{ vendedor.id }}')">Selecionar</button>
                 </td>
             </tr>
             {% endfor %}
@@ -26,8 +26,8 @@
 </div>
 
 <script>
-    function selecionarVendedor(nome) {
-        localStorage.setItem('vendedorNome', nome);
+    function selecionarVendedor(id) {
+        localStorage.setItem('vendedorId', id);
         window.location.href = '{% url 'page_vendas' %}';
     }
 </script>

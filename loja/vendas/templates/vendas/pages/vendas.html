@@ -117,9 +117,9 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
     // Recupera os valores do localStorage quando a página é carregada
     document.addEventListener('DOMContentLoaded', function() {
         var clienteId = localStorage.getItem('clienteId');
-        var vendedorNome = localStorage.getItem('vendedorNome');
-        if (clienteId) {
-            // Alteração aqui , fiz a requisição AJAX para obter o nome do cliente
+        var vendedorId = localStorage.getItem('vendedorId');
+    
+        function obterNomeCliente(clienteId) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/api/obter_nome_cliente/?cliente_id=' + clienteId, true);
             xhr.onload = function() {
@@ -139,10 +139,37 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             };
             xhr.send();
         }
-        if (vendedorNome) {
-            document.getElementById('vendedoresInput').value = vendedorNome;
+    
+        function obterNomeVendedor(vendedorId) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/obter_nome_vendedor/?vendedor_id=' + vendedorId, true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.nome_vendedor) {
+                        document.getElementById('vendedoresInput').value = response.nome_vendedor;
+                    } else {
+                        console.error('Erro ao obter nome do vendedor:', response.error);
+                    }
+                } else {
+                    console.error('Erro na requisição. Status:', xhr.status);
+                }
+            };
+            xhr.onerror = function() {
+                console.error('Erro na requisição.');
+            };
+            xhr.send();
+        }
+    
+        if (clienteId) {
+            obterNomeCliente(clienteId);
+        }
+    
+        if (vendedorId) {
+            obterNomeVendedor(vendedorId);
         }
     });
+    
 </script>
 
 {% endblock %}

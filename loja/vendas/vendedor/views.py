@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import Vendedor,VendedorForm
 from django.contrib import messages
 from django.urls import reverse
+from django.http import JsonResponse
+
 
 def listar_vendedores(request: HttpRequest) -> render:
     vendedores = Vendedor.objects.all()
@@ -85,3 +87,14 @@ def deletar_vendedor(request: HttpRequest, vendedor_id: int):
             "vendas/vendedor/listar_vendedores.html",
             {"vendedores_list": vendedores},
         )
+
+def obter_nome_vendedor(request: HttpRequest) -> JsonResponse:
+    if request.method == 'GET':
+        vendedor_id = request.GET.get('vendedor_id')   
+        try:
+            vendedor = Vendedor.objects.get(id=vendedor_id)
+            return JsonResponse({'nome_vendedor': vendedor.nome})
+        except Vendedor.DoesNotExist:
+            return JsonResponse({'error': 'vendedor não encontrado'}, status=404)
+    else:
+        return JsonResponse({'error': 'Método não suportado'}, status=405)

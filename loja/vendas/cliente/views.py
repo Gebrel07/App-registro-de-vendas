@@ -112,7 +112,7 @@ def deletar_cliente(request: HttpRequest, cliente_id: int):
         )
  
 
-def obter_nome_cliente(request):
+def obter_nome_cliente(request: HttpRequest)-> JsonResponse:
     if request.method == 'GET':
         cliente_id = request.GET.get('cliente_id')  # Obtém o cliente_id da requisição GET
         try:
