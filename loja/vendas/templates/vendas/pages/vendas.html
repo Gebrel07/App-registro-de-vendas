@@ -1,7 +1,6 @@
 {% extends 'vendas/partials/base.html' %}
 
 {% comment %}
-
 TODO: Arrumar a lógica javascript do botão selecionar
 TODO: Definir a lógica da aba cálculo
 TODO: Adicionar colunas informativas quando for selecionado o produto
@@ -24,9 +23,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
     <div class="tab-content shadow p-3 mb-5 bg-body rounded" id="myTabContent">
         <!-- Aba Inicial -->
         <div class="tab-pane fade show active" id="aba-inicial" role="tabpanel" aria-labelledby="aba-inicial-tab">
-            <div class="container my-4 p-3 ">
- 
-
+            <div class="container my-4 p-3">
                 <!-- Campo e botão para Vendedores -->
                 <div class="row mb-3 align-items-center">
                     <label for="vendedoresInput" class="col-auto col-form-label">Vendedor</label>
@@ -40,7 +37,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 
                 <!-- Campo e botão para Clientes -->
                 <div class="row mb-3 align-items-center">
-                    <label for="clientesInput" style="margin-left:21px;" class="col-auto col-form-label">Cliente</label>
+                    <label style="margin-left:19px;" for="clientesInput" class="col-auto col-form-label">Cliente</label>
                     <div class="col">
                         <div class="input-group">
                             <input type="text" class="form-control" id="clientesInput" placeholder="Digite o nome do cliente">
@@ -63,17 +60,12 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                             <div class="col">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="produto1Input" placeholder="Digite o nome do produto">
-                                    <button class="btn btn-primary" onclick="location.href='{% url 'home' %}'">Selecionar</button>
+                                    <button class="btn btn-primary" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Botão estilizado para adicionar novo produto -->
-                <button class="btn btn-primary mb-3" onclick="adicionarProduto()">
-                    <i class="bi bi-plus-lg"></i> Adicionar Produto
-                </button>
             </div>
         </div>
 
@@ -89,14 +81,10 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 </div>
 
 <script>
-    // Contador para identificar o próximo número de produto a ser adicionado
     let contadorProdutos = 1;
-
-    // Função para adicionar novo produto dinamicamente
+    
     function adicionarProduto() {
         contadorProdutos++;
-
-        // Cria um novo container para o novo produto
         let novoProduto = `
         <div class="row mb-3">
             <div class="col-auto">
@@ -105,20 +93,19 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             <div class="col">
                 <div class="input-group">
                     <input type="text" class="form-control" id="produto${contadorProdutos}Input" placeholder="Digite o nome do produto">
-                    <button class="btn btn-primary" onclick="location.href='{% url 'home' %}'">Selecionar</button>
+                    <button class="btn btn-primary" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
                 </div>
             </div>
         </div>`;
 
-        // Adiciona o novo container ao div de produtos na aba inicial
         document.getElementById('produtosContainer').insertAdjacentHTML('beforeend', novoProduto);
     }
 
-    // Recupera os valores do localStorage quando a página é carregada
     document.addEventListener('DOMContentLoaded', function() {
         var clienteId = localStorage.getItem('clienteId');
         var vendedorId = localStorage.getItem('vendedorId');
-    
+        var contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
+
         function obterNomeCliente(clienteId) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/api/obter_nome_cliente/?cliente_id=' + clienteId, true);
@@ -139,7 +126,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             };
             xhr.send();
         }
-    
+
         function obterNomeVendedor(vendedorId) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/api/obter_nome_vendedor/?vendedor_id=' + vendedorId, true);
@@ -160,16 +147,46 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             };
             xhr.send();
         }
-    
+
+        function obterNomeProduto(produtoId, inputId) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/obter_nome_produto/?produto_id=' + produtoId, true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.nome_produto) {
+                        document.getElementById(inputId).value = response.nome_produto;
+                    } else {
+                        console.error('Erro ao obter nome do produto:', response.error);
+                    }
+                } else {
+                    console.error('Erro na requisição. Status:', xhr.status);
+                }
+            };
+            xhr.onerror = function() {
+                console.error('Erro na requisição.');
+            };
+            xhr.send();
+        }
+
         if (clienteId) {
             obterNomeCliente(clienteId);
         }
-    
+
         if (vendedorId) {
             obterNomeVendedor(vendedorId);
         }
+
+        for (let i = 1; i <= contadorProdutoId; i++) {
+            let produtoId = localStorage.getItem(`produtoId${i}`);
+            if (produtoId) {
+                obterNomeProduto(produtoId, `produto${i}Input`);
+                if (i >= 1) {
+                    adicionarProduto();
+                }
+            }
+        }
     });
-    
 </script>
 
 {% endblock %}

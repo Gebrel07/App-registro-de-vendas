@@ -16,10 +16,10 @@
             {% for produto in produtos %}
             <tr>
                 <td>{{ produto.nome }}</td>
-                <td>{{produto.referencia}}</td>
+                <td>{{ produto.referencia }}</td>
                 <td>{{ produto.preco }}</td>
                 <td>
-                    <button class="btn btn-primary" onclick="selecionarProduto('{{ produto.nome }}')">Selecionar</button>
+                    <button class="btn btn-primary" onclick="selecionarProduto('{{ produto.id }}')">Selecionar</button>
                 </td>
             </tr>
             {% endfor %}
@@ -28,8 +28,13 @@
 </div>
 
 <script>
-    function selecionarProduto(nome) {
-        localStorage.setItem('produtoNome', nome);
+
+    var contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
+
+    function selecionarProduto(id) {
+        contadorProdutoId++;
+        localStorage.setItem('contadorProdutoId', contadorProdutoId);
+        localStorage.setItem('produtoId' + contadorProdutoId, id);
         window.location.href = '{% url 'page_vendas' %}';
     }
 </script>

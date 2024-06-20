@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
+from django.http import JsonResponse
 
 from .forms import ProdutoForm
 from .models import Produto
@@ -46,3 +47,14 @@ def selecionar_produto(request: HttpRequest) -> render:
         "vendas/produto/selecionar_produto.html",
         {"produtos": produtos},
     )
+
+def obter_nome_produto(request: HttpRequest) -> render:
+    if request.method == 'GET':
+        produto_id = request.GET.get('produto_id')   
+        try:
+            produto = Produto.objects.get(id=produto_id)
+            return JsonResponse({'nome_produto': produto.nome})
+        except Produto.DoesNotExist:
+            return JsonResponse({'error': 'Produto não encontrado'}, status=404)
+    else:
+        return JsonResponse({'error': 'Método não suportado'}, status=405)
