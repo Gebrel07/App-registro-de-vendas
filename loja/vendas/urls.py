@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from .produto.views import criar_produto
+from .produto.views import criar_produto,selecionar_produto
 from .vendedor.views import *
 from .cliente.views import *
 
@@ -13,6 +13,7 @@ urlpatterns = [
     path("vendas/", views.page_vendas, name="page_vendas"),
     path("vendas/selecionar_cliente", selecionar_cliente, name="selecionar_cliente"),
     path("vendas/selecionar_vendedor", selecionar_vendedor, name="selecionar_vendedor"),
+    path("vendas/selecionar_produto", selecionar_produto , name="selecionar_produto"),
 
     # Vendedores
     path("vendedores/", listar_vendedores, name="listar_vendedores"),

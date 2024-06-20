@@ -1,0 +1,36 @@
+{% extends 'vendas/partials/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h3 id="XX">Selecione um Produto</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Referencia</th>
+                <th>Preço</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+            <tr>
+                <td>{{ produto.nome }}</td>
+                <td>{{produto.referencia}}</td>
+                <td>{{ produto.preco }}</td>
+                <td>
+                    <button class="btn btn-primary" onclick="selecionarProduto('{{ produto.nome }}')">Selecionar</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function selecionarProduto(nome) {
+        localStorage.setItem('produtoNome', nome);
+        window.location.href = '{% url 'page_vendas' %}';
+    }
+</script>
+{% endblock %}

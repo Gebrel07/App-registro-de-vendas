@@ -38,3 +38,11 @@ def criar_produto(request: HttpRequest) -> render:
             template_name="vendas/produto/criar_produto.html",
             context={"form": form},
         )
+
+def selecionar_produto(request: HttpRequest) -> render:
+    produtos = Produto.objects.all()
+    return render(
+        request,
+        "vendas/produto/selecionar_produto.html",
+        {"produtos": produtos},
+    )
