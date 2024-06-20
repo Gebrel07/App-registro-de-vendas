@@ -116,10 +116,28 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 
     // Recupera os valores do localStorage quando a página é carregada
     document.addEventListener('DOMContentLoaded', function() {
-        var clienteNome = localStorage.getItem('clienteNome');
+        var clienteId = localStorage.getItem('clienteId');
         var vendedorNome = localStorage.getItem('vendedorNome');
-        if (clienteNome) {
-            document.getElementById('clientesInput').value = clienteNome;
+        if (clienteId) {
+            // Alteração aqui , fiz a requisição AJAX para obter o nome do cliente
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/obter_nome_cliente/?cliente_id=' + clienteId, true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.nome_cliente) {
+                        document.getElementById('clientesInput').value = response.nome_cliente;
+                    } else {
+                        console.error('Erro ao obter nome do cliente:', response.error);
+                    }
+                } else {
+                    console.error('Erro na requisição. Status:', xhr.status);
+                }
+            };
+            xhr.onerror = function() {
+                console.error('Erro na requisição.');
+            };
+            xhr.send();
         }
         if (vendedorNome) {
             document.getElementById('vendedoresInput').value = vendedorNome;

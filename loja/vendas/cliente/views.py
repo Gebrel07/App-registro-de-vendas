@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import ClienteForm,EnderecoForm,Cliente,Endereco
 from django.urls import reverse
 from django.contrib import messages
-
+from django.http import JsonResponse
 
 def listar_clientes(request: HttpRequest) -> render:
     clientes = Cliente.objects.all()
@@ -111,3 +111,14 @@ def deletar_cliente(request: HttpRequest, cliente_id: int):
             {"clientes_list": clientes},
         )
  
+
+def obter_nome_cliente(request):
+    if request.method == 'GET':
+        cliente_id = request.GET.get('cliente_id')  # Obtém o cliente_id da requisição GET
+        try:
+            cliente = Cliente.objects.get(id=cliente_id)
+            return JsonResponse({'nome_cliente': cliente.nome})
+        except Cliente.DoesNotExist:
+            return JsonResponse({'error': 'Cliente não encontrado'}, status=404)
+    else:
+        return JsonResponse({'error': 'Método não suportado'}, status=405)

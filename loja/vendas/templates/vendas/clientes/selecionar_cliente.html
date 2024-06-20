@@ -19,7 +19,7 @@
                 <td>{{ cliente.cpf }}</td>
                 <td>{{ cliente.telefone }}</td>
                 <td>
-                    <button class="btn btn-primary" onclick="selecionarCliente('{{ cliente.nome }}')">Selecionar</button>
+                    <button class="btn btn-primary" onclick="selecionarCliente('{{ cliente.id }}')">Selecionar</button>
                 </td>
             </tr>
             {% endfor %}
@@ -28,8 +28,8 @@
 </div>
 
 <script>
-    function selecionarCliente(nome) {
-        localStorage.setItem('clienteNome', nome);
+    function selecionarCliente(id) {
+        localStorage.setItem('clienteId', id);
         window.location.href = '{% url 'page_vendas' %}';
     }
 </script>
