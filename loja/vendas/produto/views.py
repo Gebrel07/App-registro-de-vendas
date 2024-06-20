@@ -40,6 +40,7 @@ def criar_produto(request: HttpRequest) -> render:
             context={"form": form},
         )
 
+
 def selecionar_produto(request: HttpRequest) -> render:
     produtos = Produto.objects.all()
     return render(
@@ -48,13 +49,14 @@ def selecionar_produto(request: HttpRequest) -> render:
         {"produtos": produtos},
     )
 
+
 def obter_nome_produto(request: HttpRequest) -> render:
-    if request.method == 'GET':
-        produto_id = request.GET.get('produto_id')   
+    if request.method == "GET":
+        produto_id = request.GET.get("produto_id")
         try:
             produto = Produto.objects.get(id=produto_id)
-            return JsonResponse({'nome_produto': produto.nome})
+            return JsonResponse({"nome_produto": produto.nome})
         except Produto.DoesNotExist:
-            return JsonResponse({'error': 'Produto não encontrado'}, status=404)
+            return JsonResponse({"error": "Produto não encontrado"}, status=404)
     else:
-        return JsonResponse({'error': 'Método não suportado'}, status=405)
+        return JsonResponse({"error": "Método não suportado"}, status=405)
