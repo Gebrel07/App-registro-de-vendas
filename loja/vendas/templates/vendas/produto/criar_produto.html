@@ -7,14 +7,6 @@
 {% endcomment %}
 
 {% block content %}
-  <form method="POST" class="mt-3 border border-gray rounded p-4">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="mb-3">
-        <label for="id_nome_produto" class="form-label">{{ field.label }}</label>
-        {% render_field field class='form-control' %}
-      </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary">Salvar</button>
-  </form>
+  <h3>Criar produto</h3>
+  {% include 'vendas/produto/form_produto.html' %}
 {% endblock %}
