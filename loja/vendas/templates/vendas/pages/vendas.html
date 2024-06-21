@@ -89,24 +89,23 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 
 <script>
     let contadorProdutos = 1;
-
-    var pendingRequests = 0;
-
+    let pendingRequests = 0;
+    
     function incrementPendingRequests() {
         pendingRequests++;
     }
-
+    
     function decrementPendingRequests() {
         pendingRequests--;
         if (pendingRequests === 0) {
             hideLoadingSpinner(); // Esconde o spinner e mostra o conteúdo quando todas as requisições são concluídas
         }
     }
-
+    
     function checkAllRequestsCompleted() {
         decrementPendingRequests();
     }
-
+    
     function adicionarProduto() {
         contadorProdutos++;
         let novoProduto = `
@@ -124,10 +123,9 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                 <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
             </div>
         </div>`;
-
         document.getElementById('produtosContainer').insertAdjacentHTML('beforeend', novoProduto);
     }
-
+    
     function showLoadingSpinner() {
         document.getElementById('loadingSpinner').style.display = 'block';
         document.getElementById('myTabContent').style.filter = 'blur(4px)';
@@ -137,128 +135,85 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         document.getElementById('loadingSpinner').style.display = 'none';
         document.getElementById('myTabContent').style.filter = 'none';
     }
-
+    
     document.addEventListener('DOMContentLoaded', function() {
-        var clienteId = localStorage.getItem('clienteId');
-        var vendedorId = localStorage.getItem('vendedorId');
-        var contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
-
+        const clienteId = localStorage.getItem('clienteId');
+        const vendedorId = localStorage.getItem('vendedorId');
+        const contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
+    
+        function requestAPI(url, callback) {
+            incrementPendingRequests();
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    callback(JSON.parse(xhr.responseText));
+                } else {
+                    console.error('Erro na requisição. Status:', xhr.status);
+                }
+                checkAllRequestsCompleted();
+            };
+            xhr.onerror = function() {
+                console.error('Erro na requisição.');
+                checkAllRequestsCompleted();
+            };
+            xhr.send();
+        }
+    
         function obterNomeCliente(clienteId) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/api/obter_nome_cliente/?cliente_id=' + clienteId, true);
-            xhr.onload = function() {
-                if (xhr.status == 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.nome_cliente) {
-                        document.getElementById('clientesInput').value = response.nome_cliente;
-                    } else {
-                        console.error('Erro ao obter nome do cliente:', response.error);
-                    }
+            requestAPI(`/api/obter_nome_cliente/?cliente_id=${clienteId}`, function(response) {
+                if (response.nome_cliente) {
+                    document.getElementById('clientesInput').value = response.nome_cliente;
                 } else {
-                    console.error('Erro na requisição. Status:', xhr.status);
+                    console.error('Erro ao obter nome do cliente:', response.error);
                 }
-                checkAllRequestsCompleted()
-            };
-            xhr.onerror = function() {
-                console.error('Erro na requisição.');
-            };
-            xhr.send();
+            });
         }
-
+    
         function obterNomeVendedor(vendedorId) {
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/api/obter_nome_vendedor/?vendedor_id=' + vendedorId, true);
-            xhr.onload = function() {
-                if (xhr.status == 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.nome_vendedor) {
-                        document.getElementById('vendedoresInput').value = response.nome_vendedor;
-                    } else {
-                        console.error('Erro ao obter nome do vendedor:', response.error);
-                    }
+            requestAPI(`/api/obter_nome_vendedor/?vendedor_id=${vendedorId}`, function(response) {
+                if (response.nome_vendedor) {
+                    document.getElementById('vendedoresInput').value = response.nome_vendedor;
                 } else {
-                    console.error('Erro na requisição. Status:', xhr.status);
+                    console.error('Erro ao obter nome do vendedor:', response.error);
                 }
-                checkAllRequestsCompleted()
-            };
-            xhr.onerror = function() {
-                console.error('Erro na requisição.');
-            };
-            xhr.send();
+            });
         }
- 
-        function obterPrecoProduto(produtoId,inputId,precoId){
-            showLoadingSpinner()
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/api/obter_preco_produto/?produto_id=' + produtoId, true);
-            xhr.onload = function() {
-                if (xhr.status == 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.preco_produto) {
-                        document.getElementById(precoId).value = response.preco_produto;  // Assumindo que a resposta tem um campo 'preco_produto'
-                    } else {
-                        console.error('Erro ao obter preco do produto:', response.error);
-                    }
+    
+        function obterPrecoProduto(produtoId, precoId) {
+            showLoadingSpinner();
+            requestAPI(`/api/obter_preco_produto/?produto_id=${produtoId}`, function(response) {
+                if (response.preco_produto) {
+                    document.getElementById(precoId).value = response.preco_produto;
                 } else {
-                    console.error('Erro na requisição. Status:', xhr.status);
+                    console.error('Erro ao obter preço do produto:', response.error);
                 }
-                checkAllRequestsCompleted()
-            };
-            xhr.onerror = function() {
-                console.error('Erro na requisição.');
-            };
-            xhr.send();
-            
+            });
         }
-
-        function obterNomeProduto(produtoId, inputId, precoId) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/api/obter_nome_produto/?produto_id=' + produtoId, true);
-            xhr.onload = function() {
-                if (xhr.status == 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.nome_produto) {
-                        document.getElementById(inputId).value = response.nome_produto;
-                    } else {
-                        console.error('Erro ao obter nome do produto:', response.error);
-                    }
+    
+        function obterNomeProduto(produtoId, inputId) {
+            requestAPI(`/api/obter_nome_produto/?produto_id=${produtoId}`, function(response) {
+                if (response.nome_produto) {
+                    document.getElementById(inputId).value = response.nome_produto;
                 } else {
-                    console.error('Erro na requisição. Status:', xhr.status);
+                    console.error('Erro ao obter nome do produto:', response.error);
                 }
-                checkAllRequestsCompleted()
-            };
-            xhr.onerror = function() {
-                console.error('Erro na requisição.');
-            };
-            xhr.send();
+            });
         }
-
-        if (clienteId) {
-            incrementPendingRequests();
-            obterNomeCliente(clienteId);
-        }
-
-        if (vendedorId) {
-            incrementPendingRequests();
-            obterNomeVendedor(vendedorId);
-        }
-
+    
+        if (clienteId) obterNomeCliente(clienteId);
+        if (vendedorId) obterNomeVendedor(vendedorId);
+    
         for (let i = 1; i <= contadorProdutoId; i++) {
             let produtoId = localStorage.getItem(`produtoId${i}`);
             if (produtoId) {
-                incrementPendingRequests();
-                obterNomeProduto(produtoId, `produto${i}Input`, `preco${i}Input`);
-                incrementPendingRequests();
-                obterPrecoProduto(produtoId, `produto${i}Input`, `preco${i}Input`);
-                if (i >= 1) {
-                    adicionarProduto();
-                }
+                adicionarProduto();
+                obterNomeProduto(produtoId, `produto${i}Input`);
+                obterPrecoProduto(produtoId, `preco${i}Input`);
             }
         }
-        checkAllRequestsCompleted();
     });
+    
 </script>
 
 <style>
