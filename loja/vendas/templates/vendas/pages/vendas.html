@@ -9,7 +9,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 {% block content %}
 
 <div class="container mt-4">
-    <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="display: none; position: fixed; top: 50%; left: 50%; z-index: 1000;">
+    <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="width:50px;height:50px;display: none; position: fixed; top: 50%; left: 50%; z-index: 1000;">
         <span class="visually-hidden">Carregando...</span>
     </div>
     <!-- Abas -->
@@ -40,7 +40,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 
                 <!-- Campo e botão para Clientes -->
                 <div class="row mb-3 align-items-center">
-                    <label style="margin-left:19px;" for="clientesInput" class="col-auto col-form-label">Cliente</label>
+                    <label for="clientesInput" class="col-auto col-form-label">Cliente</label>
                     <div class="col">
                         <div class="input-group">
                             <input type="text" class="form-control" id="clientesInput" placeholder="Digite o nome do cliente">
@@ -54,21 +54,42 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                     <div class="card-header bg-primary text-white">
                         Produtos
                     </div>
-                    <div class="card-body" id="produtosContainer">
-                        <!-- Produtos serão adicionados dinamicamente aqui -->
-                        <div class="row mb-3 align-items-center">
-                            <div class="col-2">
-                                <input type="number" class="form-control form-control-sm" id="quantidade1Input" placeholder="Quantidade" >
-                            </div>
-                            <div class="col">
-                                <input type="text" class="form-control form-control-sm" id="produto1Input" placeholder="Nome do produto">
-                            </div>
-                            <div class="col-1">
-                                <input type="text" class="form-control form-control-sm" id="preco1Input" placeholder="Valor" readonly>
-                            </div>
-                            <div class="col-auto">
-                                <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
-                            </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Quantidade</th>
+                                        <th scope="col">Produto</th>
+                                        <th scope="col">Unitário</th>
+                                        <th scope="col">Desconto (%)</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="produtosContainer">
+                                    <!-- Produtos serão adicionados dinamicamente aqui -->
+                                    <tr class="align-items-center">
+                                        <td class="col-1">
+                                            <input type="number" class="form-control form-control-sm" id="quantidade1Input" placeholder="Qtd." readonly>
+                                        </td>
+                                        <td class="col-6"> <!-- Aumento do tamanho da coluna para 4 unidades -->
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-sm" id="produto1Input" placeholder="Nome do produto">
+                                                <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" id="preco1Input" placeholder="Unitário" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-sm" id="desconto1Input" placeholder="Desconto (%)">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" id="total1Input" placeholder="Total" readonly>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -109,26 +130,34 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
     function adicionarProduto() {
         contadorProdutos++;
         let novoProduto = `
-        <div class="row mb-3 align-items-center">
-            <div class="col-2">
-                <input type="number" class="form-control form-control-sm" id="quantidade${contadorProdutos}Input" placeholder="Quantidade" readonly>
-            </div>
-            <div class="col">
-                <input type="text" class="form-control form-control-sm" id="produto${contadorProdutos}Input" placeholder="Nome do produto">
-            </div>
-            <div class="col-1">
-                <input type="text" class="form-control form-control-sm" id="preco${contadorProdutos}Input" placeholder="Valor" readonly>
-            </div>
-            <div class="col-auto">
-                <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
-            </div>
-        </div>`;
+        <tr class="align-items-center">
+            <td class="col-1">
+                <input type="number" class="form-control form-control-sm" id="quantidade${contadorProdutos}Input" placeholder="Qtd." readonly>
+            </td>
+            <td class="col-6">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm" id="produto${contadorProdutos}Input" placeholder="Nome do produto">
+                    <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
+                </div>
+            </td>
+            <td>
+                <input type="text" class="form-control form-control-sm" id="preco${contadorProdutos}Input" placeholder="Unitário" readonly>
+            </td>
+            <td>
+                <input type="number" class="form-control form-control-sm" id="desconto${contadorProdutos}Input" placeholder="Desconto">
+            </td>
+            <td>
+                <input type="text" class="form-control form-control-sm" id="total${contadorProdutos}Input" placeholder="Total" readonly>
+            </td>
+        </tr>`;
         document.getElementById('produtosContainer').insertAdjacentHTML('beforeend', novoProduto);
     }
     
+    
+    
     function showLoadingSpinner() {
         document.getElementById('loadingSpinner').style.display = 'block';
-        document.getElementById('myTabContent').style.filter = 'blur(4px)';
+        document.getElementById('myTabContent').style.filter = 'blur(17px)';
     }
     
     function hideLoadingSpinner() {
