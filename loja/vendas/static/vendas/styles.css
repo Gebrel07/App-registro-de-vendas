@@ -10,3 +10,13 @@ input[type=number] {
     -moz-appearance: textfield;
     appearance: textfield;
 }
+
+.btn-vendas i {
+    font-size: 32px;
+    /* Tamanho do ícone */
+}
+
+.btn-vendas {
+    font-size: 18px;
+    /* Tamanho do texto */
+}
