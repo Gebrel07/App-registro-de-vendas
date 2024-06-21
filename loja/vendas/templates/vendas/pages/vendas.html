@@ -9,6 +9,9 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 {% block content %}
 
 <div class="container mt-4">
+    <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="display: none; position: fixed; top: 50%; left: 50%; z-index: 1000;">
+        <span class="visually-hidden">Carregando...</span>
+    </div>
     <!-- Abas -->
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -87,6 +90,23 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 <script>
     let contadorProdutos = 1;
 
+    var pendingRequests = 0;
+
+    function incrementPendingRequests() {
+        pendingRequests++;
+    }
+
+    function decrementPendingRequests() {
+        pendingRequests--;
+        if (pendingRequests === 0) {
+            hideLoadingSpinner(); // Esconde o spinner e mostra o conteúdo quando todas as requisições são concluídas
+        }
+    }
+
+    function checkAllRequestsCompleted() {
+        decrementPendingRequests();
+    }
+
     function adicionarProduto() {
         contadorProdutos++;
         let novoProduto = `
@@ -108,6 +128,16 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         document.getElementById('produtosContainer').insertAdjacentHTML('beforeend', novoProduto);
     }
 
+    function showLoadingSpinner() {
+        document.getElementById('loadingSpinner').style.display = 'block';
+        document.getElementById('myTabContent').style.filter = 'blur(4px)';
+    }
+    
+    function hideLoadingSpinner() {
+        document.getElementById('loadingSpinner').style.display = 'none';
+        document.getElementById('myTabContent').style.filter = 'none';
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         var clienteId = localStorage.getItem('clienteId');
         var vendedorId = localStorage.getItem('vendedorId');
@@ -127,6 +157,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                 } else {
                     console.error('Erro na requisição. Status:', xhr.status);
                 }
+                checkAllRequestsCompleted()
             };
             xhr.onerror = function() {
                 console.error('Erro na requisição.');
@@ -135,6 +166,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         }
 
         function obterNomeVendedor(vendedorId) {
+
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/api/obter_nome_vendedor/?vendedor_id=' + vendedorId, true);
             xhr.onload = function() {
@@ -148,6 +180,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                 } else {
                     console.error('Erro na requisição. Status:', xhr.status);
                 }
+                checkAllRequestsCompleted()
             };
             xhr.onerror = function() {
                 console.error('Erro na requisição.');
@@ -156,6 +189,8 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         }
  
         function obterPrecoProduto(produtoId,inputId,precoId){
+            showLoadingSpinner()
+
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/api/obter_preco_produto/?produto_id=' + produtoId, true);
             xhr.onload = function() {
@@ -169,6 +204,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                 } else {
                     console.error('Erro na requisição. Status:', xhr.status);
                 }
+                checkAllRequestsCompleted()
             };
             xhr.onerror = function() {
                 console.error('Erro na requisição.');
@@ -191,6 +227,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                 } else {
                     console.error('Erro na requisição. Status:', xhr.status);
                 }
+                checkAllRequestsCompleted()
             };
             xhr.onerror = function() {
                 console.error('Erro na requisição.');
@@ -199,23 +236,28 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         }
 
         if (clienteId) {
+            incrementPendingRequests();
             obterNomeCliente(clienteId);
         }
 
         if (vendedorId) {
+            incrementPendingRequests();
             obterNomeVendedor(vendedorId);
         }
 
         for (let i = 1; i <= contadorProdutoId; i++) {
             let produtoId = localStorage.getItem(`produtoId${i}`);
             if (produtoId) {
+                incrementPendingRequests();
                 obterNomeProduto(produtoId, `produto${i}Input`, `preco${i}Input`);
+                incrementPendingRequests();
                 obterPrecoProduto(produtoId, `produto${i}Input`, `preco${i}Input`);
                 if (i >= 1) {
                     adicionarProduto();
                 }
             }
         }
+        checkAllRequestsCompleted();
     });
 </script>
 
