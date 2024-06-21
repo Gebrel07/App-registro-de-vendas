@@ -1,9 +1,14 @@
 from django.urls import path
 
 from . import views
-from .produto.views import *
-from .vendedor.views import *
-from .cliente.views import *
+from .cliente.views import (criar_cliente, deletar_cliente, editar_cliente,
+                            listar_clientes, obter_nome_cliente,
+                            selecionar_cliente)
+from .produto.views import (criar_produto, obter_nome_produto,
+                            selecionar_produto)
+from .vendedor.views import (criar_vendedor, deletar_vendedor, editar_vendedor,
+                             listar_vendedores, obter_nome_vendedor,
+                             selecionar_vendedor)
 
 urlpatterns = [
     # Home
