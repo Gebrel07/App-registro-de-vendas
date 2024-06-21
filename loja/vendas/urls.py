@@ -38,6 +38,6 @@ urlpatterns = [
 
     # Produtos
     path("produtos/criar", criar_produto, name="criar_produto"),
-    path("produtos/<int:cliente_id>/", editar_produto, name="editar_produto"),
+    path("produtos/<int:produto_id>/", editar_produto, name="editar_produto"),
     path('api/obter_nome_produto/', obter_nome_produto, name='obter_nome_produto'),
 ]

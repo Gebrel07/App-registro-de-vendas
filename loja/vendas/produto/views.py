@@ -42,9 +42,9 @@ def criar_produto(request: HttpRequest) -> render:
 
 
 def editar_produto(
-    request: HttpRequest, cliente_id: int
+    request: HttpRequest, produto_id: int
 ) -> HttpResponse | HttpResponseRedirect:
-    produto = get_object_or_404(klass=Produto, id=cliente_id)
+    produto = get_object_or_404(klass=Produto, id=produto_id)
 
     initial_data = {
         "nome": produto.nome,
@@ -65,7 +65,7 @@ def editar_produto(
     form = ProdutoForm(data=request.POST, initial=initial_data)
 
     if not form.has_changed() or not form.is_valid():
-        return redirect("editar_produto", cliente_id=cliente_id)
+        return redirect("editar_produto", produto_id=produto_id)
 
     try:
         for field in form.changed_data:
@@ -82,7 +82,7 @@ def editar_produto(
             message="Erro ao editar produto",
         )
     finally:
-        return redirect("editar_produto", cliente_id=cliente_id)
+        return redirect("editar_produto", produto_id=produto_id)
 
 
 def selecionar_produto(request: HttpRequest) -> render:
