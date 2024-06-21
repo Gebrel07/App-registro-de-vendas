@@ -40,7 +40,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 
                 <!-- Campo e botão para Clientes -->
                 <div class="row mb-3 align-items-center">
-                    <label for="clientesInput" class="col-auto col-form-label">Cliente</label>
+                    <label style = "margin-left:20px;"for="clientesInput" class="col-auto col-form-label">Cliente</label>
                     <div class="col">
                         <div class="input-group">
                             <input type="text" class="form-control" id="clientesInput" placeholder="Digite o nome do cliente">
@@ -72,7 +72,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                                         <td class="col-1">
                                             <input type="number" class="form-control form-control-sm" id="quantidade1Input" placeholder="Qtd." readonly>
                                         </td>
-                                        <td class="col-6"> <!-- Aumento do tamanho da coluna para 4 unidades -->
+                                        <td class="col-6">
                                             <div class="input-group">
                                                 <input type="text" class="form-control form-control-sm" id="produto1Input" placeholder="Nome do produto">
                                                 <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
@@ -82,7 +82,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                                             <input type="text" class="form-control form-control-sm" id="preco1Input" placeholder="Unitário" readonly>
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control form-control-sm" id="desconto1Input" placeholder="Desconto (%)">
+                                            <input type="number" class="form-control form-control-sm" id="desconto1Input" placeholder="Desconto">
                                         </td>
                                         <td>
                                             <input type="text" class="form-control form-control-sm" id="total1Input" placeholder="Total" readonly>
@@ -119,7 +119,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
     function decrementPendingRequests() {
         pendingRequests--;
         if (pendingRequests === 0) {
-            hideLoadingSpinner(); // Esconde o spinner e mostra o conteúdo quando todas as requisições são concluídas
+            hideLoadingSpinner(); 
         }
     }
     
@@ -152,9 +152,35 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         </tr>`;
         document.getElementById('produtosContainer').insertAdjacentHTML('beforeend', novoProduto);
     }
+
+
+    function calcularTotal(precoUnitarioID, desconto, totalInputId) {
+        let preco = parseFloat(document.getElementById(precoUnitarioID).value);
+        let desc = parseFloat(desconto);
     
+        if (!isNaN(preco)) {
+            let total = preco - (isNaN(desc) ? 0 : desc);
+            document.getElementById(totalInputId).value = total.toFixed(2); // Arredonda para duas casas decimais
+        } else {
+            document.getElementById(totalInputId).value = ''; // Limpa o campo se o preço não for numérico
+        }
+    }
     
+    function handleDescontoChange(descontoInputId, precoUnitarioID, totalInputId) {
+        let descontoInput = document.getElementById(descontoInputId);
+        let totalInput = document.getElementById(totalInputId);
+        let precoUnitario = parseFloat(document.getElementById(precoUnitarioID).value);
     
+        // Ao carregar a página, definir o total como o preço unitário inicial
+        totalInput.value = precoUnitario.toFixed(2);
+    
+        descontoInput.addEventListener('input', function() {
+            let descontoValue = descontoInput.value;
+            calcularTotal(precoUnitarioID, descontoValue, totalInputId);
+        });
+    }
+
+
     function showLoadingSpinner() {
         document.getElementById('loadingSpinner').style.display = 'block';
         document.getElementById('myTabContent').style.filter = 'blur(17px)';
@@ -190,6 +216,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         }
     
         function obterNomeCliente(clienteId) {
+            showLoadingSpinner();
             requestAPI(`/api/obter_nome_cliente/?cliente_id=${clienteId}`, function(response) {
                 if (response.nome_cliente) {
                     document.getElementById('clientesInput').value = response.nome_cliente;
@@ -200,6 +227,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         }
     
         function obterNomeVendedor(vendedorId) {
+            showLoadingSpinner();
             requestAPI(`/api/obter_nome_vendedor/?vendedor_id=${vendedorId}`, function(response) {
                 if (response.nome_vendedor) {
                     document.getElementById('vendedoresInput').value = response.nome_vendedor;
@@ -209,11 +237,12 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             });
         }
     
-        function obterPrecoProduto(produtoId, precoId) {
+        function obterPrecoProduto(produtoId, precoId,count) {
             showLoadingSpinner();
             requestAPI(`/api/obter_preco_produto/?produto_id=${produtoId}`, function(response) {
                 if (response.preco_produto) {
                     document.getElementById(precoId).value = response.preco_produto;
+                    handleDescontoChange(`desconto${count}Input`, `preco${count}Input`, `total${count}Input`);
                 } else {
                     console.error('Erro ao obter preço do produto:', response.error);
                 }
@@ -238,11 +267,12 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             if (produtoId) {
                 adicionarProduto();
                 obterNomeProduto(produtoId, `produto${i}Input`);
-                obterPrecoProduto(produtoId, `preco${i}Input`);
+                obterPrecoProduto(produtoId, `preco${i}Input`,i);
             }
+            
         }
+
     });
-    
 </script>
 
 <style>
