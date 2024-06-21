@@ -4,8 +4,8 @@ from . import views
 from .cliente.views import (criar_cliente, deletar_cliente, editar_cliente,
                             listar_clientes, obter_nome_cliente,
                             selecionar_cliente)
-from .produto.views import (criar_produto, editar_produto, obter_nome_produto,
-                            selecionar_produto)
+from .produto.views import (criar_produto, editar_produto, listar_produtos,
+                            obter_nome_produto, selecionar_produto)
 from .vendedor.views import (criar_vendedor, deletar_vendedor, editar_vendedor,
                              listar_vendedores, obter_nome_vendedor,
                              selecionar_vendedor)
@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/obter_nome_cliente/', obter_nome_cliente, name='obter_nome_cliente'),
 
     # Produtos
+    path("produtos/", listar_produtos, name="listar_produtos"),
     path("produtos/criar", criar_produto, name="criar_produto"),
     path("produtos/<int:produto_id>/", editar_produto, name="editar_produto"),
     path('api/obter_nome_produto/', obter_nome_produto, name='obter_nome_produto'),

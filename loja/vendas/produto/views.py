@@ -7,6 +7,15 @@ from .forms import ProdutoForm
 from .models import Produto
 
 
+def listar_produtos(request: HttpRequest) -> HttpResponse:
+    produtos = Produto.objects.all()
+    return render(
+        request=request,
+        template_name="vendas/produto/listar_produtos.html",
+        context={"produtos": produtos},
+    )
+
+
 def criar_produto(request: HttpRequest) -> render:
     if request.method == "POST":
         form = ProdutoForm(request.POST)
