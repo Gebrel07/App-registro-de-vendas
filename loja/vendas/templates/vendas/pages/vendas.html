@@ -30,7 +30,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                     <div class="col">
                         <div class="input-group">
                             <input type="text" class="form-control" id="vendedoresInput" placeholder="Digite o nome do vendedor">
-                            <button class="btn btn-primary" onclick="location.href='{% url 'selecionar_vendedor' %}'">Selecionar</button>
+                            <button class="btn btn-secondary" onclick="location.href='{% url 'selecionar_vendedor' %}'">Selecionar</button>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                     <div class="col">
                         <div class="input-group">
                             <input type="text" class="form-control" id="clientesInput" placeholder="Digite o nome do cliente">
-                            <button class="btn btn-primary" onclick="location.href='{% url 'selecionar_cliente' %}'">Selecionar</button>
+                            <button class="btn btn-secondary" onclick="location.href='{% url 'selecionar_cliente' %}'">Selecionar</button>
                         </div>
                     </div>
                 </div>
@@ -53,19 +53,23 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                     </div>
                     <div class="card-body" id="produtosContainer">
                         <!-- Produtos serão adicionados dinamicamente aqui -->
-                        <div class="row mb-3">
-                            <div class="col-auto">
-                                <label for="produto1Input" class="col-form-label">Produto 1</label>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-2">
+                                <input type="number" class="form-control form-control-sm" id="quantidade1Input" placeholder="Quantidade" >
                             </div>
                             <div class="col">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="produto1Input" placeholder="Digite o nome do produto">
-                                    <button class="btn btn-primary" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
-                                </div>
+                                <input type="text" class="form-control form-control-sm" id="produto1Input" placeholder="Nome do produto">
+                            </div>
+                            <div class="col-1">
+                                <input type="text" class="form-control form-control-sm" id="preco1Input" placeholder="Valor" readonly>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
                             </div>
                         </div>
                     </div>
                 </div>
+ 
             </div>
         </div>
 
@@ -82,19 +86,22 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
 
 <script>
     let contadorProdutos = 1;
-    
+
     function adicionarProduto() {
         contadorProdutos++;
         let novoProduto = `
-        <div class="row mb-3">
-            <div class="col-auto">
-                <label for="produto${contadorProdutos}Input" class="col-form-label">Produto ${contadorProdutos}</label>
+        <div class="row mb-3 align-items-center">
+            <div class="col-2">
+                <input type="number" class="form-control form-control-sm" id="quantidade${contadorProdutos}Input" placeholder="Quantidade" readonly>
             </div>
             <div class="col">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="produto${contadorProdutos}Input" placeholder="Digite o nome do produto">
-                    <button class="btn btn-primary" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
-                </div>
+                <input type="text" class="form-control form-control-sm" id="produto${contadorProdutos}Input" placeholder="Nome do produto">
+            </div>
+            <div class="col-1">
+                <input type="text" class="form-control form-control-sm" id="preco${contadorProdutos}Input" placeholder="Valor" readonly>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'selecionar_produto' %}'">Selecionar</button>
             </div>
         </div>`;
 
@@ -147,8 +154,30 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             };
             xhr.send();
         }
+ 
+        function obterPrecoProduto(produtoId,inputId,precoId){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/obter_preco_produto/?produto_id=' + produtoId, true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.preco_produto) {
+                        document.getElementById(precoId).value = response.preco_produto;  // Assumindo que a resposta tem um campo 'preco_produto'
+                    } else {
+                        console.error('Erro ao obter preco do produto:', response.error);
+                    }
+                } else {
+                    console.error('Erro na requisição. Status:', xhr.status);
+                }
+            };
+            xhr.onerror = function() {
+                console.error('Erro na requisição.');
+            };
+            xhr.send();
+            
+        }
 
-        function obterNomeProduto(produtoId, inputId) {
+        function obterNomeProduto(produtoId, inputId, precoId) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/api/obter_nome_produto/?produto_id=' + produtoId, true);
             xhr.onload = function() {
@@ -180,7 +209,8 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         for (let i = 1; i <= contadorProdutoId; i++) {
             let produtoId = localStorage.getItem(`produtoId${i}`);
             if (produtoId) {
-                obterNomeProduto(produtoId, `produto${i}Input`);
+                obterNomeProduto(produtoId, `produto${i}Input`, `preco${i}Input`);
+                obterPrecoProduto(produtoId, `produto${i}Input`, `preco${i}Input`);
                 if (i >= 1) {
                     adicionarProduto();
                 }
@@ -188,5 +218,14 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         }
     });
 </script>
+
+<style>
+    .form-control-sm {
+        font-size: 0.875rem; /* Font size smaller */
+    }
+    .btn-sm {
+        font-size: 0.875rem; /* Font size smaller */
+    }
+</style>
 
 {% endblock %}
