@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.http import (HttpRequest, HttpResponse, HttpResponseNotAllowed,
                          HttpResponseRedirect, JsonResponse)
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 from .forms import ProdutoForm
 from .models import Produto
@@ -68,7 +69,13 @@ def editar_produto(
         return render(
             request=request,
             template_name="vendas/produto/editar_produto.html",
-            context={"form": form},
+            context={
+                "form": form,
+                "delete_url": reverse(
+                    viewname="deletar_produto",
+                    kwargs={"produto_id": produto_id},
+                ),
+            },
         )
 
     form = ProdutoForm(data=request.POST, initial=initial_data)
