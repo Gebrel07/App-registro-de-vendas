@@ -70,7 +70,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                                     <!-- Produtos serão adicionados dinamicamente aqui -->
                                     <tr class="align-items-center">
                                         <td class="col-1">
-                                            <input type="number" class="form-control form-control-sm" id="quantidade1Input" placeholder="Qtd." readonly>
+                                            <input type="number" class="form-control form-control-sm" id="quantidade1Input" placeholder="Qtd." value=1>
                                         </td>
                                         <td class="col-6">
                                             <div class="input-group">
@@ -112,27 +112,33 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
     let contadorProdutos = 1;
     let pendingRequests = 0;
     
+    /**
+     * Incrementa o contador de requisições pendentes.
+     */
     function incrementPendingRequests() {
         pendingRequests++;
     }
     
+    /**
+     * Decrementa o contador de requisições pendentes e
+     * esconde o spinner de carregamento se todas as requisições estiverem completas.
+     */
     function decrementPendingRequests() {
         pendingRequests--;
         if (pendingRequests === 0) {
-            hideLoadingSpinner(); 
+            hideLoadingSpinner();
         }
     }
     
-    function checkAllRequestsCompleted() {
-        decrementPendingRequests();
-    }
-    
+    /**
+     * Adiciona um novo produto na tabela.
+     */
     function adicionarProduto() {
         contadorProdutos++;
         let novoProduto = `
         <tr class="align-items-center">
             <td class="col-1">
-                <input type="number" class="form-control form-control-sm" id="quantidade${contadorProdutos}Input" placeholder="Qtd." readonly>
+                <input type="number" class="form-control form-control-sm" id="quantidade${contadorProdutos}Input" placeholder="Qtd." value="1">
             </td>
             <td class="col-6">
                 <div class="input-group">
@@ -151,41 +157,61 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             </td>
         </tr>`;
         document.getElementById('produtosContainer').insertAdjacentHTML('beforeend', novoProduto);
+    
+        // Configura o cálculo do total com base nos valores iniciais do novo produto.
+        handleDescontoChange(`desconto${contadorProdutos}Input`, `preco${contadorProdutos}Input`, `quantidade${contadorProdutos}Input`, `total${contadorProdutos}Input`);
     }
-
-
-    function calcularTotal(precoUnitarioID, desconto, totalInputId) {
+    
+    /**
+     * Calcula o valor total do produto com base no preço unitário, desconto e quantidade.
+     */
+    function calcularTotal(precoUnitarioID, desconto, quantidadeID, totalInputId) {
         let preco = parseFloat(document.getElementById(precoUnitarioID).value);
         let desc = parseFloat(desconto);
+        let quantidade = parseInt(document.getElementById(quantidadeID).value);
     
-        if (!isNaN(preco)) {
-            let total = preco - (isNaN(desc) ? 0 : desc);
+        if (!isNaN(preco) && !isNaN(quantidade)) {
+            let total = (preco * quantidade) - (isNaN(desc) ? 0 : desc);
             document.getElementById(totalInputId).value = total.toFixed(2); // Arredonda para duas casas decimais
         } else {
-            document.getElementById(totalInputId).value = ''; // Limpa o campo se o preço não for numérico
+            document.getElementById(totalInputId).value = ''; // Limpa o campo se o preço ou quantidade não forem numéricos
         }
     }
     
-    function handleDescontoChange(descontoInputId, precoUnitarioID, totalInputId) {
+    /**
+     * Configura os eventos de mudança no desconto e quantidade para recalcular o total.
+     */
+    function handleDescontoChange(descontoInputId, precoUnitarioID, quantidadeID, totalInputId) {
         let descontoInput = document.getElementById(descontoInputId);
+        let quantidadeInput = document.getElementById(quantidadeID);
         let totalInput = document.getElementById(totalInputId);
         let precoUnitario = parseFloat(document.getElementById(precoUnitarioID).value);
     
-        // Ao carregar a página, definir o total como o preço unitário inicial
-        totalInput.value = precoUnitario.toFixed(2);
+        // Ao carregar a página, definir o total como o preço unitário inicial multiplicado pela quantidade inicial
+        totalInput.value = (precoUnitario * parseInt(quantidadeInput.value)).toFixed(2);
     
         descontoInput.addEventListener('input', function() {
             let descontoValue = descontoInput.value;
-            calcularTotal(precoUnitarioID, descontoValue, totalInputId);
+            calcularTotal(precoUnitarioID, descontoValue, quantidadeID, totalInputId);
+        });
+    
+        quantidadeInput.addEventListener('input', function() {
+            let descontoValue = descontoInput.value;
+            calcularTotal(precoUnitarioID, descontoValue, quantidadeID, totalInputId);
         });
     }
-
-
+    
+    /**
+     * Mostra o spinner de carregamento.
+     */
     function showLoadingSpinner() {
         document.getElementById('loadingSpinner').style.display = 'block';
         document.getElementById('myTabContent').style.filter = 'blur(17px)';
     }
     
+    /**
+     * Esconde o spinner de carregamento.
+     */
     function hideLoadingSpinner() {
         document.getElementById('loadingSpinner').style.display = 'none';
         document.getElementById('myTabContent').style.filter = 'none';
@@ -196,6 +222,9 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
         const vendedorId = localStorage.getItem('vendedorId');
         const contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
     
+        /**
+         * Realiza uma requisição à API.
+         */
         function requestAPI(url, callback) {
             incrementPendingRequests();
             let xhr = new XMLHttpRequest();
@@ -206,15 +235,18 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                 } else {
                     console.error('Erro na requisição. Status:', xhr.status);
                 }
-                checkAllRequestsCompleted();
+                decrementPendingRequests();
             };
             xhr.onerror = function() {
                 console.error('Erro na requisição.');
-                checkAllRequestsCompleted();
+                decrementPendingRequests();
             };
             xhr.send();
         }
     
+        /**
+         * Obtém o nome do cliente a partir do ID.
+         */
         function obterNomeCliente(clienteId) {
             showLoadingSpinner();
             requestAPI(`/api/obter_nome_cliente/?cliente_id=${clienteId}`, function(response) {
@@ -226,6 +258,9 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             });
         }
     
+        /**
+         * Obtém o nome do vendedor a partir do ID.
+         */
         function obterNomeVendedor(vendedorId) {
             showLoadingSpinner();
             requestAPI(`/api/obter_nome_vendedor/?vendedor_id=${vendedorId}`, function(response) {
@@ -237,18 +272,24 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             });
         }
     
-        function obterPrecoProduto(produtoId, precoId,count) {
+        /**
+         * Obtém o preço do produto a partir do ID.
+         */
+        function obterPrecoProduto(produtoId, precoId, count) {
             showLoadingSpinner();
             requestAPI(`/api/obter_preco_produto/?produto_id=${produtoId}`, function(response) {
                 if (response.preco_produto) {
                     document.getElementById(precoId).value = response.preco_produto;
-                    handleDescontoChange(`desconto${count}Input`, `preco${count}Input`, `total${count}Input`);
+                    handleDescontoChange(`desconto${count}Input`, `preco${count}Input`, `quantidade${count}Input`, `total${count}Input`);
                 } else {
                     console.error('Erro ao obter preço do produto:', response.error);
                 }
             });
         }
     
+        /**
+         * Obtém o nome do produto a partir do ID.
+         */
         function obterNomeProduto(produtoId, inputId) {
             requestAPI(`/api/obter_nome_produto/?produto_id=${produtoId}`, function(response) {
                 if (response.nome_produto) {
@@ -259,20 +300,21 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             });
         }
     
+        // Se os IDs do cliente e vendedor estiverem disponíveis, obtém seus nomes.
         if (clienteId) obterNomeCliente(clienteId);
         if (vendedorId) obterNomeVendedor(vendedorId);
     
+        // Carrega os produtos salvos no localStorage.
         for (let i = 1; i <= contadorProdutoId; i++) {
             let produtoId = localStorage.getItem(`produtoId${i}`);
             if (produtoId) {
                 adicionarProduto();
                 obterNomeProduto(produtoId, `produto${i}Input`);
-                obterPrecoProduto(produtoId, `preco${i}Input`,i);
+                obterPrecoProduto(produtoId, `preco${i}Input`, i);
             }
-            
         }
-
     });
+    
 </script>
 
 <style>
