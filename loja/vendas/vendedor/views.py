@@ -63,14 +63,6 @@ def editar_vendedor(request: HttpRequest, vendedor_id: int) -> render:
     )
 
 
-def selecionar_vendedor(request: HttpRequest) -> render:
-    vendedores = Vendedor.objects.all()
-    return render(
-        request,
-        "vendas/vendedor/selecionar_vendedor.html",
-        {"vendedores": vendedores},
-    )
-
 def deletar_vendedor(request: HttpRequest, vendedor_id: int):
     vendedor = get_object_or_404(Vendedor, id=vendedor_id)
     vendedores = Vendedor.objects.all()

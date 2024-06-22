@@ -1,15 +1,14 @@
 from django.urls import path
 
 from .cliente.views import (criar_cliente, deletar_cliente, editar_cliente,
-                            listar_clientes, obter_nome_cliente,
-                            selecionar_cliente)
+                            listar_clientes, obter_nome_cliente)
 from .produto.views import (criar_produto, deletar_produto, editar_produto,
                             listar_produtos, obter_nome_produto,
-                            obter_preco_produto, selecionar_produto)
-from .venda.views import page_vendas
+                            obter_preco_produto)
+from .venda.views import (page_vendas, selecionar_cliente, selecionar_produto,
+                          selecionar_vendedor)
 from .vendedor.views import (criar_vendedor, deletar_vendedor, editar_vendedor,
-                             listar_vendedores, obter_nome_vendedor,
-                             selecionar_vendedor)
+                             listar_vendedores, obter_nome_vendedor)
 from .views import home
 
 urlpatterns = [

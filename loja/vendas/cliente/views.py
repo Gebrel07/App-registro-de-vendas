@@ -81,16 +81,6 @@ def editar_cliente(request: HttpRequest, cliente_id: int) -> render:
         },
     )
 
-
-def selecionar_cliente(request: HttpRequest) -> render:
-    clientes = Cliente.objects.all()
-    return render(
-        request,
-        "vendas/cliente/selecionar_cliente.html",
-        {"clientes": clientes},
-    )
-
- 
  
 def deletar_cliente(request: HttpRequest, cliente_id: int):
     cliente = get_object_or_404(Cliente, id=cliente_id)

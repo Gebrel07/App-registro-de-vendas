@@ -124,15 +124,6 @@ def deletar_produto(
         return redirect("listar_produtos")
 
 
-def selecionar_produto(request: HttpRequest) -> render:
-    produtos = Produto.objects.all()
-    return render(
-        request,
-        "vendas/produto/selecionar_produto.html",
-        {"produtos": produtos},
-    )
-
-
 def obter_nome_produto(request: HttpRequest) -> render:
     if request.method == "GET":
         produto_id = request.GET.get("produto_id")
