@@ -3,7 +3,10 @@
 {% load widget_tweaks %}
 
 {% block content %}
-  <h3>Produtos</h3>
+  <div class="d-flex justify-content-between">
+    <h3>Produtos</h3>
+    <a class="btn btn-success" href="{% url 'criar_produto' %}" role="button">Criar</a>
+  </div>
   <table class="table table-striped table-sm">
     <thead>
       <tr>
