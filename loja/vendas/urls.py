@@ -7,7 +7,7 @@ from .cliente.views import (criar_cliente, deletar_cliente, editar_cliente,
 from .produto.views import (criar_produto, deletar_produto, editar_produto,
                             listar_produtos, obter_nome_produto,
                             obter_preco_produto, selecionar_produto)
-from .vendas.views import page_vendas
+from .venda.views import page_vendas
 from .vendedor.views import (criar_vendedor, deletar_vendedor, editar_vendedor,
                              listar_vendedores, obter_nome_vendedor,
                              selecionar_vendedor)
