@@ -1,6 +1,5 @@
 from django.urls import path
 
-from . import views
 from .cliente.views import (criar_cliente, deletar_cliente, editar_cliente,
                             listar_clientes, obter_nome_cliente,
                             selecionar_cliente)
@@ -11,10 +10,11 @@ from .venda.views import page_vendas
 from .vendedor.views import (criar_vendedor, deletar_vendedor, editar_vendedor,
                              listar_vendedores, obter_nome_vendedor,
                              selecionar_vendedor)
+from .views import home
 
 urlpatterns = [
     # Home
-    path("", views.home, name="home"),
+    path("", home, name="home"),
 
     # Vendas
     path("vendas/", page_vendas, name="page_vendas"),
