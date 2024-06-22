@@ -7,6 +7,7 @@ from .cliente.views import (criar_cliente, deletar_cliente, editar_cliente,
 from .produto.views import (criar_produto, deletar_produto, editar_produto,
                             listar_produtos, obter_nome_produto,
                             obter_preco_produto, selecionar_produto)
+from .vendas.views import page_vendas
 from .vendedor.views import (criar_vendedor, deletar_vendedor, editar_vendedor,
                              listar_vendedores, obter_nome_vendedor,
                              selecionar_vendedor)
@@ -16,7 +17,7 @@ urlpatterns = [
     path("", views.home, name="home"),
 
     # Vendas
-    path("vendas/", views.page_vendas, name="page_vendas"),
+    path("vendas/", page_vendas, name="page_vendas"),
     path("vendas/selecionar_cliente", selecionar_cliente, name="selecionar_cliente"),
     path("vendas/selecionar_vendedor", selecionar_vendedor, name="selecionar_vendedor"),
     path("vendas/selecionar_produto", selecionar_produto , name="selecionar_produto"),
