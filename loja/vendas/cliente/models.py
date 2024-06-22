@@ -1,5 +1,7 @@
 from django.db import models
-from ..common.models import Pessoa
+
+from ..models import Pessoa
+
 
 class Endereco(models.Model):
     rua = models.CharField(max_length=255, null=False)
@@ -10,7 +12,8 @@ class Endereco(models.Model):
 
     def __str__(self) -> str:
         return f"id: {self.id}, rua: {self.rua}, cidade: {self.cidade}, estado: {self.estado}"
-    
+
+
 class Cliente(Pessoa):
     email = models.CharField(max_length=255, null=True)
     telefone = models.CharField(max_length=20, null=True)
@@ -18,4 +21,3 @@ class Cliente(Pessoa):
 
     def __str__(self) -> str:
         return f"{super().__str__()}, email: {self.email}"
-    

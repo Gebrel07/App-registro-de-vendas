@@ -1,7 +1,8 @@
 from django.db import models
-from ..common.models import Pessoa
 
- 
+from ..models import Pessoa
+
+
 class Vendedor(Pessoa):
     matricula = models.CharField(max_length=255, null=False, unique=True)
     data_contratacao = models.DateField(null=False)
