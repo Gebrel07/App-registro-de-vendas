@@ -9,7 +9,7 @@ def listar_clientes(request: HttpRequest) -> render:
     clientes = Cliente.objects.all()
     return render(
         request,
-        "vendas/clientes/listar_clientes.html",
+        "vendas/cliente/listar_clientes.html",
         {"clientes_list": clientes},
     )
 
@@ -42,7 +42,7 @@ def criar_cliente(request: HttpRequest) -> render:
 
     return render(
         request,
-        "vendas/clientes/criar_cliente.html",
+        "vendas/cliente/criar_cliente.html",
         {"cliente_form": cliente_form, "endereco_form": endereco_form},
     )
 
@@ -74,7 +74,7 @@ def editar_cliente(request: HttpRequest, cliente_id: int) -> render:
 
     return render(
         request,
-        "vendas/clientes/editar_cliente.html",
+        "vendas/cliente/editar_cliente.html",
         {
             "cliente_form": cliente_form,
             "endereco_form": endereco_form,
@@ -86,7 +86,7 @@ def selecionar_cliente(request: HttpRequest) -> render:
     clientes = Cliente.objects.all()
     return render(
         request,
-        "vendas/clientes/selecionar_cliente.html",
+        "vendas/cliente/selecionar_cliente.html",
         {"clientes": clientes},
     )
 
@@ -107,7 +107,7 @@ def deletar_cliente(request: HttpRequest, cliente_id: int):
     
     return render(
             request,
-            "vendas/clientes/listar_clientes.html",
+            "vendas/cliente/listar_clientes.html",
             {"clientes_list": clientes},
         )
  
