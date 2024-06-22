@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (criar_vendedor, deletar_vendedor, editar_vendedor,
                     listar_vendedores, obter_nome_vendedor)
 
-urlpatterns = [
+vendedor_urlpatterns = [
     path("vendedores/", listar_vendedores, name="listar_vendedores"),
     path(
         "vendedores/criar/", criar_vendedor, name="criar_vendedor"

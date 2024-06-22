@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (criar_cliente, deletar_cliente, editar_cliente,
                     listar_clientes, obter_nome_cliente)
 
-urlpatterns = [
+cliente_urlpatterns = [
     path("clientes/", listar_clientes, name="listar_clientes"),
     path("clientes/criar/", criar_cliente, name="criar_cliente"),
     path(
