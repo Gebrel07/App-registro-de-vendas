@@ -1,6 +1,6 @@
 from django.contrib import messages
-from django.http import (HttpRequest, HttpResponse, HttpResponseRedirect,
-                         JsonResponse)
+from django.http import (HttpRequest, HttpResponse, HttpResponseNotAllowed,
+                         HttpResponseRedirect, JsonResponse)
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ProdutoForm
@@ -92,6 +92,29 @@ def editar_produto(
         )
     finally:
         return redirect("editar_produto", produto_id=produto_id)
+
+
+def deletar_produto(
+    request: HttpRequest, produto_id: int
+) -> HttpResponseRedirect | HttpResponseNotAllowed:
+    produto = get_object_or_404(klass=Produto, id=produto_id)
+
+    if request.method != "POST":
+        return HttpResponseNotAllowed(permitted_methods=["POST"])
+
+    try:
+        produto.delete()
+        messages.success(
+            request=request, message="Produto deletado com sucesso!"
+        )
+    except Exception:
+        # TODO: logar erros
+        messages.error(
+            request=request,
+            message="Erro ao deletar produto",
+        )
+    finally:
+        return redirect("listar_produtos")
 
 
 def selecionar_produto(request: HttpRequest) -> render:
