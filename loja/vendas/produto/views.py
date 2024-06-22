@@ -41,7 +41,7 @@ def criar_produto(request: HttpRequest) -> render:
                     message="Erro ao criar produto",
                 )
             finally:
-                return redirect("criar_produto")
+                return redirect("listar_produtos")
     else:
         form = ProdutoForm()
         return render(
