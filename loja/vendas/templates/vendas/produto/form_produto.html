@@ -1,6 +1,6 @@
 {% load widget_tweaks %}
 
-<form method="POST" class="mt-3 border border-gray rounded p-4">
+<form method="POST" class="border border-gray rounded p-4">
   {% csrf_token %}
   {% for field in form %}
     <div class="mb-3">
