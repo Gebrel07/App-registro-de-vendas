@@ -6,6 +6,7 @@
     <div class="mb-3">
       <label for="id_nome_produto" class="form-label">{{ field.label }}</label>
       {% render_field field class='form-control' %}
+      {% include 'vendas/partials/form_field_errors.html' with errors=field.errors %}
     </div>
   {% endfor %}
   <button type="submit" class="btn btn-primary">Salvar</button>
