@@ -114,6 +114,7 @@ def obter_nome_produto(request: HttpRequest) -> render:
     else:
         return JsonResponse({"error": "Método não suportado"}, status=405)
 
+
 def obter_preco_produto(request: HttpRequest) -> render:
     if request.method == "GET":
         produto_id = request.GET.get("produto_id")
@@ -124,4 +125,3 @@ def obter_preco_produto(request: HttpRequest) -> render:
             return JsonResponse({"error": "Produto não encontrado"}, status=404)
     else:
         return JsonResponse({"error": "Método não suportado"}, status=405)
-    
