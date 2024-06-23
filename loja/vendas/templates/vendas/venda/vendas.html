@@ -64,7 +64,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                                         <th scope="col">Unitário</th>
                                         <th scope="col">Desconto (%)</th>
                                         <th scope="col">Total</th>
-
+                                        <th scope="col">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id="produtosContainer">
@@ -282,14 +282,20 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                     </td>
                     
                     <td>
-                        
+                        <button class="btn btn-danger btn-sm" onclick="removerProduto(${contadorProdutos}, '${produtoId}')">Remover</button>
                     </td>
                 </tr>`;
             document.getElementById('produtosContainer').insertAdjacentHTML('beforeend', novoProduto);
             handleDescontoChange(`desconto${contadorProdutos}Input`, `preco${contadorProdutos}Input`, `quantidade${contadorProdutos}Input`, `total${contadorProdutos}Input`);
         }
     }
-
+        // Função para remover um produto
+    function removerProduto(id, produtoId) {
+        // Remove da lista local
+        delete produtosAdicionados[produtoId];
+        // Remove da interface
+        document.getElementById(`quantidade${id}Input`).parentNode.parentNode.remove();
+    }
     // Inicialização ao carregar a página
     document.addEventListener('DOMContentLoaded', function() {
         const clienteId = localStorage.getItem('clienteId');
