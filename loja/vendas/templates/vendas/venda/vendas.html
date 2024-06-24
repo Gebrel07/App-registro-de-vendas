@@ -260,7 +260,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             let novoProduto = `
                 <tr class="align-items-center" id="produto${produtoId}Row">
                     <td class="col-1">
-                        <input type="number" class="form-control form-control-sm" id="quantidade${produtoId}Input" placeholder="Qtd." value="1">
+                        <input type="number" class="form-control form-control-sm" id="quantidade${produtoId}Input" placeholder="Qtd." value="1" readonly>
                     </td>
                     <td class="col-6">
                         <div class="input-group">
@@ -288,37 +288,41 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
     /**
      * Remove um produto da lista e do localStorage.
      */
-    function removerProduto(produtoId) {
+     function removerProduto(produtoId) {
         // Remove da lista local
         delete produtosAdicionados[produtoId];
         
         // Remove da interface
-        document.getElementById(`produto${produtoId}Row`).remove();
+        const produtoRow = document.getElementById(`produto${produtoId}Row`);
+        if (produtoRow) {
+            produtoRow.remove();
+        }
         
         // Remove do localStorage
-        for (let i = 1; i <= localStorage.getItem('contadorProdutoId'); i++) {
-            if (localStorage.getItem(`produtoId${i}`) === produtoId) {
-                localStorage.removeItem(`produtoId${i}`);
+        const contadorProdutoId = parseInt(localStorage.getItem('contadorProdutoId'));
+        let novoContador = 0;
+        const novosProdutos = {};
+    
+        for (let i = 1; i <= contadorProdutoId; i++) {
+            const prodId = localStorage.getItem(`produtoId${i}`);
+            if (prodId !== produtoId && prodId) {
+                novoContador++;
+                localStorage.setItem(`produtoId${novoContador}`, prodId);
+                
+                // Atualiza o objeto de novos produtos para refletir no localStorage
+                novosProdutos[prodId] = { quantidade: produtosAdicionados[prodId]?.quantidade || 1 };
             }
         }
     
-        // Reajustar e reindexar os itens no localStorage
-        let contadorProdutoId = parseInt(localStorage.getItem('contadorProdutoId'));
-        let novoContador = 0;
-        let novosProdutos = {};
-        for (let i = 1; i <= contadorProdutoId; i++) {
-            let prodId = localStorage.getItem(`produtoId${i}`);
-            if (prodId) {
-                novoContador++;
-                localStorage.setItem(`produtoId${novoContador}`, prodId);
-
-                //Logica para deixar a interface igual ao locaStorage
-                novosProdutos[prodId] = { quantidade: produtosAdicionados[prodId] ? produtosAdicionados[prodId].quantidade : 1 };
-            }
+        // Remove itens excedentes no localStorage
+        for (let i = novoContador + 1; i <= contadorProdutoId; i++) {
+            localStorage.removeItem(`produtoId${i}`);
         }
+    
         localStorage.setItem('contadorProdutoId', novoContador);
         produtosAdicionados = novosProdutos;
     }
+    
     
     // Inicialização ao carregar a página
     document.addEventListener('DOMContentLoaded', function() {
