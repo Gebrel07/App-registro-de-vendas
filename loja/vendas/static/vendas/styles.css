@@ -20,3 +20,12 @@ input[type=number] {
     font-size: 18px;
     /* Tamanho do texto */
 }
+
+.decoration-none {
+    text-decoration: none;
+}
+
+.home-btn {
+    width: 150px;
+    overflow-wrap: break-word;
+}
