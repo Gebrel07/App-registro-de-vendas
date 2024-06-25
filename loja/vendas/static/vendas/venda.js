@@ -272,6 +272,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Listener para abrir o modal com o produtoId correto
   document.querySelectorAll('[data-bs-target="#modal"]').forEach(button => {
       button.addEventListener('click', function() {
+          produtoNome = document.getElementById("produto"+this.getAttribute('data-produto-id')+"Input").value;
+          document.getElementById("nomeProdutoModal").textContent = produtoNome;
           produtoIdToRemove = this.getAttribute('data-produto-id');
       });
   });
@@ -283,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
           produtoIdToRemove = null; // Reset após a remoção
  
           document.getElementById('modal').classList.remove('show');
+          location.reload();
 
       }
   });
