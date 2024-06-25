@@ -29,3 +29,13 @@ input[type=number] {
     width: 150px;
     overflow-wrap: break-word;
 }
+
+.form-control-sm {
+    font-size: 0.875rem;
+    /* Font size smaller */
+}
+
+.btn-sm {
+    font-size: 0.875rem;
+    /* Font size smaller */
+}
