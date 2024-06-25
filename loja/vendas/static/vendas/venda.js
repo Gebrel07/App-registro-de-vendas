@@ -194,7 +194,14 @@ function adicionarProduto(produtoId) {
                         <input type="text" class="form-control form-control-sm" id="total${produtoId}Input" placeholder="Total" readonly>
                     </td>
                     <td>
-                        <button class="btn btn-danger btn-sm" onclick="removerProduto('${produtoId}')">Remover</button>
+                        <button 
+                          class="btn btn-danger"
+                          type="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modal"
+                          data-produto-id = ${produtoId}
+                          >Remover
+                        </button>
                     </td>
                 </tr>`;
     document.getElementById("produtosContainer").insertAdjacentHTML("beforeend", novoProduto);
@@ -245,20 +252,39 @@ function removerProduto(produtoId) {
   produtosAdicionados = novosProdutos;
 }
 
-// Inicialização ao carregar a página
-document.addEventListener("DOMContentLoaded", function () {
-  const clienteId = localStorage.getItem("clienteId");
-  const vendedorId = localStorage.getItem("vendedorId");
-  const contadorProdutoId = localStorage.getItem("contadorProdutoId") || 0;
+document.addEventListener('DOMContentLoaded', function() {
+  const clienteId = localStorage.getItem('clienteId');
+  const vendedorId = localStorage.getItem('vendedorId');
+  const contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
+  let produtoIdToRemove;
 
   if (clienteId) obterNomeCliente(clienteId);
   if (vendedorId) obterNomeVendedor(vendedorId);
 
   // Carrega os produtos salvos no localStorage
   for (let i = 1; i <= contadorProdutoId; i++) {
-    let produtoId = localStorage.getItem(`produtoId${i}`);
-    if (produtoId) {
-      adicionarProduto(produtoId);
-    }
+      let produtoId = localStorage.getItem(`produtoId${i}`);
+      if (produtoId) {
+          adicionarProduto(produtoId);
+      }
   }
+
+  // Listener para abrir o modal com o produtoId correto
+  document.querySelectorAll('[data-bs-target="#modal"]').forEach(button => {
+      button.addEventListener('click', function() {
+          produtoIdToRemove = this.getAttribute('data-produto-id');
+      });
+  });
+
+  // Listener para confirmar a remoção do produto
+  document.getElementById('confirmRemoveBtn').addEventListener('click', function() {
+      if (produtoIdToRemove) {
+          removerProduto(produtoIdToRemove);
+          produtoIdToRemove = null; // Reset após a remoção
+ 
+          document.getElementById('modal').classList.remove('show');
+
+      }
+  });
 });
+
