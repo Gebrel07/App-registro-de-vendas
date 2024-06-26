@@ -27,13 +27,38 @@
     </table>
 </div>
 <script>
-    var contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
+    var contadorProdutoId = parseInt(localStorage.getItem('contadorProdutoId')) || 0;
+
+    function productExists(contadorProdutoId, id) {
+        for (let i = 1; i <= contadorProdutoId; i++) {  // Mudei para começar em 1, pois você incrementa antes de salvar
+            var dictVenda = JSON.parse(localStorage.getItem(`dictVenda${i}`));
+            if (dictVenda && dictVenda.produtoId === id) {
+                return i;
+            }
+        }
+        return null;
+    }
 
     function selecionarProduto(id) {
-        contadorProdutoId++;
-        localStorage.setItem('contadorProdutoId', contadorProdutoId);
-        localStorage.setItem('produtoId' + contadorProdutoId, id);
-        window.location.href = '{% url 'page_vendas' %}';
+        var produtoExistenteID = productExists(contadorProdutoId, id);
+        if (produtoExistenteID !== null) {
+            var produtoExistente = JSON.parse(localStorage.getItem(`dictVenda${produtoExistenteID}`));
+            produtoExistente.quantidade++;
+            localStorage.setItem('dictVenda'+produtoExistenteID,JSON.stringify(produtoExistente));
+            localStorage.setItem('contadorProdutoId', contadorProdutoId);
+            window.location.href = '{% url 'page_vendas' %}';
+        } else {
+            contadorProdutoId++;
+            var dictVenda = {
+                produtoId: id,
+                quantidade: 1,
+                desconto: 0
+            };
+            localStorage.setItem('contadorProdutoId', contadorProdutoId);
+            localStorage.setItem('dictVenda' + contadorProdutoId, JSON.stringify(dictVenda));
+            window.location.href = '{% url 'page_vendas' %}';
+        }
     }
 </script>
+
 {% endblock %}

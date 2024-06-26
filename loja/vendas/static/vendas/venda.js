@@ -1,4 +1,6 @@
+// Variável para contagem de requisições pendentes
 let pendingRequests = 0;
+// Dicionário para armazenar produtos adicionados
 let produtosAdicionados = {};
 
 /**
@@ -10,7 +12,7 @@ function incrementPendingRequests() {
 
 /**
  * Decrementa a quantidade de requisições pendentes.
- * Se não houver mais requisições pendentes, esconde o spinner de carregamento.
+ * Esconde o spinner de carregamento se não houver mais requisições pendentes.
  */
 function decrementPendingRequests() {
   pendingRequests--;
@@ -22,7 +24,6 @@ function decrementPendingRequests() {
 /**
  * Mostra o spinner de carregamento.
  */
-
 function showLoadingSpinner() {
   document.getElementById("loadingSpinner").style.display = "block";
   document.getElementById("myTabContent").style.filter = "blur(17px)";
@@ -39,7 +40,7 @@ function hideLoadingSpinner() {
 /**
  * Faz uma requisição ao servidor.
  * @param {string} url - A URL para fazer a requisição.
- * @param {function} callback - A função callback a ser chamada com a resposta.
+ * @param {function} callback - Função callback chamada com a resposta.
  */
 function requestAPI(url, callback) {
   incrementPendingRequests();
@@ -63,8 +64,7 @@ function requestAPI(url, callback) {
 /**
  * Obtém o nome do cliente pelo ID.
  * @param {number} clienteId - O ID do cliente.
- * @returns {Promise<string>} - Uma Promise que resolve com o nome do cliente, serve para fazer
- * resolve e reject 
+ * @returns {Promise<string>} - Promise que resolve com o nome do cliente ou rejeita com erro.
  */
 function obterNomeCliente(clienteId) {
   return new Promise((resolve, reject) => {
@@ -74,7 +74,7 @@ function obterNomeCliente(clienteId) {
         resolve(response.nome_cliente);
       } else {
         console.error("Erro ao obter nome do cliente:", response.error);
-        reject(response.error);  
+        reject(response.error);
       }
     });
   });
@@ -83,8 +83,7 @@ function obterNomeCliente(clienteId) {
 /**
  * Obtém o nome do vendedor pelo ID.
  * @param {number} vendedorId - O ID do vendedor.
- * @returns {Promise<string>} - Uma Promise que resolve com o nome do vendedor,serve para fazer
- * resolve e reject 
+ * @returns {Promise<string>} - Promise que resolve com o nome do vendedor ou rejeita com erro.
  */
 function obterNomeVendedor(vendedorId) {
   return new Promise((resolve, reject) => {
@@ -94,7 +93,7 @@ function obterNomeVendedor(vendedorId) {
         resolve(response.nome_vendedor);
       } else {
         console.error("Erro ao obter nome do vendedor:", response.error);
-        reject(response.error);  
+        reject(response.error);
       }
     });
   });
@@ -103,8 +102,7 @@ function obterNomeVendedor(vendedorId) {
 /**
  * Obtém o nome do produto pelo ID.
  * @param {number} produtoId - O ID do produto.
- * @returns {Promise<string>} - Uma Promise que resolve com o nome do produto, serve para fazer
- * resolve e reject 
+ * @returns {Promise<string>} - Promise que resolve com o nome do produto ou rejeita com erro.
  */
 function obterNomeProduto(produtoId) {
   return new Promise((resolve, reject) => {
@@ -114,7 +112,7 @@ function obterNomeProduto(produtoId) {
         resolve(response.nome_produto);
       } else {
         console.error("Erro ao obter nome do produto:", response.error);
-        reject(response.error);  
+        reject(response.error);
       }
     });
   });
@@ -123,8 +121,7 @@ function obterNomeProduto(produtoId) {
 /**
  * Obtém o preço do produto pelo ID.
  * @param {number} produtoId - O ID do produto.
- * @returns {Promise<number>} - Uma Promise que resolve com o preço do produto, serve para fazer
- * resolve e reject 
+ * @returns {Promise<number>} - Promise que resolve com o preço do produto ou rejeita com erro.
  */
 function obterPrecoProduto(produtoId) {
   return new Promise((resolve, reject) => {
@@ -134,7 +131,7 @@ function obterPrecoProduto(produtoId) {
         resolve(response.preco_produto);
       } else {
         console.error("Erro ao obter preço do produto:", response.error);
-        reject(response.error);  
+        reject(response.error);
       }
     });
   });
@@ -142,60 +139,45 @@ function obterPrecoProduto(produtoId) {
 
 /**
  * Adiciona um produto à lista.
- * @param {number} produtoId - O ID do produto a ser adicionado.
+ * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
-function adicionarProduto(produtoId) {
-  if (produtosAdicionados[produtoId]) {
-    incrementarQuantidadeProduto(produtoId);
+function adicionarProduto(dictVenda) {
+  if (produtosAdicionados[dictVenda.produtoId]) {
+    incrementarQuantidadeProduto(dictVenda.produtoId);
   } else {
-    produtosAdicionados[produtoId] = { quantidade: 1 };
-
-    obterNomeProduto(produtoId)
+    produtosAdicionados[dictVenda.produtoId] = { quantidade: 1 };
+    obterNomeProduto(dictVenda.produtoId)
       .then(nomeProduto => {
-        document.getElementById(`produto${produtoId}Input`).value = nomeProduto;
+        document.getElementById(`produto${dictVenda.produtoId}Input`).value = nomeProduto;
       })
       .catch(error => {
         console.error("Erro ao obter nome do produto:", error);
       });
 
-    obterPrecoProduto(produtoId)
+    obterPrecoProduto(dictVenda.produtoId)
       .then(precoProduto => {
-        document.getElementById(`preco${produtoId}Input`).value = precoProduto;
-        handleDescontoChange(
-          `desconto${produtoId}Input`,
-          `preco${produtoId}Input`,
-          `quantidade${produtoId}Input`,
-          `total${produtoId}Input`
-        );
+        document.getElementById(`preco${dictVenda.produtoId}Input`).value = precoProduto;
+        calcularTotal(dictVenda)
       })
       .catch(error => {
         console.error("Erro ao obter preço do produto:", error);
       });
 
-    inserirNovoProduto(produtoId);
-    configurarEventosProduto(produtoId);
+    inserirNovoProduto(dictVenda);
+    configurarEventosProduto(dictVenda);
   }
 }
 
 /**
- * Incrementa a quantidade de um produto já adicionado.
- * @param {number} produtoId - O ID do produto a ter sua quantidade incrementada.
- */
-function incrementarQuantidadeProduto(produtoId) {
-  let quantidadeInput = document.getElementById(`quantidade${produtoId}Input`);
-  quantidadeInput.value = parseInt(quantidadeInput.value) + 1;
-  recalcularTotal(produtoId);
-}
-
-/**
  * Insere um novo produto na interface.
- * @param {number} produtoId - O ID do produto a ser inserido.
+ * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
-function inserirNovoProduto(produtoId) {
+function inserirNovoProduto(dictVenda) {
+  let produtoId = dictVenda.produtoId;
   let novoProduto = `
     <tr class="align-items-center" id="produto${produtoId}Row">
       <td class="col-1">
-        <input type="number" class="form-control form-control-sm" id="quantidade${produtoId}Input" placeholder="Qtd." value="1" readonly>
+        <input type="number" class="form-control form-control-sm" id="quantidade${produtoId}Input" placeholder="Qtd." value="1">
       </td>
       <td class="col-6">
         <div class="input-group">
@@ -212,7 +194,14 @@ function inserirNovoProduto(produtoId) {
         <input type="text" class="form-control form-control-sm" id="total${produtoId}Input" placeholder="Total" readonly>
       </td>
       <td>
-        <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#modal" data-produto-id="${produtoId}">Remover</button>
+        <button 
+          class="btn btn-danger"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#modal"
+          data-produto-id="${produtoId}"
+          >Remover
+        </button>
       </td>
     </tr>`;
   document.getElementById("produtosContainer").insertAdjacentHTML("beforeend", novoProduto);
@@ -220,15 +209,26 @@ function inserirNovoProduto(produtoId) {
 
 /**
  * Configura eventos para o produto adicionado.
- * @param {number} produtoId - O ID do produto a ter eventos configurados.
+ * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
-function configurarEventosProduto(produtoId) {
-  handleDescontoChange(
-    `desconto${produtoId}Input`,
-    `preco${produtoId}Input`,
-    `quantidade${produtoId}Input`,
-    `total${produtoId}Input`
-  );
+function configurarEventosProduto(dictVenda) {
+  let produtoId = dictVenda.produtoId;
+  let quantidadeInput = document.getElementById(`quantidade${produtoId}Input`);
+  let descontoInput = document.getElementById(`desconto${produtoId}Input`);
+
+  if (quantidadeInput) {
+    quantidadeInput.value = dictVenda.quantidade;
+    handleQuantidadeChange(dictVenda, quantidadeInput);
+  } else {
+    console.error(`Elemento com ID quantidade${produtoId}Input não encontrado.`);
+  }
+
+  if (descontoInput) {
+    descontoInput.value = dictVenda.desconto;
+    handleDescontoChange(dictVenda, descontoInput);
+  } else {
+    console.error(`Elemento com ID desconto${produtoId}Input não encontrado.`);
+  }
 }
 
 /**
@@ -262,26 +262,23 @@ function atualizarLocalStorage(produtoId) {
   const novosProdutos = {};
 
   for (let i = 1; i <= contadorProdutoId; i++) {
-    const prodId = localStorage.getItem(`produtoId${i}`);
-    if (prodId !== produtoId && prodId) {
+    const dictVenda = JSON.parse(localStorage.getItem(`dictVenda${i}`));
+    if (dictVenda.produtoId !== produtoId.toString() && dictVenda.produtoId) {
       novoContador++;
-      localStorage.setItem(`produtoId${novoContador}`, prodId);
-      novosProdutos[prodId] = { quantidade: produtosAdicionados[prodId]?.quantidade || 1 };
+      localStorage.setItem(`dictVenda${novoContador}`, JSON.stringify(dictVenda));
+      novosProdutos[dictVenda.produtoId] = { quantidade: produtosAdicionados[dictVenda.produtoId]?.quantidade || 1 };
     }
   }
 
-
   for (let i = novoContador + 1; i <= contadorProdutoId; i++) {
-    localStorage.removeItem(`produtoId${i}`);
+    localStorage.removeItem(`dictVenda${i}`);
   }
 
   localStorage.setItem("contadorProdutoId", novoContador);
   produtosAdicionados = novosProdutos;
 }
-/**
- * Funções para calcular e atualizar os valores dos produtos.
- */
 
+ 
 /**
  * Calcula o total do produto com base no preço unitário, desconto e quantidade.
  * @param {string} precoUnitarioID - ID do elemento de entrada do preço unitário.
@@ -289,63 +286,52 @@ function atualizarLocalStorage(produtoId) {
  * @param {string} quantidadeID - ID do elemento de entrada da quantidade.
  * @param {string} totalInputId - ID do elemento de entrada do total.
  */
-function calcularTotal(precoUnitarioID, desconto, quantidadeID, totalInputId) {
-  let preco = parseFloat(document.getElementById(precoUnitarioID).value);
-  let desc = parseFloat(desconto);
-  let quantidade = parseInt(document.getElementById(quantidadeID).value);
+function calcularTotal(dictVenda) {
+  totalInput = document.getElementById(`total${dictVenda.produtoId}Input`);
+  preco = document.getElementById(`preco${dictVenda.produtoId}Input`);
+  totalInput.value = (preco.value * dictVenda.quantidade)-dictVenda.desconto;
+}
 
-  if (!isNaN(preco) && !isNaN(quantidade)) {
-    let total = preco * quantidade - (isNaN(desc) ? 0 : desc);
-    document.getElementById(totalInputId).value = total.toFixed(2);
+/**
+ * Recalcula o total do produto quando a quantidade é alterada.
+ * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ */
+function handleQuantidadeChange(dictVenda, quantidadeInput) {
+  if (quantidadeInput) {
+    quantidadeInput.addEventListener("change", function () {
+      dictVenda.quantidade = quantidadeInput.value;
+      localStorage.setItem(`dictVenda${dictVenda.produtoId}`, JSON.stringify(dictVenda));
+      calcularTotal(dictVenda);
+    });
   } else {
-    document.getElementById(totalInputId).value = "";
+    console.error(`Elemento com ID ${quantidadeInput} não encontrado.`);
   }
 }
 
 /**
- * Recalcula o total do produto quando a quantidade ou desconto é alterada.
- * @param {number} produtoId - ID do produto.
+ * Lida com mudanças no desconto de um produto.
+ * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ * @param {string} descontoInput - ID do input do desconto.
  */
-function recalcularTotal(produtoId) {
-  let quantidadeInput = document.getElementById(`quantidade${produtoId}Input`);
-  let descontoInput = document.getElementById(`desconto${produtoId}Input`);
-  let precoInput = document.getElementById(`preco${produtoId}Input`);
-  let totalInput = document.getElementById(`total${produtoId}Input`);
-
-  calcularTotal(precoInput.id, descontoInput.value, quantidadeInput.id, totalInput.id);
-}
-
-/**
- * Trata a mudança no desconto e atualiza o total.
- * @param {string} descontoInputId - ID do elemento de entrada do desconto.
- * @param {string} precoUnitarioID - ID do elemento de entrada do preço unitário.
- * @param {string} quantidadeID - ID do elemento de entrada da quantidade.
- * @param {string} totalInputId - ID do elemento de entrada do total.
- */
-function handleDescontoChange(descontoInputId, precoUnitarioID, quantidadeID, totalInputId) {
-  let descontoInput = document.getElementById(descontoInputId);
-  let quantidadeInput = document.getElementById(quantidadeID);
-  let totalInput = document.getElementById(totalInputId);
-  let precoUnitario = parseFloat(document.getElementById(precoUnitarioID).value);
-
-  totalInput.value = (precoUnitario * parseInt(quantidadeInput.value)).toFixed(2);
-
-  [descontoInput, quantidadeInput].forEach((input) => {
-    input.addEventListener("input", function () {
-      let descontoValue = descontoInput.value;
-      calcularTotal(precoUnitarioID, descontoValue, quantidadeID, totalInputId);
+function handleDescontoChange(dictVenda, descontoInput) {
+  if (descontoInput) {
+    descontoInput.addEventListener("change", function () {
+      dictVenda.desconto = descontoInput.value;
+      localStorage.setItem(`dictVenda${dictVenda.produtoId}`, JSON.stringify(dictVenda));
+      calcularTotal(dictVenda);
     });
-  });
+  } else {
+    console.error(`Elemento com ID ${descontoInput} não encontrado.`);
+  }
 }
 
 /**
  * Configuração inicial ao carregar a página.
  */
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
   const clienteId = localStorage.getItem('clienteId');
   const vendedorId = localStorage.getItem('vendedorId');
   const contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
-  let produtoIdToRemove;
 
   if (clienteId) {
     try {
@@ -366,27 +352,30 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 
   for (let i = 1; i <= contadorProdutoId; i++) {
-    let produtoId = localStorage.getItem(`produtoId${i}`);
-    if (produtoId) {
-      adicionarProduto(produtoId);
+    let dictVenda = JSON.parse(localStorage.getItem(`dictVenda${i}`));
+    if (dictVenda) {
+      adicionarProduto(dictVenda);
     }
   }
-//Função que monitora o click no botão de abrir o modal
+
   document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
-    button.addEventListener('click', function() {
-      let produtoNome = document.getElementById("produto" + this.getAttribute('data-produto-id') + "Input").value;
+    button.addEventListener('click', function () {
+      let produtoId = button.getAttribute('data-produto-id');
+      let produtoNome = document.getElementById(`produto${produtoId}Input`).value;
       document.getElementById("nomeProdutoModal").textContent = produtoNome;
-      produtoIdToRemove = this.getAttribute('data-produto-id');
+      vendaToRemove = produtoId;
     });
   });
 
-  //Função que monitora o click do botão confirmar no modal
-  document.getElementById('confirmRemoveBtn').addEventListener('click', function() {
-    if (produtoIdToRemove) {
-      removerProduto(produtoIdToRemove);
-      produtoIdToRemove = null;
+  document.getElementById('confirmRemoveBtn').addEventListener('click', function () {
+    if (vendaToRemove) {
+      removerProduto(vendaToRemove);
+      vendaToRemove = null;
       document.getElementById('modal').classList.remove('show');
       location.reload();
     }
   });
+
 });
+
+ 
