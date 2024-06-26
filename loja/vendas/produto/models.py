@@ -4,7 +4,7 @@ from django.db import models
 class Produto(models.Model):
     nome = models.CharField(max_length=255, null=False)
     preco = models.DecimalField(
-        default=0, max_digits=6, decimal_places=2, null=False
+        default=0, max_digits=10, decimal_places=2, null=False
     )
     cor = models.CharField(max_length=255, null=False)
     tamanho = models.CharField(max_length=255, null=False)
