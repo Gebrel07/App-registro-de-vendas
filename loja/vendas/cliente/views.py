@@ -28,7 +28,7 @@ def criar_cliente(request: HttpRequest) -> render:
                 messages.success(request=request,
                                  message="Cliente criado com sucesso!")
             except Exception:
-                # TODO:
+                # TODO: logar erros
                 messages.error(request=request,
                                  message="Erro ao criar cliente!")
             finally:
