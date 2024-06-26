@@ -15,6 +15,22 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
     <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="width:50px;height:50px;display: none; position: fixed; top: 50%; left: 50%; z-index: 1000;">
         <span class="visually-hidden">Carregando...</span>
     </div>
+    <!-- Modal personalizado para deletar produtos de maneira variavel -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Confirmação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Todos os <span id="nomeProdutoModal"></span> vão ser removidos, tem certeza?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-danger" id="confirmRemoveBtn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Abas -->
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -24,7 +40,7 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             <button class="nav-link" id="aba-calculos-tab" data-bs-toggle="tab" data-bs-target="#aba-calculos" type="button" role="tab" aria-controls="aba-calculos" aria-selected="false">Cálculos</button>
         </li>
     </ul>
-
+    
     <!-- Conteúdo das Abas -->
     <div class="tab-content shadow p-3 mb-5 bg-body rounded" id="myTabContent">
         <!-- Aba Inicial -->
@@ -39,7 +55,8 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
                             <button class="btn btn-secondary" onclick="location.href='{% url 'selecionar_vendedor' %}'">Selecionar</button>
                         </div>
                     </div>
-                </div>
+                </div>      
+                
 
                 <!-- Campo e botão para Clientes -->
                 <div class="row mb-3 align-items-center">
