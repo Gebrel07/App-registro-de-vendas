@@ -78,6 +78,10 @@ def editar_cliente(request: HttpRequest, cliente_id: int) -> render:
         {
             "cliente_form": cliente_form,
             "endereco_form": endereco_form,
+            "delete_url": reverse(
+                viewname="deletar_cliente",
+                kwargs={"cliente_id": cliente_id},
+            ),
         },
     )
 
