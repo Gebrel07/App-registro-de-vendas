@@ -5,18 +5,43 @@ from ..produto.models import Produto
 from ..vendedor.models import Vendedor
 
 
-# TODO: incluir relação many to many entre Produto e Venda
+# TODO: atualizar diagrama de tabelas
 class Venda(models.Model):
-    data_venda = models.DateField(null=False)
-    quantidade = models.IntegerField(default=1, null=False)
-    comissao = models.FloatField(default=0, null=False)
     vendedor = models.ForeignKey(
         to=Vendedor, on_delete=models.SET_NULL, null=True
     )
     cliente = models.ForeignKey(
         to=Cliente, on_delete=models.SET_NULL, null=True
     )
-    produto = models.ForeignKey(to=Produto, on_delete=models.CASCADE)
+    data_venda = models.DateField(null=False)
 
     def __str__(self) -> str:
-        return f"id: {self.id}, data_venda: {self.data_venda}, quantidade: {self.quantidade}"
+        return f"id: {self.id}, data_venda: {self.data_venda}"
+
+    def total_venda(self):
+        return sum(item.total_item() for item in self.itens.all())
+
+    def total_comissao(self):
+        return sum(item.total_comissao() for item in self.itens.all())
+
+
+# NOTE: se o preço de um produto for atualizado, alterará o total
+# de todas as suas vendas anteriores.
+# Necessário registrar preco do produto nesta tabela no momento da venda para evitar isso?
+class ItemVenda(models.Model):
+    venda = models.ForeignKey(
+        Venda, related_name="itens", on_delete=models.CASCADE, null=False
+    )
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, null=False)
+    quantidade = models.PositiveIntegerField(null=False, default=1)
+    desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    comissao = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+
+    def __str__(self) -> str:
+        return f"id: {self.id}, produto_id: {self.produto.id}, quantidade: {self.quantidade}"
+
+    def total_item(self):
+        return self.quantidade * self.produto.preco * (1 - self.desconto / 100)
+
+    def total_comissao(self):
+        return self.total_item() * (self.comissao / 100)

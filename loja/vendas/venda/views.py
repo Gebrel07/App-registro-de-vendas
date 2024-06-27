@@ -4,6 +4,7 @@ from django.shortcuts import render
 from ..cliente.models import Cliente
 from ..produto.models import Produto
 from ..vendedor.models import Vendedor
+from .models import Venda
 
 
 def page_vendas(request: HttpRequest) -> render:
