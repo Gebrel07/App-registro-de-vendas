@@ -32,5 +32,4 @@ class VendaTestCase(TestCase):
             comissao=2.0,
         )
 
-        print(venda.itens.all())
         assert len(venda.itens.all()) == 2
