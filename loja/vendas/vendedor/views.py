@@ -59,7 +59,15 @@ def editar_vendedor(request: HttpRequest, vendedor_id: int) -> render:
     else:
         form = VendedorForm(instance=vendedor)
     return render(
-        request, "vendas/vendedor/editar_vendedor.html", {"form": form}
+        request,
+        "vendas/vendedor/editar_vendedor.html",
+        {
+            "form": form,
+            "delete_url": reverse(
+                viewname="deletar_vendedor",
+                kwargs={"vendedor_id": vendedor_id},
+            ),
+        }
     )
 
 
