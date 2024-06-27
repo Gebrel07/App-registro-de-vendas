@@ -10,8 +10,9 @@ function func(){
         totalDescontoBruto+=totalDesconto(itemVenda);
         quantidadeProduto+= totalQuantidade(itemVenda)
     }
-    document.getElementById("totalVendaInput").value = totalPreco.toFixed(2)
-    document.getElementById("descontoInput").value = (((totalDescontoBruto/totalPreco)*100)/quantidadeProduto).toFixed(2);
+    alert(totalDescontoBruto);
+    document.getElementById("totalVendaInput").value = totalPreco.toFixed(2);
+    //document.getElementById("descontoInput").value = quantidadeProduto;
 }
 
 
@@ -24,7 +25,7 @@ function totalVenda(itemVenda) {
 }
 
 function totalDesconto(itemVenda){
-    let descontoProduto = Number(itemVenda.desconto);
+    let descontoProduto = itemVenda.desconto;
     return descontoProduto
 
 }

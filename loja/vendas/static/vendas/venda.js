@@ -156,7 +156,7 @@ function adicionarProduto(dictVenda) {
 
     obterPrecoProduto(dictVenda.produtoId)
       .then(precoProduto => {
-        document.getElementById(`preco${dictVenda.produtoId}Input`).value = precoProduto.toFixed(2);
+        document.getElementById(`preco${dictVenda.produtoId}Input`).value = precoProduto;
         calcularTotal(dictVenda)
       })
       .catch(error => {
