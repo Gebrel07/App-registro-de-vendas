@@ -1,9 +1,7 @@
 {% extends 'vendas/partials/base.html' %}
 
 {% comment %}
-TODO: Arrumar a lógica javascript do botão selecionar
 TODO: Definir a lógica da aba cálculo
-TODO: Adicionar colunas informativas quando for selecionado o produto
 {% endcomment %}
 
 {% block content %}
@@ -99,14 +97,44 @@ TODO: Adicionar colunas informativas quando for selecionado o produto
             </div>
         </div>
 
-        <!-- Aba de Cálculos -->
-        <div class="tab-pane fade" id="aba-calculos" role="tabpanel" aria-labelledby="aba-calculos-tab">
-            <!-- Conteúdo da aba de cálculos -->        
-            <div class="container my-4 p-3 border border-info">
-                <h3>Cálculos</h3>
-                <!-- Aqui você pode adicionar conteúdo relacionado aos cálculos -->
+<!-- Aba de Cálculos -->
+<div class="tab-pane fade" id="aba-calculos" role="tabpanel" aria-labelledby="aba-calculos-tab">
+    <!-- Conteúdo da aba de cálculos -->        
+    <div class="container my-4 p-3 border border-info rounded">
+        <div class="row mb-3">
+            <div class="col-sm-6 ">
+                <label for="parcelasSelect" class="col-sm-4 col-form-label">Parcelas</label>
+                <select class="form-select" id="parcelasSelect">
+                    <option value="0">A vista</option>
+                    <option value="1">1x</option>
+                    <option value="2">2x</option>
+                    <option value="3">3x</option>
+                    <option value="4">4x</option>
+                    <option value="5">5x</option>
+                    <option value="6">6x</option>
+                </select>
+            </div>
+ 
+            <div class="col-sm-6">
+                <label for="comissaoInput" class="col-sm-2 col-form-label">Comissão</label>
+                <input type="text" class="form-control" id="comissaoInput" readonly>
+            </div>
+        </div>
+        <div class="container my-2 p-2 border rounded" style="font-size: smaller; width: 50%;">
+            <div class="row mb-3 text-center">
+                <label for="totalVendaInput" class="col-sm-12 col-form-label">Total da Venda</label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="totalVendaInput" readonly>
+                </div>
+            </div>
+            <div class="row mb-3 text-center">
+                <label for="descontoInput" class="col-sm-12 col-form-label">Desconto %</label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="descontoInput">
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
