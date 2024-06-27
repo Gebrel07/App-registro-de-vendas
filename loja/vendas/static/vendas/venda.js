@@ -156,7 +156,7 @@ function adicionarProduto(dictVenda) {
 
     obterPrecoProduto(dictVenda.produtoId)
       .then(precoProduto => {
-        document.getElementById(`preco${dictVenda.produtoId}Input`).value = precoProduto;
+        document.getElementById(`preco${dictVenda.produtoId}Input`).value = precoProduto.toFixed(2);
         calcularTotal(dictVenda)
       })
       .catch(error => {
@@ -224,7 +224,7 @@ function configurarEventosProduto(dictVenda) {
   }
 
   if (descontoInput) {
-    descontoInput.value = dictVenda.desconto;
+    descontoInput.value = dictVenda.desconto.toFixed(2);
     handleDescontoChange(dictVenda, descontoInput);
   } else {
     console.error(`Elemento com ID desconto${produtoId}Input não encontrado.`);
@@ -278,23 +278,21 @@ function atualizarLocalStorage(produtoId) {
   produtosAdicionados = novosProdutos;
 }
 
- 
 /**
- * Calcula o total do produto com base no preço unitário, desconto e quantidade.
- * @param {string} precoUnitarioID - ID do elemento de entrada do preço unitário.
- * @param {number} desconto - Valor do desconto.
- * @param {string} quantidadeID - ID do elemento de entrada da quantidade.
- * @param {string} totalInputId - ID do elemento de entrada do total.
+ * Calcula o total do produto.
+ * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
 function calcularTotal(dictVenda) {
-  totalInput = document.getElementById(`total${dictVenda.produtoId}Input`);
-  preco = document.getElementById(`preco${dictVenda.produtoId}Input`);
-  totalInput.value = (preco.value * dictVenda.quantidade)-dictVenda.desconto;
+  let totalInput = document.getElementById(`total${dictVenda.produtoId}Input`);
+  let preco = document.getElementById(`preco${dictVenda.produtoId}Input`);
+  let total = (Number(preco.value) * dictVenda.quantidade) - dictVenda.desconto;
+  totalInput.value = total.toFixed(2);
 }
 
 /**
  * Recalcula o total do produto quando a quantidade é alterada.
  * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ * @param {HTMLElement} quantidadeInput - Elemento de input da quantidade.
  */
 function handleQuantidadeChange(dictVenda, quantidadeInput) {
   if (quantidadeInput) {
@@ -311,12 +309,12 @@ function handleQuantidadeChange(dictVenda, quantidadeInput) {
 /**
  * Lida com mudanças no desconto de um produto.
  * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
- * @param {string} descontoInput - ID do input do desconto.
+ * @param {HTMLElement} descontoInput - Elemento de input do desconto.
  */
 function handleDescontoChange(dictVenda, descontoInput) {
   if (descontoInput) {
     descontoInput.addEventListener("change", function () {
-      dictVenda.desconto = descontoInput.value;
+      dictVenda.desconto = Number(descontoInput.value).toFixed(2);
       localStorage.setItem(`dictVenda${dictVenda.produtoId}`, JSON.stringify(dictVenda));
       calcularTotal(dictVenda);
     });
@@ -375,7 +373,4 @@ document.addEventListener('DOMContentLoaded', async function () {
       location.reload();
     }
   });
-
 });
-
- 

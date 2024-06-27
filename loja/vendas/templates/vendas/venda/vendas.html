@@ -8,6 +8,7 @@ TODO: Definir a lógica da aba cálculo
 
 {% load static %}
 <script src="{% static 'vendas/venda.js' %}"></script>
+<script src="{% static 'vendas/calculos.js' %}"></script>
 
 <div class="container mt-4">
     <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="width:50px;height:50px;display: none; position: fixed; top: 50%; left: 50%; z-index: 1000;">
@@ -35,7 +36,7 @@ TODO: Definir a lógica da aba cálculo
             <button class="nav-link active" id="aba-inicial-tab" data-bs-toggle="tab" data-bs-target="#aba-inicial" type="button" role="tab" aria-controls="aba-inicial" aria-selected="true">Vender</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="aba-calculos-tab" data-bs-toggle="tab" data-bs-target="#aba-calculos" type="button" role="tab" aria-controls="aba-calculos" aria-selected="false">Cálculos</button>
+            <button onclick="func()" class="nav-link" id="aba-calculos-tab" data-bs-toggle="tab" data-bs-target="#aba-calculos" type="button" role="tab" aria-controls="aba-calculos" aria-selected="false">Cálculos</button>
         </li>
     </ul>
     
@@ -135,6 +136,12 @@ TODO: Definir a lógica da aba cálculo
             </div>
         </div>
     </div>
+    <div class="text-center my-4">
+        <button class="btn btn-primary btn-lg mx-2">Finalizar Venda</button>
+        <button class="btn btn-danger btn-lg mx-2">Limpar Venda</button>
+    </div>
 </div>
+
+
 
 {% endblock %}
