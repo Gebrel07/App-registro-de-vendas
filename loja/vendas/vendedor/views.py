@@ -1,9 +1,13 @@
+import logging
+
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import Vendedor,VendedorForm
 from django.contrib import messages
 from django.urls import reverse
 from django.http import JsonResponse
+
+logger = logging.getLogger(__name__)
 
 
 def listar_vendedores(request: HttpRequest) -> render:
@@ -24,8 +28,8 @@ def criar_vendedor(request: HttpRequest) -> render:
                 messages.success(request=request,
                                  message="Vendedor criado com sucesso",
                                  )
-            except Exception:
-                # TODO: possiveis erros 
+            except Exception as e:
+                logger.exception(msg=e)
                 messages.error(request=request,
                                message="Erro ao criar produto",
                                )
@@ -49,8 +53,8 @@ def editar_vendedor(request: HttpRequest, vendedor_id: int) -> render:
                     request=request,
                     message="Vendedor editado com sucesso"
                                  )
-            except:
-                #TODO : detalhar erros
+            except Exception as e:
+                logger.exception(msg=e)
                 messages.error(request=request,
                                message="Erro ao editar vendedor"
                                )
@@ -80,6 +84,7 @@ def deletar_vendedor(request: HttpRequest, vendedor_id: int):
             vendedor.delete()
             messages.success(request, "Vendedor deletado com sucesso!")
         except Exception as e:
+            logger.exception(msg=e)
             messages.error(request, "Erro ao deletar vendedor!")
     
     return render(
