@@ -10,7 +10,6 @@ function func(){
         totalDescontoBruto += totalDesconto(itemVenda);
         quantidadeProduto += totalQuantidade(itemVenda);
     }
-
     document.getElementById("totalVendaInput").value = (totalPreco-totalDescontoBruto).toFixed(2);
 
     // Calculando o desconto médio percentual
@@ -26,7 +25,7 @@ function totalVenda(itemVenda) {
 
 function totalDesconto(itemVenda) {
     let descontoProduto = itemVenda.desconto;
-    return descontoProduto;
+    return Number(descontoProduto);
 }
 
 function totalQuantidade(itemVenda) {

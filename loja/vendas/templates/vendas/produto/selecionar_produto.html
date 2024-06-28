@@ -55,7 +55,7 @@
                 desconto: 0
             };
             localStorage.setItem('contadorProdutoId', contadorProdutoId);
-            localStorage.setItem('dictVenda' + contadorProdutoId, JSON.stringify(dictVenda));
+            localStorage.setItem('dictVenda' + id, JSON.stringify(dictVenda));
             window.location.href = '{% url 'page_vendas' %}';
         }
     }

@@ -1,7 +1,5 @@
-// Variável para contagem de requisições pendentes
-let pendingRequests = 0;
-// Dicionário para armazenar produtos adicionados
 let produtosAdicionados = {};
+let pendingRequests = 0;
 
 /**
  * Incrementa a quantidade de requisições pendentes.
@@ -70,6 +68,7 @@ function obterNomeCliente(clienteId) {
   return new Promise((resolve, reject) => {
     showLoadingSpinner();
     requestAPI(`/api/obter_nome_cliente/?cliente_id=${clienteId}`, function (response) {
+      hideLoadingSpinner();
       if (response.nome_cliente) {
         resolve(response.nome_cliente);
       } else {
@@ -89,6 +88,7 @@ function obterNomeVendedor(vendedorId) {
   return new Promise((resolve, reject) => {
     showLoadingSpinner();
     requestAPI(`/api/obter_nome_vendedor/?vendedor_id=${vendedorId}`, function (response) {
+      hideLoadingSpinner();
       if (response.nome_vendedor) {
         resolve(response.nome_vendedor);
       } else {
@@ -108,6 +108,7 @@ function obterNomeProduto(produtoId) {
   return new Promise((resolve, reject) => {
     showLoadingSpinner();
     requestAPI(`/api/obter_nome_produto/?produto_id=${produtoId}`, function (response) {
+      hideLoadingSpinner();
       if (response.nome_produto) {
         resolve(response.nome_produto);
       } else {
@@ -127,6 +128,7 @@ function obterPrecoProduto(produtoId) {
   return new Promise((resolve, reject) => {
     showLoadingSpinner();
     requestAPI(`/api/obter_preco_produto/?produto_id=${produtoId}`, function (response) {
+      hideLoadingSpinner();
       if (response.preco_produto) {
         resolve(response.preco_produto);
       } else {
@@ -157,7 +159,7 @@ function adicionarProduto(dictVenda) {
     obterPrecoProduto(dictVenda.produtoId)
       .then(precoProduto => {
         document.getElementById(`preco${dictVenda.produtoId}Input`).value = precoProduto;
-        calcularTotal(dictVenda)
+        calcularTotal(dictVenda);
       })
       .catch(error => {
         console.error("Erro ao obter preço do produto:", error);
@@ -278,21 +280,16 @@ function atualizarLocalStorage(produtoId) {
   produtosAdicionados = novosProdutos;
 }
 
-/**
- * Calcula o total do produto.
- * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
- */
 function calcularTotal(dictVenda) {
   let totalInput = document.getElementById(`total${dictVenda.produtoId}Input`);
   let preco = document.getElementById(`preco${dictVenda.produtoId}Input`);
   let total = (Number(preco.value) * dictVenda.quantidade) - dictVenda.desconto;
-  totalInput.value = total;
+  totalInput.value = total.toFixed(2);
 }
 
 /**
  * Recalcula o total do produto quando a quantidade é alterada.
  * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
- * @param {HTMLElement} quantidadeInput - Elemento de input da quantidade.
  */
 function handleQuantidadeChange(dictVenda, quantidadeInput) {
   if (quantidadeInput) {
@@ -309,7 +306,7 @@ function handleQuantidadeChange(dictVenda, quantidadeInput) {
 /**
  * Lida com mudanças no desconto de um produto.
  * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
- * @param {HTMLElement} descontoInput - Elemento de input do desconto.
+ * @param {string} descontoInput - ID do input do desconto.
  */
 function handleDescontoChange(dictVenda, descontoInput) {
   if (descontoInput) {
