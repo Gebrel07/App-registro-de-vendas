@@ -1,9 +1,14 @@
+import logging
+
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import ClienteForm,EnderecoForm,Cliente,Endereco
 from django.urls import reverse
 from django.contrib import messages
 from django.http import JsonResponse
+
+logger = logging.getLogger(__name__)
+
 
 def listar_clientes(request: HttpRequest) -> render:
     clientes = Cliente.objects.all()
@@ -27,8 +32,8 @@ def criar_cliente(request: HttpRequest) -> render:
                 cliente.save()
                 messages.success(request=request,
                                  message="Cliente criado com sucesso!")
-            except Exception:
-                # TODO: logar erros
+            except Exception as e:
+                logger.exception(msg=e)
                 messages.error(request=request,
                                  message="Erro ao criar cliente!")
             finally:
@@ -60,8 +65,8 @@ def editar_cliente(request: HttpRequest, cliente_id: int) -> render:
                 endereco_form.save()
                 messages.success(request=request,
                                  message="Cliente editado com sucesso!")
-            except:
-                # TODO: possiveis erros
+            except Exception as e:
+                logger.exception(msg=e)
                 messages.error(
                     request=request,
                     message = "Erro ao editar cliente"
@@ -97,6 +102,7 @@ def deletar_cliente(request: HttpRequest, cliente_id: int):
             endereco.delete()
             messages.success(request, "Cliente deletado com sucesso!")
         except Exception as e:
+            logger.exception(msg=e)
             messages.error(request, "Erro ao deletar cliente!")
     
     return render(
