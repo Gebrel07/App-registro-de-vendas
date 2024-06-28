@@ -239,8 +239,13 @@ function configurarEventosProduto(dictVenda) {
  */
 function removerProduto(produtoId) {
   delete produtosAdicionados[produtoId];
-  removerProdutoInterface(produtoId);
-  atualizarLocalStorage(produtoId);
+  removerProdutoInterface(produtoId); 
+  //remove do localStorage
+  localStorage.removeItem("dictVenda"+produtoId);
+  //decremente o contador de linhas
+  contador = localStorage.getItem('contadorProdutoId');
+  contador--;
+  localStorage.setItem("contadorProdutoId",contador);
 }
 
 /**
@@ -254,31 +259,6 @@ function removerProdutoInterface(produtoId) {
   }
 }
 
-/**
- * Atualiza o LocalStorage após a remoção de um produto.
- * @param {number} produtoId - O ID do produto a ser removido do LocalStorage.
- */
-function atualizarLocalStorage(produtoId) {
-  const contadorProdutoId = parseInt(localStorage.getItem("contadorProdutoId"));
-  let novoContador = 0;
-  const novosProdutos = {};
-
-  for (let i = 1; i <= contadorProdutoId; i++) {
-    const dictVenda = JSON.parse(localStorage.getItem(`dictVenda${i}`));
-    if (dictVenda.produtoId !== produtoId.toString() && dictVenda.produtoId) {
-      novoContador++;
-      localStorage.setItem(`dictVenda${novoContador}`, JSON.stringify(dictVenda));
-      novosProdutos[dictVenda.produtoId] = { quantidade: produtosAdicionados[dictVenda.produtoId]?.quantidade || 1 };
-    }
-  }
-
-  for (let i = novoContador + 1; i <= contadorProdutoId; i++) {
-    localStorage.removeItem(`dictVenda${i}`);
-  }
-
-  localStorage.setItem("contadorProdutoId", novoContador);
-  produtosAdicionados = novosProdutos;
-}
 
 function calcularTotal(dictVenda) {
   let totalInput = document.getElementById(`total${dictVenda.produtoId}Input`);
