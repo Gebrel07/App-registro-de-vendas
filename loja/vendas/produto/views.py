@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.http import (HttpRequest, HttpResponse, HttpResponseNotAllowed,
                          HttpResponseRedirect, JsonResponse)
@@ -6,6 +8,8 @@ from django.urls import reverse
 
 from .forms import ProdutoForm
 from .models import Produto
+
+logger = logging.getLogger(__name__)
 
 
 def listar_produtos(request: HttpRequest) -> HttpResponse:
@@ -34,8 +38,8 @@ def criar_produto(request: HttpRequest) -> render:
                     request=request,
                     message="Produto criado com sucesso!",
                 )
-            except Exception:
-                # TODO: logar erros
+            except Exception as e:
+                logger.exception(msg=e)
                 messages.error(
                     request=request,
                     message="Erro ao criar produto",
@@ -91,8 +95,8 @@ def editar_produto(
             request=request,
             message="Produto editado com sucesso!",
         )
-    except Exception:
-        # TODO: logar erros
+    except Exception as e:
+        logger.exception(msg=e)
         messages.error(
             request=request,
             message="Erro ao editar produto",
@@ -114,8 +118,8 @@ def deletar_produto(
         messages.success(
             request=request, message="Produto deletado com sucesso!"
         )
-    except Exception:
-        # TODO: logar erros
+    except Exception as e:
+        logger.exception(msg=e)
         messages.error(
             request=request,
             message="Erro ao deletar produto",
