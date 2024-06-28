@@ -28,34 +28,38 @@
 </div>
 <script>
     var contadorProdutoId = parseInt(localStorage.getItem('contadorProdutoId')) || 0;
-
+    var orderIdList = JSON.parse(localStorage.getItem('orderIdList')) || [];
+    
     function productExists(id) {
-        item = JSON.parse(localStorage.getItem('dictVenda' + id));
-        if(item){
+        var item = JSON.parse(localStorage.getItem('itemVenda' + id));
+        if(item!==null){
             return item;
         }
         return null;
     }
-
+    
     function selecionarProduto(id) {
         var produtoExistenteID = productExists(id);
         if (produtoExistenteID !== null) {
             produtoExistenteID.quantidade++;
-            localStorage.setItem('dictVenda'+produtoExistenteID.produtoId,JSON.stringify(produtoExistenteID));
+            localStorage.setItem('itemVenda' + produtoExistenteID.produtoId, JSON.stringify(produtoExistenteID));
             localStorage.setItem('contadorProdutoId', contadorProdutoId);
             window.location.href = '{% url 'page_vendas' %}';
         } else {
             contadorProdutoId++;
-            var dictVenda = {
+            var itemVenda = {
                 produtoId: id,
                 quantidade: 1,
                 desconto: 0
             };
+            orderIdList.push(itemVenda.produtoId);
             localStorage.setItem('contadorProdutoId', contadorProdutoId);
-            localStorage.setItem('dictVenda' + id, JSON.stringify(dictVenda));
+            localStorage.setItem('itemVenda' + id, JSON.stringify(itemVenda));
+            localStorage.setItem('orderIdList', JSON.stringify(orderIdList));
             window.location.href = '{% url 'page_vendas' %}';
         }
     }
+    
 </script>
 
 {% endblock %}
