@@ -29,22 +29,19 @@
 <script>
     var contadorProdutoId = parseInt(localStorage.getItem('contadorProdutoId')) || 0;
 
-    function productExists(contadorProdutoId, id) {
-        for (let i = 1; i <= contadorProdutoId; i++) {  // Mudei para começar em 1, pois você incrementa antes de salvar
-            var dictVenda = JSON.parse(localStorage.getItem(`dictVenda${i}`));
-            if (dictVenda && dictVenda.produtoId === id) {
-                return i;
-            }
+    function productExists(id) {
+        item = JSON.parse(localStorage.getItem('dictVenda' + id));
+        if(item){
+            return item;
         }
         return null;
     }
 
     function selecionarProduto(id) {
-        var produtoExistenteID = productExists(contadorProdutoId, id);
+        var produtoExistenteID = productExists(id);
         if (produtoExistenteID !== null) {
-            var produtoExistente = JSON.parse(localStorage.getItem(`dictVenda${produtoExistenteID}`));
-            produtoExistente.quantidade++;
-            localStorage.setItem('dictVenda'+produtoExistenteID,JSON.stringify(produtoExistente));
+            produtoExistenteID.quantidade++;
+            localStorage.setItem('dictVenda'+produtoExistenteID.produtoId,JSON.stringify(produtoExistenteID));
             localStorage.setItem('contadorProdutoId', contadorProdutoId);
             window.location.href = '{% url 'page_vendas' %}';
         } else {
