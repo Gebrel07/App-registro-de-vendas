@@ -224,7 +224,7 @@ function configurarEventosProduto(dictVenda) {
   }
 
   if (descontoInput) {
-    descontoInput.value = dictVenda.desconto.toFixed(2);
+    descontoInput.value = dictVenda.desconto;
     handleDescontoChange(dictVenda, descontoInput);
   } else {
     console.error(`Elemento com ID desconto${produtoId}Input não encontrado.`);
@@ -286,7 +286,7 @@ function calcularTotal(dictVenda) {
   let totalInput = document.getElementById(`total${dictVenda.produtoId}Input`);
   let preco = document.getElementById(`preco${dictVenda.produtoId}Input`);
   let total = (Number(preco.value) * dictVenda.quantidade) - dictVenda.desconto;
-  totalInput.value = total.toFixed(2);
+  totalInput.value = total;
 }
 
 /**
