@@ -305,8 +305,8 @@ function handleDescontoChange(itemVenda, descontoInput) {
  * Configuração inicial ao carregar a página.
  */
 document.addEventListener('DOMContentLoaded', async function () {
-  const clienteId = localStorage.getItem('clienteId');
-  const vendedorId = localStorage.getItem('vendedorId');
+  const clienteId = localStorage.getItem('clienteId')|| 0;
+  const vendedorId = localStorage.getItem('vendedorId') || 0;
   const contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
   var orderIdList = JSON.parse(localStorage.getItem("orderIdList"));
 
