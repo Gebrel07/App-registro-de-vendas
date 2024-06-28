@@ -141,41 +141,37 @@ function obterPrecoProduto(produtoId) {
 
 /**
  * Adiciona um produto à lista.
- * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
-function adicionarProduto(dictVenda) {
-  if (produtosAdicionados[dictVenda.produtoId]) {
-    incrementarQuantidadeProduto(dictVenda.produtoId);
-  } else {
-    produtosAdicionados[dictVenda.produtoId] = { quantidade: 1 };
-    obterNomeProduto(dictVenda.produtoId)
+function adicionarProduto(itemVenda) {
+    obterNomeProduto(itemVenda.produtoId)
       .then(nomeProduto => {
-        document.getElementById(`produto${dictVenda.produtoId}Input`).value = nomeProduto;
+        document.getElementById(`produto${itemVenda.produtoId}Input`).value = nomeProduto;
       })
       .catch(error => {
         console.error("Erro ao obter nome do produto:", error);
       });
 
-    obterPrecoProduto(dictVenda.produtoId)
+    obterPrecoProduto(itemVenda.produtoId)
       .then(precoProduto => {
-        document.getElementById(`preco${dictVenda.produtoId}Input`).value = precoProduto;
-        calcularTotal(dictVenda);
+        document.getElementById(`preco${itemVenda.produtoId}Input`).value = precoProduto;
+        calcularTotal(itemVenda);
       })
       .catch(error => {
         console.error("Erro ao obter preço do produto:", error);
       });
 
-    inserirNovoProduto(dictVenda);
-    configurarEventosProduto(dictVenda);
+    inserirNovoProduto(itemVenda);
+    configurarEventosProduto(itemVenda);
   }
-}
+
 
 /**
  * Insere um novo produto na interface.
- * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
-function inserirNovoProduto(dictVenda) {
-  let produtoId = dictVenda.produtoId;
+function inserirNovoProduto(itemVenda) {
+  let produtoId = itemVenda.produtoId;
   let novoProduto = `
     <tr class="align-items-center" id="produto${produtoId}Row">
       <td class="col-1">
@@ -211,23 +207,23 @@ function inserirNovoProduto(dictVenda) {
 
 /**
  * Configura eventos para o produto adicionado.
- * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
-function configurarEventosProduto(dictVenda) {
-  let produtoId = dictVenda.produtoId;
+function configurarEventosProduto(itemVenda) {
+  let produtoId = itemVenda.produtoId;
   let quantidadeInput = document.getElementById(`quantidade${produtoId}Input`);
   let descontoInput = document.getElementById(`desconto${produtoId}Input`);
 
   if (quantidadeInput) {
-    quantidadeInput.value = dictVenda.quantidade;
-    handleQuantidadeChange(dictVenda, quantidadeInput);
+    quantidadeInput.value = itemVenda.quantidade;
+    handleQuantidadeChange(itemVenda, quantidadeInput);
   } else {
     console.error(`Elemento com ID quantidade${produtoId}Input não encontrado.`);
   }
 
   if (descontoInput) {
-    descontoInput.value = dictVenda.desconto;
-    handleDescontoChange(dictVenda, descontoInput);
+    descontoInput.value = itemVenda.desconto;
+    handleDescontoChange(itemVenda, descontoInput);
   } else {
     console.error(`Elemento com ID desconto${produtoId}Input não encontrado.`);
   }
@@ -238,14 +234,28 @@ function configurarEventosProduto(dictVenda) {
  * @param {number} produtoId - O ID do produto a ser removido.
  */
 function removerProduto(produtoId) {
+  let orderIdList = JSON.parse(localStorage.getItem("orderIdList"));
+ 
+   
   delete produtosAdicionados[produtoId];
+  //remover da interface
   removerProdutoInterface(produtoId); 
   //remove do localStorage
-  localStorage.removeItem("dictVenda"+produtoId);
+
+  localStorage.removeItem("itemVenda"+produtoId);
+
   //decremente o contador de linhas
   contador = localStorage.getItem('contadorProdutoId');
   contador--;
   localStorage.setItem("contadorProdutoId",contador);
+
+  //remover da lista de ordem de carregamento
+  orderIdList = JSON.parse(localStorage.getItem("orderIdList"));
+  index = orderIdList.indexOf(`${produtoId}`);
+  orderIdList.splice(index, 1);
+  localStorage.setItem("orderIdList",JSON.stringify(orderIdList));
+
+
 }
 
 /**
@@ -260,23 +270,23 @@ function removerProdutoInterface(produtoId) {
 }
 
 
-function calcularTotal(dictVenda) {
-  let totalInput = document.getElementById(`total${dictVenda.produtoId}Input`);
-  let preco = document.getElementById(`preco${dictVenda.produtoId}Input`);
-  let total = (Number(preco.value) * dictVenda.quantidade) - dictVenda.desconto;
+function calcularTotal(itemVenda) {
+  let totalInput = document.getElementById(`total${itemVenda.produtoId}Input`);
+  let preco = document.getElementById(`preco${itemVenda.produtoId}Input`);
+  let total = (Number(preco.value) * itemVenda.quantidade) - itemVenda.desconto;
   totalInput.value = total.toFixed(2);
 }
 
 /**
  * Recalcula o total do produto quando a quantidade é alterada.
- * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
-function handleQuantidadeChange(dictVenda, quantidadeInput) {
+function handleQuantidadeChange(itemVenda, quantidadeInput) {
   if (quantidadeInput) {
     quantidadeInput.addEventListener("change", function () {
-      dictVenda.quantidade = quantidadeInput.value;
-      localStorage.setItem(`dictVenda${dictVenda.produtoId}`, JSON.stringify(dictVenda));
-      calcularTotal(dictVenda);
+      itemVenda.quantidade = quantidadeInput.value;
+      localStorage.setItem(`itemVenda${itemVenda.produtoId}`, JSON.stringify(itemVenda));
+      calcularTotal(itemVenda);
     });
   } else {
     console.error(`Elemento com ID ${quantidadeInput} não encontrado.`);
@@ -285,15 +295,15 @@ function handleQuantidadeChange(dictVenda, quantidadeInput) {
 
 /**
  * Lida com mudanças no desconto de um produto.
- * @param {Object} dictVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  * @param {string} descontoInput - ID do input do desconto.
  */
-function handleDescontoChange(dictVenda, descontoInput) {
+function handleDescontoChange(itemVenda, descontoInput) {
   if (descontoInput) {
     descontoInput.addEventListener("change", function () {
-      dictVenda.desconto = Number(descontoInput.value).toFixed(2);
-      localStorage.setItem(`dictVenda${dictVenda.produtoId}`, JSON.stringify(dictVenda));
-      calcularTotal(dictVenda);
+      itemVenda.desconto = Number(descontoInput.value).toFixed(2);
+      localStorage.setItem(`itemVenda${itemVenda.produtoId}`, JSON.stringify(itemVenda));
+      calcularTotal(itemVenda);
     });
   } else {
     console.error(`Elemento com ID ${descontoInput} não encontrado.`);
@@ -307,6 +317,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   const clienteId = localStorage.getItem('clienteId');
   const vendedorId = localStorage.getItem('vendedorId');
   const contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
+  var orderIdList = JSON.parse(localStorage.getItem("orderIdList"));
 
   if (clienteId) {
     try {
@@ -327,9 +338,13 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 
   for (let i = 1; i <= contadorProdutoId; i++) {
-    let dictVenda = JSON.parse(localStorage.getItem(`dictVenda${i}`));
-    if (dictVenda) {
-      adicionarProduto(dictVenda);
+    if (orderIdList){
+      let itemVenda = JSON.parse(localStorage.getItem(`itemVenda${orderIdList[i-1]}`));
+
+      if (itemVenda) {
+        
+        adicionarProduto(itemVenda);
+      }
     }
   }
 

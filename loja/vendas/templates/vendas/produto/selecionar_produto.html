@@ -28,37 +28,38 @@
 </div>
 <script>
     var contadorProdutoId = parseInt(localStorage.getItem('contadorProdutoId')) || 0;
-
-    function productExists(contadorProdutoId, id) {
-        for (let i = 1; i <= contadorProdutoId; i++) {  // Mudei para começar em 1, pois você incrementa antes de salvar
-            var dictVenda = JSON.parse(localStorage.getItem(`dictVenda${i}`));
-            if (dictVenda && dictVenda.produtoId === id) {
-                return i;
-            }
+    var orderIdList = JSON.parse(localStorage.getItem('orderIdList')) || [];
+    
+    function productExists(id) {
+        var item = JSON.parse(localStorage.getItem('itemVenda' + id));
+        if(item!==null){
+            return item;
         }
         return null;
     }
-
+    
     function selecionarProduto(id) {
-        var produtoExistenteID = productExists(contadorProdutoId, id);
+        var produtoExistenteID = productExists(id);
         if (produtoExistenteID !== null) {
-            var produtoExistente = JSON.parse(localStorage.getItem(`dictVenda${produtoExistenteID}`));
-            produtoExistente.quantidade++;
-            localStorage.setItem('dictVenda'+produtoExistenteID,JSON.stringify(produtoExistente));
+            produtoExistenteID.quantidade++;
+            localStorage.setItem('itemVenda' + produtoExistenteID.produtoId, JSON.stringify(produtoExistenteID));
             localStorage.setItem('contadorProdutoId', contadorProdutoId);
             window.location.href = '{% url 'page_vendas' %}';
         } else {
             contadorProdutoId++;
-            var dictVenda = {
+            var itemVenda = {
                 produtoId: id,
                 quantidade: 1,
                 desconto: 0
             };
+            orderIdList.push(itemVenda.produtoId);
             localStorage.setItem('contadorProdutoId', contadorProdutoId);
-            localStorage.setItem('dictVenda' + id, JSON.stringify(dictVenda));
+            localStorage.setItem('itemVenda' + id, JSON.stringify(itemVenda));
+            localStorage.setItem('orderIdList', JSON.stringify(orderIdList));
             window.location.href = '{% url 'page_vendas' %}';
         }
     }
+    
 </script>
 
 {% endblock %}
