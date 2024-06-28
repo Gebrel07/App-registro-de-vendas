@@ -16,6 +16,8 @@ function func(){
     // Calculando o desconto médio percentual
     let descontoMedioPercentual = Math.abs((((totalPreco-totalDescontoBruto)/totalPreco)*100)-100);
     document.getElementById("descontoInput").value = `${descontoMedioPercentual.toFixed(2)}%`;
+
+    document.getElementById("comissaoInput").value="3%";
 }
 
 function totalVenda(itemVenda) {

@@ -2,10 +2,11 @@ let produtosAdicionados = {};
 let pendingRequests = 0;
 
 /**
- * Incrementa a quantidade de requisições pendentes.
+ * Incrementa a quantidade de requisições pendentes e mostra o spinner de carregamento.
  */
 function incrementPendingRequests() {
   pendingRequests++;
+  showLoadingSpinner();
 }
 
 /**
@@ -66,9 +67,7 @@ function requestAPI(url, callback) {
  */
 function obterNomeCliente(clienteId) {
   return new Promise((resolve, reject) => {
-    showLoadingSpinner();
     requestAPI(`/api/obter_nome_cliente/?cliente_id=${clienteId}`, function (response) {
-      hideLoadingSpinner();
       if (response.nome_cliente) {
         resolve(response.nome_cliente);
       } else {
@@ -86,9 +85,7 @@ function obterNomeCliente(clienteId) {
  */
 function obterNomeVendedor(vendedorId) {
   return new Promise((resolve, reject) => {
-    showLoadingSpinner();
     requestAPI(`/api/obter_nome_vendedor/?vendedor_id=${vendedorId}`, function (response) {
-      hideLoadingSpinner();
       if (response.nome_vendedor) {
         resolve(response.nome_vendedor);
       } else {
@@ -106,9 +103,7 @@ function obterNomeVendedor(vendedorId) {
  */
 function obterNomeProduto(produtoId) {
   return new Promise((resolve, reject) => {
-    showLoadingSpinner();
     requestAPI(`/api/obter_nome_produto/?produto_id=${produtoId}`, function (response) {
-      hideLoadingSpinner();
       if (response.nome_produto) {
         resolve(response.nome_produto);
       } else {
@@ -126,9 +121,7 @@ function obterNomeProduto(produtoId) {
  */
 function obterPrecoProduto(produtoId) {
   return new Promise((resolve, reject) => {
-    showLoadingSpinner();
     requestAPI(`/api/obter_preco_produto/?produto_id=${produtoId}`, function (response) {
-      hideLoadingSpinner();
       if (response.preco_produto) {
         resolve(response.preco_produto);
       } else {
@@ -144,27 +137,26 @@ function obterPrecoProduto(produtoId) {
  * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
 function adicionarProduto(itemVenda) {
-    obterNomeProduto(itemVenda.produtoId)
-      .then(nomeProduto => {
-        document.getElementById(`produto${itemVenda.produtoId}Input`).value = nomeProduto;
-      })
-      .catch(error => {
-        console.error("Erro ao obter nome do produto:", error);
-      });
+  obterNomeProduto(itemVenda.produtoId)
+    .then(nomeProduto => {
+      document.getElementById(`produto${itemVenda.produtoId}Input`).value = nomeProduto;
+    })
+    .catch(error => {
+      console.error("Erro ao obter nome do produto:", error);
+    });
 
-    obterPrecoProduto(itemVenda.produtoId)
-      .then(precoProduto => {
-        document.getElementById(`preco${itemVenda.produtoId}Input`).value = precoProduto;
-        calcularTotal(itemVenda);
-      })
-      .catch(error => {
-        console.error("Erro ao obter preço do produto:", error);
-      });
+  obterPrecoProduto(itemVenda.produtoId)
+    .then(precoProduto => {
+      document.getElementById(`preco${itemVenda.produtoId}Input`).value = precoProduto;
+      calcularTotal(itemVenda);
+    })
+    .catch(error => {
+      console.error("Erro ao obter preço do produto:", error);
+    });
 
-    inserirNovoProduto(itemVenda);
-    configurarEventosProduto(itemVenda);
-  }
-
+  inserirNovoProduto(itemVenda);
+  configurarEventosProduto(itemVenda);
+}
 
 /**
  * Insere um novo produto na interface.
@@ -269,7 +261,6 @@ function removerProdutoInterface(produtoId) {
   }
 }
 
-
 function calcularTotal(itemVenda) {
   let totalInput = document.getElementById(`total${itemVenda.produtoId}Input`);
   let preco = document.getElementById(`preco${itemVenda.produtoId}Input`);
@@ -342,7 +333,6 @@ document.addEventListener('DOMContentLoaded', async function () {
       let itemVenda = JSON.parse(localStorage.getItem(`itemVenda${orderIdList[i-1]}`));
 
       if (itemVenda) {
-        
         adicionarProduto(itemVenda);
       }
     }
