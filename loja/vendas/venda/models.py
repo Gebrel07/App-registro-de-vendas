@@ -7,6 +7,10 @@ from ..vendedor.models import Vendedor
 
 # TODO: atualizar diagrama de tabelas
 class Venda(models.Model):
+    PGTO_AVISTA = 1
+    PGTO_PARCELADO = 2
+    TIPOS_PGTO = {PGTO_AVISTA: "A vista", PGTO_PARCELADO: "Parcelado"}
+
     vendedor = models.ForeignKey(
         to=Vendedor, on_delete=models.SET_NULL, null=True
     )
@@ -14,6 +18,10 @@ class Venda(models.Model):
         to=Cliente, on_delete=models.SET_NULL, null=True
     )
     data_venda = models.DateField(null=False)
+    tipo_pgto = models.IntegerField(
+        null=False, choices=TIPOS_PGTO, default=PGTO_AVISTA
+    )
+    parcelas_pgto = models.PositiveIntegerField(null=False, default=0)
 
     def __str__(self) -> str:
         return f"id: {self.id}, data_venda: {self.data_venda}"
