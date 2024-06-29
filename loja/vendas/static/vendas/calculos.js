@@ -1,4 +1,5 @@
 function calcular() {
+    document.getElementById("MSGmodificaçãoDesconto").style = "display:none;"
     let totalPreco = 0;
     let totalDescontoBruto = 0;
     let quantidadeProduto = 0;
@@ -52,6 +53,7 @@ function handleDescontoTotalChange(contadorProdutoId, totalPreco, orderIdList) {
 
         // Atualizar o total da venda com o desconto total aplicado
         document.getElementById("totalVendaInput").value = totalVendaComDesconto.toFixed(2);
+        document.getElementById("MSGmodificaçãoDesconto").style = "display:show;"
     });
 }
 

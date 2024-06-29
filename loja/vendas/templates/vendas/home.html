@@ -2,7 +2,7 @@
 
 {% block content %}
   <h3>Bem vindo</h3>
-  <button onclick="clear()">limpar localStorage (ferramenta DEV)</button>
+  <button onclick="clearLocalStorage()">Limpar localStorage (ferramenta DEV)</button>
   <div class="d-flex gap-4 flex-wrap justify-content-center">
     <a href="{% url 'listar_produtos' %}" class="decoration-none home-btn text-center text-dark border rounded p-4">Produtos</a>
     <a href="{% url 'listar_vendedores' %}" class="decoration-none home-btn text-center text-dark border rounded p-4">Vendedores</a>
@@ -11,9 +11,9 @@
   </div>
 
 <script>
-function clear(){
-  localStorage.clear();
-}
+  function clearLocalStorage(){
+    localStorage.clear();
+  }
 
 
 </script>
