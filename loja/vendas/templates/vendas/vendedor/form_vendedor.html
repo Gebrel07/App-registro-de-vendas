@@ -1,4 +1,3 @@
-{% comment %} # TODO: exibir mensagens de erros dos campos {% endcomment %}
 <form method="post">
     {% csrf_token %}
 
@@ -7,27 +6,32 @@
         <div style="grid-column: span 1 ;">
             <label for="id_nome" style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Nome:</label>
             {{ form.nome }}
+            {% include 'vendas/partials/form_field_errors.html' with errors=form.nome.errors %}
         </div>
 
         <div style = "margin-left:50px;">
             <label for="id_matricula" style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Matrícula:</label>
             {{ form.matricula }}
+            {% include 'vendas/partials/form_field_errors.html' with errors=form.matricula.errors %}
         </div>
 
         <div style="display: grid; gap: 50px; grid-template-columns: repeat(3, 1fr);grid-column: span 2 ;">
             <div>
                 <label for="id_data_nascimento" style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Data de Nascimento:</label>
                 {{ form.data_nascimento }}
+                {% include 'vendas/partials/form_field_errors.html' with errors=form.data_nascimento.errors %}
             </div>
 
             <div>
                 <label for="id_cpf"style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">CPF:</label>
                 {{ form.cpf }}
+                {% include 'vendas/partials/form_field_errors.html' with errors=form.cpf.errors %}
             </div>
 
             <div>
                 <label for="id_data_contratacao" style="font-size: 1.2em; color: #333; margin-bottom: 5px; display: block;">Data de Contratação:</label>
                 {{ form.data_contratacao }}
+                {% include 'vendas/partials/form_field_errors.html' with errors=form.data_contratacao.errors %}
             </div>
         </div>
 
