@@ -101,7 +101,7 @@ TODO: Definir a lógica da aba cálculo
 <!-- Aba de Cálculos -->
 <div class="tab-pane fade" id="aba-calculos" role="tabpanel" aria-labelledby="aba-calculos-tab">
     <!-- Conteúdo da aba de cálculos -->        
-     {% include 'vendas/partials/modal.html' with title='Limpar venda' body='Deseja mesmo limpar a venda?' btn_text="Limpar" btn_class="danger"%}
+     {% include 'vendas/partials/modal.html' with form_action_url='' title='Limpar venda' body='Deseja mesmo limpar a venda?' btn_text="Limpar" btn_class="danger"%}
     <div id="MSGmodificaçãoDesconto"class="alert alert-success" style="display:none;">
         O desconto foi alterado com sucesso
     </div>
