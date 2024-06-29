@@ -43,3 +43,8 @@ input[type=number] {
 .w-49 {
     width: 49%;
 }
+
+.fa-triangle-exclamation {
+    color: yellow; /* Cor amarela */
+    margin-left: 100px;
+}
