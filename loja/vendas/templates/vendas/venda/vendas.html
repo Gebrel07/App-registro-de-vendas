@@ -15,7 +15,7 @@ TODO: Definir a lógica da aba cálculo
         <span class="visually-hidden">Carregando...</span>
     </div>
     <!-- Modal personalizado para deletar produtos de maneira variavel -->
-    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -101,6 +101,7 @@ TODO: Definir a lógica da aba cálculo
 <!-- Aba de Cálculos -->
 <div class="tab-pane fade" id="aba-calculos" role="tabpanel" aria-labelledby="aba-calculos-tab">
     <!-- Conteúdo da aba de cálculos -->        
+     {% include 'vendas/partials/modal.html' with title='Limpar venda' body='Deseja mesmo limpar a venda?' btn_text="Limpar" btn_class="danger"%}
     <div id="MSGmodificaçãoDesconto"class="alert alert-success" style="display:none;">
         O desconto foi alterado com sucesso
     </div>
@@ -141,7 +142,13 @@ TODO: Definir a lógica da aba cálculo
     </div>
     <div class="text-center my-4">
         <button class="btn btn-primary btn-lg mx-2">Finalizar Venda</button>
-        <button class="btn btn-danger btn-lg mx-2">Limpar Venda</button>
+        <button 
+            class="btn btn-danger btn-lg mx-2"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target = "#modal"
+            onclick = "limparVenda()"
+            >Limpar Venda</button>
     </div>
 </div>
 

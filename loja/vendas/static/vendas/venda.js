@@ -188,7 +188,7 @@ function inserirNovoProduto(itemVenda) {
           class="btn btn-danger"
           type="button"
           data-bs-toggle="modal"
-          data-bs-target="#modal"
+          data-bs-target="#confirmationModal"
           data-produto-id="${produtoId}"
           >Remover
         </button>
@@ -264,7 +264,6 @@ function removerProdutoInterface(produtoId) {
  * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
 function calcularTotal(itemVenda) {
-  alert("oi");
   let totalInput = document.getElementById(`total${itemVenda.produtoId}Input`);
   let preco = document.getElementById(`preco${itemVenda.produtoId}Input`);
   let total = (Number(preco.value) * itemVenda.quantidade) - itemVenda.desconto;

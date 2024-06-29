@@ -104,3 +104,7 @@ function calcularTotalVenda(itemVenda) {
 function calcularTotalDesconto(itemVenda) {
     return Number(itemVenda.desconto);
 }
+
+function limparVenda(){
+    localStorage.clear();
+}
