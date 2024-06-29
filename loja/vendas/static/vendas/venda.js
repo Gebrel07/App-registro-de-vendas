@@ -227,21 +227,20 @@ function configurarEventosProduto(itemVenda) {
  */
 function removerProduto(produtoId) {
   let orderIdList = JSON.parse(localStorage.getItem("orderIdList"));
- 
-   
   delete produtosAdicionados[produtoId];
-  //remover da interface
-  removerProdutoInterface(produtoId); 
-  //remove do localStorage
 
+  //Remover da interface
+  removerProdutoInterface(produtoId); 
+
+  //Remove do localStorage
   localStorage.removeItem("itemVenda"+produtoId);
 
-  //decremente o contador de linhas
+  //Decremente o contador de linhas
   contador = localStorage.getItem('contadorProdutoId');
   contador--;
   localStorage.setItem("contadorProdutoId",contador);
 
-  //remover da lista de ordem de carregamento
+  //Remove da lista de ordem de carregamento
   orderIdList = JSON.parse(localStorage.getItem("orderIdList"));
   index = orderIdList.indexOf(`${produtoId}`);
   orderIdList.splice(index, 1);
@@ -260,8 +259,12 @@ function removerProdutoInterface(produtoId) {
     produtoRow.remove();
   }
 }
-
+/**
+ * Calcula o total da venda e bota na input correta
+ * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ */
 function calcularTotal(itemVenda) {
+  alert("oi");
   let totalInput = document.getElementById(`total${itemVenda.produtoId}Input`);
   let preco = document.getElementById(`preco${itemVenda.produtoId}Input`);
   let total = (Number(preco.value) * itemVenda.quantidade) - itemVenda.desconto;
@@ -271,6 +274,7 @@ function calcularTotal(itemVenda) {
 /**
  * Recalcula o total do produto quando a quantidade é alterada.
  * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
+ * @param {Object} quantidadeInput - Referencia o inputBox do item da venda
  */
 function handleQuantidadeChange(itemVenda, quantidadeInput) {
   if (quantidadeInput) {
