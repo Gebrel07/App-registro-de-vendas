@@ -60,6 +60,25 @@ function requestAPI(url, callback) {
   xhr.send();
 }
 
+function alterarItemlistaItens(itemVenda) {
+  // Obtém a lista de produtos do localStorage
+  const listaItens = JSON.parse(localStorage.getItem("listaItens")) || [];
+
+  // Cria uma nova lista de produtos com o item alterado
+  const listaItensAlterada = listaItens.map(item => {
+    // Se o ID do produto corresponder ao ID do itemVenda, substitua-o
+    if (item.produtoId === itemVenda.produtoId) {
+      return itemVenda;
+    }
+    // Caso contrário, mantenha o produto original
+    return item;
+  });
+
+  // Armazena a lista alterada novamente no localStorage
+  localStorage.setItem("listaItens", JSON.stringify(listaItensAlterada));
+}
+
+
 /**
  * Obtém o nome do cliente pelo ID.
  * @param {number} clienteId - O ID do cliente.
@@ -222,34 +241,6 @@ function configurarEventosProduto(itemVenda) {
 }
 
 /**
- * Remove um produto da lista.
- * @param {number} produtoId - O ID do produto a ser removido.
- */
-function removerProduto(produtoId) {
-  let orderIdList = JSON.parse(localStorage.getItem("orderIdList"));
-  delete produtosAdicionados[produtoId];
-
-  //Remover da interface
-  removerProdutoInterface(produtoId); 
-
-  //Remove do localStorage
-  localStorage.removeItem("itemVenda"+produtoId);
-
-  //Decremente o contador de linhas
-  contador = localStorage.getItem('contadorProdutoId');
-  contador--;
-  localStorage.setItem("contadorProdutoId",contador);
-
-  //Remove da lista de ordem de carregamento
-  orderIdList = JSON.parse(localStorage.getItem("orderIdList"));
-  index = orderIdList.indexOf(`${produtoId}`);
-  orderIdList.splice(index, 1);
-  localStorage.setItem("orderIdList",JSON.stringify(orderIdList));
-
-
-}
-
-/**
  * Remove um produto da interface.
  * @param {number} produtoId - O ID do produto a ser removido.
  */
@@ -259,6 +250,29 @@ function removerProdutoInterface(produtoId) {
     produtoRow.remove();
   }
 }
+
+function removerProdutoLocalStorage(produtoId){
+  const listaItens = JSON.parse(localStorage.getItem("listaItens"));
+
+  const novalistaItens = listaItens.filter(produto => produto.produtoId !== produtoId);
+  localStorage.setItem("listaItens",JSON.stringify(novalistaItens))
+}
+
+
+
+/**
+ * Remove um produto da lista.
+ * @param {number} produtoId - O ID do produto a ser removido.
+ */
+function removerProduto(produtoId) {
+
+  //Remover da interface
+  removerProdutoInterface(produtoId); 
+
+  removerProdutoLocalStorage(produtoId);
+}
+
+
 /**
  * Calcula o total da venda e bota na input correta
  * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
@@ -279,7 +293,7 @@ function handleQuantidadeChange(itemVenda, quantidadeInput) {
   if (quantidadeInput) {
     quantidadeInput.addEventListener("change", function () {
       itemVenda.quantidade = quantidadeInput.value;
-      localStorage.setItem(`itemVenda${itemVenda.produtoId}`, JSON.stringify(itemVenda));
+      alterarItemlistaItens(itemVenda);
       calcularTotal(itemVenda);
     });
   } else {
@@ -296,8 +310,7 @@ function handleDescontoChange(itemVenda, descontoInput) {
   if (descontoInput) {
     descontoInput.addEventListener("change", function () {
       itemVenda.desconto = Number(descontoInput.value).toFixed(2);
-      localStorage.setItem(`itemVenda${itemVenda.produtoId}`, JSON.stringify(itemVenda));
-      calcularTotal(itemVenda);
+      alterarItemlistaItens(itemVenda);
     });
   } else {
     console.error(`Elemento com ID ${descontoInput} não encontrado.`);
@@ -310,8 +323,8 @@ function handleDescontoChange(itemVenda, descontoInput) {
 document.addEventListener('DOMContentLoaded', async function () {
   const clienteId = localStorage.getItem('clienteId')|| 0;
   const vendedorId = localStorage.getItem('vendedorId') || 0;
-  const contadorProdutoId = localStorage.getItem('contadorProdutoId') || 0;
-  var orderIdList = JSON.parse(localStorage.getItem("orderIdList"));
+  const listaItens = JSON.parse(localStorage.getItem('listaItens')) || [];
+ 
 
   if (clienteId) {
     try {
@@ -331,13 +344,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 
-  for (let i = 1; i <= contadorProdutoId; i++) {
-    if (orderIdList){
-      let itemVenda = JSON.parse(localStorage.getItem(`itemVenda${orderIdList[i-1]}`));
-
-      if (itemVenda) {
-        adicionarProduto(itemVenda);
-      }
+  for (let i = 0; i < listaItens.length; i++) {
+    if (listaItens){
+      adicionarProduto(listaItens[i]);
     }
   }
 

@@ -27,39 +27,67 @@
     </table>
 </div>
 <script>
-    var contadorProdutoId = parseInt(localStorage.getItem('contadorProdutoId')) || 0;
-    var orderIdList = JSON.parse(localStorage.getItem('orderIdList')) || [];
-    
-    function productExists(id) {
-        var item = JSON.parse(localStorage.getItem('itemVenda' + id));
-        if(item!==null){
-            return item;
-        }
-        return null;
+        
+    // Inicializa a lista de produtos a partir do localStorage ou como uma lista vazia
+    const listaItens = JSON.parse(localStorage.getItem('listaItens')) || [];
+
+    /**
+    * Atualiza o localStorage com a lista de produtos fornecida.
+    * @param {Array} lista - Lista de produtos a ser armazenada.
+    */
+    function atualizarLocalStorage(lista) {
+        localStorage.setItem('listaItens', JSON.stringify(lista));
     }
-    
+
+    /**
+    * Atualiza ou adiciona um produto na lista de produtos.
+    * @param {Object} itemVenda - Produto a ser atualizado ou adicionado.
+    */
+    function alterarItemlistaItens(itemVenda) {
+        const index = listaItens.findIndex(item => item.produtoId === itemVenda.produtoId);
+
+        if (index !== -1) {
+            // Se o item já existe, atualiza  
+            listaItens[index] = itemVenda;
+        } else {
+            // Se o item não existe, adiciona um novo item
+            listaItens.push(itemVenda);
+        }
+
+        // Atualiza o localStorage
+        atualizarLocalStorage(listaItens);
+    }
+
+    /**
+    * Verifica se um produto existe na lista de produtos.
+    * @param {number} id - ID do produto a ser verificado.
+    * @returns {Object|null} - Retorna o produto encontrado ou null se não existir.
+    */
+    function itemExistente(id) {
+        return listaItens.find(item => item.produtoId === id) || null;
+    }
+
+    /**
+    * Seleciona um produto pelo ID, incrementa a quantidade se já existir ou adiciona um novo produto.
+    * @param {number} id - ID do produto a ser selecionado.
+    */
     function selecionarProduto(id) {
-        var produtoExistenteID = productExists(id);
-        if (produtoExistenteID !== null) {
-            produtoExistenteID.quantidade++;
-            localStorage.setItem('itemVenda' + produtoExistenteID.produtoId, JSON.stringify(produtoExistenteID));
-            localStorage.setItem('contadorProdutoId', contadorProdutoId);
+        let item = itemExistente(id);
+
+        if (item) {
+            item.quantidade++;
+            alterarItemlistaItens(item);
             window.location.href = '{% url 'page_vendas' %}';
         } else {
-            contadorProdutoId++;
-            var itemVenda = {
+            const itemVenda = {
                 produtoId: id,
                 quantidade: 1,
                 desconto: 0
             };
-            orderIdList.push(itemVenda.produtoId);
-            localStorage.setItem('contadorProdutoId', contadorProdutoId);
-            localStorage.setItem('itemVenda' + id, JSON.stringify(itemVenda));
-            localStorage.setItem('orderIdList', JSON.stringify(orderIdList));
+            alterarItemlistaItens(itemVenda);
             window.location.href = '{% url 'page_vendas' %}';
         }
     }
-    
 </script>
 
 {% endblock %}
