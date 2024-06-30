@@ -22,6 +22,7 @@ class Venda(models.Model):
         null=False, choices=TIPOS_PGTO, default=PGTO_AVISTA
     )
     parcelas_pgto = models.PositiveIntegerField(null=False, default=0)
+    comissao = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
     def __str__(self) -> str:
         return f"id: {self.id}, data_venda: {self.data_venda}"
@@ -30,7 +31,7 @@ class Venda(models.Model):
         return sum(item.total_item() for item in self.itens.all())
 
     def total_comissao(self):
-        return sum(item.total_comissao() for item in self.itens.all())
+        return self.total_venda() * (self.comissao / 100)
 
 
 # NOTE: se o preço de um produto for atualizado, alterará o total
@@ -43,13 +44,9 @@ class ItemVenda(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, null=False)
     quantidade = models.PositiveIntegerField(null=False, default=1)
     desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
-    comissao = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
     def __str__(self) -> str:
         return f"id: {self.id}, produto_id: {self.produto.id}, quantidade: {self.quantidade}"
 
     def total_item(self):
         return self.quantidade * self.produto.preco * (1 - self.desconto / 100)
-
-    def total_comissao(self):
-        return self.total_item() * (self.comissao / 100)

@@ -14,6 +14,7 @@ class VendaTestCase(TestCase):
             data_venda=datetime.now().date(),
             vendedor=create_test_vendedor1(),
             cliente=create_test_cliente1(endereco=create_test_endereco1()),
+            comissao=10.0,
         )
 
         ItemVenda.objects.create(
@@ -21,7 +22,6 @@ class VendaTestCase(TestCase):
             produto=create_test_produto1(),
             quantidade=1,
             desconto=5.0,
-            comissao=2.0,
         )
 
         ItemVenda.objects.create(
@@ -29,7 +29,6 @@ class VendaTestCase(TestCase):
             produto=create_test_produto2(),
             quantidade=2,
             desconto=5.0,
-            comissao=2.0,
         )
 
-        assert len(venda.itens.all()) == 2
+        self.assertEqual(venda.itens.count(), 2)
