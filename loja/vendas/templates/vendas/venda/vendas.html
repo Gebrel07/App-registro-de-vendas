@@ -133,10 +133,22 @@ TODO: Definir a lógica da aba cálculo
                 </div>
             </div>
             <div class="row mb-3 text-center">
-                <i id = 'triggerElement' data-bs-toggle="tooltip" data-bs-placement="top" title="Você pode alterar o desconto total aqui!!" class="fa-solid fa-triangle-exclamation">Desconto total%</i>
-                <div class="col-sm-12">
-                    <input type="text" class="form-control" id="descontoInput">
+                <div> 
+                    <label class="col-sm-12 col-form-label">Desconto total%</label>
                 </div>
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="descontoInput">
+                        <span class="material-symbols-outlined text-warning"
+                        id = 'triggerElement' 
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="top" 
+                        title="Você pode alterar o desconto total!!"
+                        style="font-size:40px;"
+                        >
+                            priority_high
+                    </span>
+                    </div>
             </div>
         </div>
     </div>
