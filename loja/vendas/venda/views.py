@@ -15,7 +15,7 @@ from .serializers import VendaWriteSerializer
 def criar_venda(request: HttpRequest):
     try:
         serializer = VendaWriteSerializer(data=JSONParser().parse(request))
-        messages.success(request=request,message="Venda concluida com sucesso!")
+        
     except ParseError:
         messages.error(request=request,message="Erro ao finalizar a venda!")
         return JsonResponse({"detail": "Invalid JSON"}, status=400)
@@ -24,7 +24,8 @@ def criar_venda(request: HttpRequest):
     if not serializer.is_valid():
         messages.error(request=request,message="Erro ao finalizar a venda!")
         return JsonResponse(serializer.errors, status=400)
-
+    
+    messages.success(request=request,message="Venda concluida com sucesso!")
     serializer.save()
     return JsonResponse(serializer.data, status=201)
 
