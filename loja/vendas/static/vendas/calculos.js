@@ -11,12 +11,12 @@ function calcular() {
     let totalPreco = 0;
     let totalDescontoBruto = 0;
     let quantidadeProduto = 0;
-    const orderIdList = JSON.parse(localStorage.getItem("orderIdList") || "[]");
-    const contadorProdutoId = Number(localStorage.getItem("contadorProdutoId")) || 0;
+    const listaItens = JSON.parse(localStorage.getItem("listaItens") || "[]");
+ 
 
     // Iterar sobre cada item de venda e calcular totais
-    for (let i = 0; i < contadorProdutoId; i++) {
-        const itemVenda = obterItemVenda(orderIdList[i]);
+    for (let i = 0; i < listaItens.length; i++) {
+        const itemVenda = listaItens[i];
         totalPreco += calcularTotalVenda(itemVenda);
         totalDescontoBruto += calcularTotalDesconto(itemVenda);
         quantidadeProduto += itemVenda.quantidade;
@@ -32,19 +32,12 @@ function calcular() {
     document.getElementById("comissaoInput").value = "3%";
 
     // Manipular mudanças no desconto total
-    handleDescontoTotalChange(contadorProdutoId, totalPreco, orderIdList);
+    handleDescontoTotalChange(listaItens,totalPreco);
      
 }
 
-/**
- * @function handleDescontoTotalChange
- * Manipula mudanças no desconto total. Atualiza os valores de desconto de cada item de venda 
- * de forma proporcional ao desconto total e atualiza a interface.
- * @param {number} contadorProdutoId - Número total de produtos.
- * @param {number} totalPreco - Preço total dos itens de venda.
- * @param {Array} orderIdList - Lista de IDs das ordens de venda.
- */
-function handleDescontoTotalChange(contadorProdutoId, totalPreco, orderIdList) {
+ 
+function handleDescontoTotalChange(listaItens, totalPreco) {
     const descontoTotalInput = document.getElementById("descontoInput");
 
     descontoTotalInput.addEventListener("change", function () {
@@ -53,8 +46,8 @@ function handleDescontoTotalChange(contadorProdutoId, totalPreco, orderIdList) {
         var descontoTotalBruto = totalPreco * (descontoTotalPercentual / 100);
 
         // Iterar sobre cada item de venda para calcular e aplicar o desconto proporcional
-        for (let i = 0; i < contadorProdutoId; i++) {
-            const itemVenda = obterItemVenda(orderIdList[i]);
+        for (let i = 0; i < listaItens.length; i++) {
+            const itemVenda = listaItens[i];
             const precoProduto = Number(document.getElementById(`preco${itemVenda.produtoId}Input`).value) || 0;
             const descontoProporcional = (totalPreco > 0) ? (precoProduto * itemVenda.quantidade / totalPreco) : 0;
             const descontoItem = (descontoProporcional * (descontoTotalBruto));
@@ -63,7 +56,7 @@ function handleDescontoTotalChange(contadorProdutoId, totalPreco, orderIdList) {
             calcularTotal(itemVenda);
             // Atualizar a interface com o novo desconto
             document.getElementById(`desconto${itemVenda.produtoId}Input`).value = descontoItem.toFixed(2);
-            localStorage.setItem("itemVenda" + orderIdList[i], JSON.stringify(itemVenda));
+            alterarItemlistaItens(itemVenda);
 
             descontoTotalInput.value = `${descontoTotalPercentual.toFixed(2)}%`;
         }
@@ -74,15 +67,7 @@ function handleDescontoTotalChange(contadorProdutoId, totalPreco, orderIdList) {
     });
 }
 
-/**
- * @function obterItemVenda
- * Obtém os detalhes de um item de venda armazenado no localStorage.
- * @param {number} orderId - ID da ordem de venda.
- * @returns {Object} Objeto contendo os detalhes do item de venda.
- */
-function obterItemVenda(orderId) {
-    return JSON.parse(localStorage.getItem("itemVenda" + orderId) || "{}");
-}
+ 
 
 /**
  * @function calcularTotalVenda
