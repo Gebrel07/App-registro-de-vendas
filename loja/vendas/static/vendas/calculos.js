@@ -52,7 +52,7 @@ function handleDescontoTotalChange(listaItens, totalPreco) {
             const descontoProporcional = (totalPreco > 0) ? (precoProduto * itemVenda.quantidade / totalPreco) : 0;
             const descontoItem = (descontoProporcional * (descontoTotalBruto));
 
-            itemVenda.desconto = Number(descontoItem);
+            itemVenda.desconto = Number(descontoItem).toFixed(2);
             calcularTotal(itemVenda);
             // Atualizar a interface com o novo desconto
             document.getElementById(`desconto${itemVenda.produtoId}Input`).value = descontoItem.toFixed(2);
