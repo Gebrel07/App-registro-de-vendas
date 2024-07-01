@@ -2,6 +2,7 @@ from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser, ParseError
+from django.contrib import messages
 
 from ..cliente.models import Cliente
 from ..produto.models import Produto
@@ -14,10 +15,14 @@ from .serializers import VendaWriteSerializer
 def criar_venda(request: HttpRequest):
     try:
         serializer = VendaWriteSerializer(data=JSONParser().parse(request))
+        messages.success(request=request,message="Venda concluida com sucesso!")
     except ParseError:
+        messages.error(request=request,message="Erro ao finalizar a venda!")
         return JsonResponse({"detail": "Invalid JSON"}, status=400)
+         
 
     if not serializer.is_valid():
+        messages.error(request=request,message="Erro ao finalizar a venda!")
         return JsonResponse(serializer.errors, status=400)
 
     serializer.save()

@@ -145,11 +145,6 @@ async function enviarVenda() {
     // Obter o tipo de pagamento
     const tipoPagamento = document.getElementById("parcelasSelect").value;
 
-
-
-
-
-
     // Montar tudo em um JSON
     const venda = {
         vendedor: vendedor,
@@ -190,6 +185,8 @@ async function enviarVenda() {
     } catch (error) {
         console.error('Erro na requisição:', error);
     }
+    localStorage.clear();
+    location.reload();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
