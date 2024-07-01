@@ -185,8 +185,7 @@ async function enviarVenda() {
     } catch (error) {
         console.error('Erro na requisição:', error);
     }
-    localStorage.clear();
-    location.reload();
+    console.log(venda);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
