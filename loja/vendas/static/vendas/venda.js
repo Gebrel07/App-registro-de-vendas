@@ -1,5 +1,3 @@
-let produtosAdicionados = {};
-
 /**
  * Mostra o spinner de carregamento.
  */
