@@ -116,23 +116,11 @@ function obterPrecoProduto(produtoId) {
  * @param {Object} itemVenda - Dicionário com dados da venda (produtoId, quantidade, desconto).
  */
 function adicionarProduto(itemVenda) {
-  obterNomeProduto(itemVenda.produtoId)
-    .then(nomeProduto => {
-      document.getElementById(`produto${itemVenda.produtoId}Input`).value = nomeProduto;
-    })
-    .catch(error => {
-      console.error("Erro ao obter nome do produto:", error);
-    });
-
-  obterPrecoProduto(itemVenda.produtoId)
-    .then(precoProduto => {
-      document.getElementById(`preco${itemVenda.produtoId}Input`).value = precoProduto;
-      calcularTotal(itemVenda);
-    })
-    .catch(error => {
-      console.error("Erro ao obter preço do produto:", error);
-    });
-
+  const idProduto = itemVenda.produtoId;
+  fetchData(`/api/produtos/${idProduto}`).then((produto) => {
+    document.getElementById(`produto${idProduto}Input`).value = produto.nome;
+    document.getElementById(`preco${idProduto}Input`).value = produto.preco;
+  });
   inserirNovoProduto(itemVenda);
   configurarEventosProduto(itemVenda);
 }
@@ -298,10 +286,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById("vendedoresInput").value = dadosVendedor.nome_vendedor;
   }
 
-  for (let i = 0; i < listaItens.length; i++) {
-    if (listaItens){
-      adicionarProduto(listaItens[i]);
-    }
+  for (const item of listaItens) {
+    adicionarProduto(item);
   }
 
   document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
