@@ -75,7 +75,6 @@ function handleDescontoTotalChange(listaItens, totalPreco) {
 
         document.getElementById("totalVendaInput").value = totalVendaComDesconto.toFixed(2);
         document.getElementById("msgModificaçãoDesconto").style = "display:show;";
-         
     });
 }
 
