@@ -14,26 +14,6 @@ function hideLoadingSpinner() {
   document.getElementById("myTabContent").style.filter = "none";
 }
 
-/**
- * Faz uma requisição ao servidor.
- * @param {string} url - A URL para fazer a requisição.
- * @param {function} callback - Função callback chamada com a resposta.
- */
-function requestAPI(url, callback) {
-  let xhr = new XMLHttpRequest();
-  xhr.open("GET", url, true);
-  xhr.onload = function () {
-    if (xhr.status == 200) {
-      callback(JSON.parse(xhr.responseText));
-    } else {
-      console.error("Erro na requisição. Status:", xhr.status);
-    }
-  };
-  xhr.onerror = function () {
-    console.error("Erro na requisição.");
-  };
-  xhr.send();
-}
 
 function alterarItemlistaItens(itemVenda) {
   // Obtém a lista de produtos do localStorage
@@ -75,41 +55,6 @@ async function fetchData(url) {
   }
 }
 
-/**
- * Obtém o nome do produto pelo ID.
- * @param {number} produtoId - O ID do produto.
- * @returns {Promise<string>} - Promise que resolve com o nome do produto ou rejeita com erro.
- */
-function obterNomeProduto(produtoId) {
-  return new Promise((resolve, reject) => {
-    requestAPI(`/api/obter_nome_produto/?produto_id=${produtoId}`, function (response) {
-      if (response.nome_produto) {
-        resolve(response.nome_produto);
-      } else {
-        console.error("Erro ao obter nome do produto:", response.error);
-        reject(response.error);
-      }
-    });
-  });
-}
-
-/**
- * Obtém o preço do produto pelo ID.
- * @param {number} produtoId - O ID do produto.
- * @returns {Promise<number>} - Promise que resolve com o preço do produto ou rejeita com erro.
- */
-function obterPrecoProduto(produtoId) {
-  return new Promise((resolve, reject) => {
-    requestAPI(`/api/obter_preco_produto/?produto_id=${produtoId}`, function (response) {
-      if (response.preco_produto) {
-        resolve(response.preco_produto);
-      } else {
-        console.error("Erro ao obter preço do produto:", response.error);
-        reject(response.error);
-      }
-    });
-  });
-}
 
 /**
  * Adiciona um produto à lista.
