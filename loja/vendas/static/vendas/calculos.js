@@ -4,6 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
+
+document.getElementById('confirmSendButton').addEventListener('click', function () {
+        enviarVenda();
+    });
+
+
 });
 
 /**
