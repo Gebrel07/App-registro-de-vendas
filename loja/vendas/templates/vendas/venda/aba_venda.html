@@ -5,7 +5,7 @@
       <label for="vendedoresInput" class="col-auto col-form-label">Vendedor</label>
       <div class="col">
         <div class="input-group">
-          <input type="text" class="form-control" id="vendedoresInput" placeholder="Digite o nome do vendedor" />
+          <input type="text" class="form-control" id="vendedoresInput" placeholder="Selecione um vendedor" readonly/>
           <button class="btn btn-secondary" onclick="location.href='{% url 'selecionar_vendedor' %}'">Selecionar</button>
         </div>
       </div>
@@ -15,7 +15,7 @@
       <label style="margin-left:20px;" for="clientesInput" class="col-auto col-form-label">Cliente</label>
       <div class="col">
         <div class="input-group">
-          <input type="text" class="form-control" id="clientesInput" placeholder="Digite o nome do cliente" />
+          <input type="text" class="form-control" id="clientesInput" placeholder="Selecione um cliente"  readonly/>
           <button class="btn btn-secondary" onclick="location.href='{% url 'selecionar_cliente' %}'">Selecionar</button>
         </div>
       </div>
