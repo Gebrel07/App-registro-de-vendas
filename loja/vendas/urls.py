@@ -1,5 +1,6 @@
 from django.urls import path
 
+from .api.urls import api_urlpatterns
 from .cliente.urls import cliente_urlpatterns
 from .produto.urls import produto_urlpatterns
 from .venda.urls import venda_urlpatterns
@@ -15,6 +16,7 @@ INCLUDE_URLS = (
     produto_urlpatterns,
     venda_urlpatterns,
     vendedor_urlpatterns,
+    api_urlpatterns,
 )
 
 joined_urls = []
