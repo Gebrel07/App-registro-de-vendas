@@ -1,19 +1,12 @@
 /**
  * Mostra o spinner de carregamento.
  */
-function showLoadingSpinner() {
-  document.getElementById("loadingSpinner").style.display = "block";
-  document.getElementById("myTabContent").style.filter = "blur(17px)";
+function toggleLoadingSpinner(show) {
+  const display = show ? "block" : "none";
+  const filter = show ? "blur(17px)" : "none";
+  document.getElementById("loadingSpinner").style.display = display;
+  document.getElementById("myTabContent").style.filter = filter;
 }
-
-/**
- * Esconde o spinner de carregamento.
- */
-function hideLoadingSpinner() {
-  document.getElementById("loadingSpinner").style.display = "none";
-  document.getElementById("myTabContent").style.filter = "none";
-}
-
 
 function alterarItemlistaItens(itemVenda) {
   // Obtém a lista de produtos do localStorage
@@ -214,7 +207,7 @@ function handleDescontoChange(itemVenda, descontoInput) {
  * Configuração inicial ao carregar a página.
  */
 document.addEventListener('DOMContentLoaded', async function () {
-  showLoadingSpinner();
+  toggleLoadingSpinner(true);
 
   const clienteId = localStorage.getItem('clienteId')|| 0;
   const vendedorId = localStorage.getItem('vendedorId') || 0;
@@ -253,5 +246,5 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   });
 
-  hideLoadingSpinner();
+  toggleLoadingSpinner(false);
 });
