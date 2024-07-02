@@ -55,39 +55,24 @@ function alterarItemlistaItens(itemVenda) {
 
 
 /**
- * Obtém o nome do cliente pelo ID.
- * @param {number} clienteId - O ID do cliente.
- * @returns {Promise<string>} - Promise que resolve com o nome do cliente ou rejeita com erro.
+ * Função assíncrona para buscar dados de uma URL fornecida.
+ *
+ * @param {string} url - A URL da qual buscar os dados.
+ * @returns {Promise<Object|null>} Uma promessa que resolve para os dados em formato JSON 
+ *                                  se a requisição for bem-sucedida, ou null se houver um erro.
  */
-function obterNomeCliente(clienteId) {
-  return new Promise((resolve, reject) => {
-    requestAPI(`/api/obter_nome_cliente/?cliente_id=${clienteId}`, function (response) {
-      if (response.nome_cliente) {
-        resolve(response.nome_cliente);
-      } else {
-        console.error("Erro ao obter nome do cliente:", response.error);
-        reject(response.error);
-      }
-    });
-  });
-}
-
-/**
- * Obtém o nome do vendedor pelo ID.
- * @param {number} vendedorId - O ID do vendedor.
- * @returns {Promise<string>} - Promise que resolve com o nome do vendedor ou rejeita com erro.
- */
-function obterNomeVendedor(vendedorId) {
-  return new Promise((resolve, reject) => {
-    requestAPI(`/api/obter_nome_vendedor/?vendedor_id=${vendedorId}`, function (response) {
-      if (response.nome_vendedor) {
-        resolve(response.nome_vendedor);
-      } else {
-        console.error("Erro ao obter nome do vendedor:", response.error);
-        reject(response.error);
-      }
-    });
-  });
+async function fetchData(url) {
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) {
+      throw new Error(`Erro HTTP: ${resp.status}`);
+    }
+    const jsonData = await resp.json();
+    return jsonData;
+  } catch (error) {
+    console.error("Erro no request: ", error);
+    return null;
+  }
 }
 
 /**
@@ -304,21 +289,13 @@ document.addEventListener('DOMContentLoaded', async function () {
  
 
   if (clienteId) {
-    try {
-      const nomeCliente = await obterNomeCliente(clienteId);
-      document.getElementById('clientesInput').value = nomeCliente;
-    } catch (error) {
-      console.error("Erro ao obter nome do cliente:", error);
-    }
+    const dadosCliente = await fetchData(`/api/obter_nome_cliente/?cliente_id=${clienteId}`);
+    document.getElementById("clientesInput").value = dadosCliente.nome_cliente;
   }
 
   if (vendedorId) {
-    try {
-      const nomeVendedor = await obterNomeVendedor(vendedorId);
-      document.getElementById('vendedoresInput').value = nomeVendedor;
-    } catch (error) {
-      console.error("Erro ao obter nome do vendedor:", error);
-    }
+    const dadosVendedor = await fetchData(`/api/obter_nome_vendedor/?vendedor_id=${vendedorId}`);
+    document.getElementById("vendedoresInput").value = dadosVendedor.nome_vendedor;
   }
 
   for (let i = 0; i < listaItens.length; i++) {
