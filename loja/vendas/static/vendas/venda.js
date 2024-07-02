@@ -1,24 +1,4 @@
 let produtosAdicionados = {};
-let pendingRequests = 0;
-
-/**
- * Incrementa a quantidade de requisições pendentes e mostra o spinner de carregamento.
- */
-function incrementPendingRequests() {
-  pendingRequests++;
-  showLoadingSpinner();
-}
-
-/**
- * Decrementa a quantidade de requisições pendentes.
- * Esconde o spinner de carregamento se não houver mais requisições pendentes.
- */
-function decrementPendingRequests() {
-  pendingRequests--;
-  if (pendingRequests === 0) {
-    hideLoadingSpinner();
-  }
-}
 
 /**
  * Mostra o spinner de carregamento.
@@ -42,7 +22,6 @@ function hideLoadingSpinner() {
  * @param {function} callback - Função callback chamada com a resposta.
  */
 function requestAPI(url, callback) {
-  incrementPendingRequests();
   let xhr = new XMLHttpRequest();
   xhr.open("GET", url, true);
   xhr.onload = function () {
@@ -51,11 +30,9 @@ function requestAPI(url, callback) {
     } else {
       console.error("Erro na requisição. Status:", xhr.status);
     }
-    decrementPendingRequests();
   };
   xhr.onerror = function () {
     console.error("Erro na requisição.");
-    decrementPendingRequests();
   };
   xhr.send();
 }
@@ -321,6 +298,8 @@ function handleDescontoChange(itemVenda, descontoInput) {
  * Configuração inicial ao carregar a página.
  */
 document.addEventListener('DOMContentLoaded', async function () {
+  showLoadingSpinner();
+
   const clienteId = localStorage.getItem('clienteId')|| 0;
   const vendedorId = localStorage.getItem('vendedorId') || 0;
   const listaItens = JSON.parse(localStorage.getItem('listaItens')) || [];
@@ -367,4 +346,6 @@ document.addEventListener('DOMContentLoaded', async function () {
       location.reload();
     }
   });
+
+  hideLoadingSpinner();
 });
