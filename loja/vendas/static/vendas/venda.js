@@ -208,7 +208,7 @@ function handleDescontoChange(itemVenda, descontoInput) {
  */
 document.addEventListener('DOMContentLoaded', async function () {
   toggleLoadingSpinner(true);
-
+  let hideSpinnerTimeout;
   const clienteId = localStorage.getItem('clienteId')|| 0;
   const vendedorId = localStorage.getItem('vendedorId') || 0;
   const listaItens = JSON.parse(localStorage.getItem('listaItens')) || [];
@@ -246,5 +246,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   });
 
-  toggleLoadingSpinner(false);
+  // Limpar timeout anterior, se existir
+  if (hideSpinnerTimeout) {
+    clearTimeout(hideSpinnerTimeout);
+  }
+
+  // Esconder o spinner após 0,5 segundos
+  hideSpinnerTimeout = setTimeout(() => {
+    toggleLoadingSpinner(false);
+  }, 175);
 });
