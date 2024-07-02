@@ -2,7 +2,8 @@
   <!-- Conteúdo da aba de cálculos -->
   {% include 'vendas/partials/modal.html' with form_action_url='' title='Limpar venda' body='Deseja mesmo limpar a venda?' btn_text='Limpar' btn_class='danger' %}
   {% include 'vendas/venda/modal_enviar_produto.html' %}
-  <div id="MSGmodificaçãoDesconto" class="alert alert-success" style="display:none;">O desconto foi alterado com sucesso</div>
+  <div id="msgErroCampo" class="alert alert-danger" style="display:none;">Campos não foram preenchidos!</div>
+  <div id="msgModificaçãoDesconto" class="alert alert-success" style="display:none;">O desconto foi alterado com sucesso</div>
   <div class="container my-4 p-3 border border-info rounded">
     <div class="row mb-3">
       <div class="col-sm-6">
