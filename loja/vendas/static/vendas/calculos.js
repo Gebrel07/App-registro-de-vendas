@@ -1,10 +1,14 @@
+// Espera o DOM estar completamente carregado antes de inicializar os tooltips
 document.addEventListener('DOMContentLoaded', function() {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    });
 });
 
+/**
+ * Calcula os totais e atualiza os campos com os valores calculados.
+ */
 function calcular() {
     document.getElementById("MSGmodificaçãoDesconto").style = "display:none;";
     const listaItens = JSON.parse(localStorage.getItem("listaItens") || "[]");
@@ -14,6 +18,11 @@ function calcular() {
     handleDescontoTotalChange(listaItens, totalPreco);
 }
 
+/**
+ * Calcula os totais de preço, desconto bruto e quantidade de produtos.
+ * @param {Array} listaItens - Lista de itens de venda.
+ * @returns {Object} - Objeto contendo os totais de preço, desconto bruto e quantidade de produtos.
+ */
 function calcularTotais(listaItens) {
     let totalPreco = 0;
     let totalDescontoBruto = 0;
@@ -28,6 +37,12 @@ function calcularTotais(listaItens) {
     return { totalPreco, totalDescontoBruto, quantidadeProduto };
 }
 
+/**
+ * Atualiza os campos de totais na interface.
+ * @param {number} totalPreco - Total do preço dos itens.
+ * @param {number} totalDescontoBruto - Total do desconto bruto dos itens.
+ * @param {number} quantidadeProduto - Quantidade total de produtos.
+ */
 function atualizarCamposTotais(totalPreco, totalDescontoBruto, quantidadeProduto) {
     document.getElementById("totalVendaInput").value = (totalPreco - totalDescontoBruto).toFixed(2);
     const descontoMedioPercentual = Math.abs((((totalPreco - totalDescontoBruto) / totalPreco) * 100) - 100);
@@ -35,6 +50,11 @@ function atualizarCamposTotais(totalPreco, totalDescontoBruto, quantidadeProduto
     document.getElementById("comissaoInput").value = "3%";
 }
 
+/**
+ * Lida com a mudança no total de desconto e aplica descontos proporcionais aos itens.
+ * @param {Array} listaItens - Lista de itens de venda.
+ * @param {number} totalPreco - Total do preço dos itens.
+ */
 function handleDescontoTotalChange(listaItens, totalPreco) {
     const descontoTotalInput = document.getElementById("descontoInput");
 
@@ -52,6 +72,12 @@ function handleDescontoTotalChange(listaItens, totalPreco) {
     });
 }
 
+/**
+ * Aplica o desconto proporcional a um item de venda.
+ * @param {Object} itemVenda - Objeto contendo informações do item de venda.
+ * @param {number} totalPreco - Total do preço dos itens.
+ * @param {number} descontoTotalBruto - Total do desconto bruto dos itens.
+ */
 function aplicarDescontoProporcional(itemVenda, totalPreco, descontoTotalBruto) {
     const precoProduto = Number(document.getElementById(`preco${itemVenda.produtoId}Input`).value) || 0;
     const descontoProporcional = (totalPreco > 0) ? (precoProduto * itemVenda.quantidade / totalPreco) : 0;
@@ -68,19 +94,36 @@ function aplicarDescontoProporcional(itemVenda, totalPreco, descontoTotalBruto) 
     descontoTotalInput.value = `${descontoTotalPercentual.toFixed(2)}%`;
 }
 
+/**
+ * Calcula o total de venda de um item.
+ * @param {Object} itemVenda - Objeto contendo informações do item de venda.
+ * @returns {number} - Total de venda do item.
+ */
 function calcularTotalVenda(itemVenda) {
     const precoProduto = Number(document.getElementById(`preco${itemVenda.produtoId}Input`).value) || 0;
     return precoProduto * itemVenda.quantidade;
 }
 
+/**
+ * Calcula o total de desconto de um item.
+ * @param {Object} itemVenda - Objeto contendo informações do item de venda.
+ * @returns {number} - Total de desconto do item.
+ */
 function calcularTotalDesconto(itemVenda) {
     return Number(itemVenda.desconto);
 }
 
+/**
+ * Limpa todos os dados de venda do localStorage.
+ */
 function limparVenda() {
     localStorage.clear();
 }
 
+/**
+ * Obtém a data atual formatada como YYYY-MM-DD.
+ * @returns {string} - Data atual formatada.
+ */
 function obterDataAtual() {
     const dataAtual = new Date();
     const ano = dataAtual.getFullYear();
@@ -89,6 +132,11 @@ function obterDataAtual() {
     return `${ano}-${mes}-${dia}`;
 }
 
+/**
+ * Formata a lista de itens, alterando a chave 'produtoId' para 'produto'.
+ * @param {Array} listaItens - Lista de itens de venda.
+ * @returns {Array} - Lista de itens formatada.
+ */
 function formatarProdutoId(listaItens) {
     listaItens.forEach(item => {
         if ('produtoId' in item) {
@@ -99,6 +147,9 @@ function formatarProdutoId(listaItens) {
     return listaItens;
 }
 
+/**
+ * Envia a venda para o servidor.
+ */
 async function enviarVenda() {
     const cliente = localStorage.getItem("clienteId");
     const vendedor = localStorage.getItem("vendedorId");
