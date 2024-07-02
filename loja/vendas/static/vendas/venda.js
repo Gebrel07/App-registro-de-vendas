@@ -190,14 +190,14 @@ function inserirNovoProduto(itemVenda) {
       </td>
       <td class="col-6">
         <div class="input-group">
-          <input type="text" class="form-control form-control-sm" id="produto${produtoId}Input" placeholder="Nome do produto">
+          <input type="text" class="form-control form-control-sm" id="produto${produtoId}Input" placeholder="Nome do produto" readonly>
         </div>
       </td>
       <td>
         <input type="text" class="form-control form-control-sm" id="preco${produtoId}Input" placeholder="Unitário" readonly>
       </td>
       <td>
-        <input type="number" class="form-control form-control-sm" id="desconto${produtoId}Input" placeholder="Desconto">
+        <input type="number" class="form-control form-control-sm" id="desconto${produtoId}Input" placeholder="Desconto" readonly>
       </td>
       <td>
         <input type="text" class="form-control form-control-sm" id="total${produtoId}Input" placeholder="Total" readonly>
