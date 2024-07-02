@@ -16,7 +16,7 @@ document.getElementById('confirmSendButton').addEventListener('click', function 
  * Calcula os totais e atualiza os campos com os valores calculados.
  */
 function calcular() {
-    document.getElementById("MSGmodificaçãoDesconto").style = "display:none;";
+    document.getElementById("msgModificaçãoDesconto").style = "display:none;";
     const listaItens = JSON.parse(localStorage.getItem("listaItens") || "[]");
 
     const { totalPreco, totalDescontoBruto, quantidadeProduto } = calcularTotais(listaItens);
@@ -74,7 +74,8 @@ function handleDescontoTotalChange(listaItens, totalPreco) {
         });
 
         document.getElementById("totalVendaInput").value = totalVendaComDesconto.toFixed(2);
-        document.getElementById("MSGmodificaçãoDesconto").style = "display:show;";
+        document.getElementById("msgModificaçãoDesconto").style = "display:show;";
+         
     });
 }
 
@@ -162,9 +163,10 @@ async function enviarVenda() {
     const listaItens = localStorage.getItem('listaItens');
 
     if (!cliente || !vendedor || !listaItens) {
-        console.error('Dados essenciais estão faltando');
-        return;
+        document.getElementById("msgErroCampo").style = "display: show;";
+        document.getElementById("closeModalSend").click()
     }
+    
 
     const dataHora = obterDataAtual();
     const tipoPagamento = document.getElementById("parcelasSelect").value;
