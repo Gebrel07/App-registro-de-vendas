@@ -58,7 +58,11 @@ function adicionarProduto(itemVenda) {
   fetchData(`/api/produtos/${idProduto}`).then((produto) => {
     document.getElementById(`produto${idProduto}Input`).value = produto.nome;
     document.getElementById(`preco${idProduto}Input`).value = produto.preco;
+    itemVenda.preco_unitario_venda = produto.preco;
+    alterarItemlistaItens(itemVenda);
   });
+ 
+
   inserirNovoProduto(itemVenda);
   configurarEventosProduto(itemVenda);
 }
@@ -110,6 +114,8 @@ function configurarEventosProduto(itemVenda) {
   let produtoId = itemVenda.produtoId;
   let quantidadeInput = document.getElementById(`quantidade${produtoId}Input`);
   let descontoInput = document.getElementById(`desconto${produtoId}Input`);
+
+
 
   if (quantidadeInput) {
     quantidadeInput.value = itemVenda.quantidade;

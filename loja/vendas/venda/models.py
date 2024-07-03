@@ -42,11 +42,16 @@ class ItemVenda(models.Model):
         Venda, related_name="itens", on_delete=models.CASCADE, null=False
     )
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, null=False)
+    preco_unitario_venda = models.DecimalField(max_digits=7, decimal_places=2, null=False, default = 0.00)
     quantidade = models.PositiveIntegerField(null=False, default=1)
     desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
     def __str__(self) -> str:
-        return f"id: {self.id}, produto_id: {self.produto.id}, quantidade: {self.quantidade}"
+        return (f"id: {self.id}, "
+                f"produto_id: {self.produto.id}, "
+                f"quantidade: {self.quantidade}, "
+                f"valor_unitario_venda: {self.preco_unitario_venda}")
+
 
     def total_item(self):
         return self.quantidade * self.produto.preco * (1 - self.desconto / 100)
