@@ -33,6 +33,9 @@ class Venda(models.Model):
     def total_comissao(self):
         return self.total_venda() * (self.comissao / 100)
 
+    def get_tipo_pgto_str(self):
+        return self.TIPOS_PGTO.get(self.tipo_pgto, "Unknown")
+
 
 # NOTE: se o preço de um produto for atualizado, alterará o total
 # de todas as suas vendas anteriores.

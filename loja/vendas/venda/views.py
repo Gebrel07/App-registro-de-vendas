@@ -4,11 +4,20 @@ from django.shortcuts import render
 from ..cliente.models import Cliente
 from ..produto.models import Produto
 from ..vendedor.models import Vendedor
-from .models import Venda  # noqa
+from .models import Venda
 
 
 def nova_venda(request: HttpRequest) -> render:
     return render(request, "vendas/venda/nova_venda.html")
+
+
+def listar_vendas(request: HttpRequest):
+    vendas = Venda.objects.all().order_by("-data_venda")
+    return render(
+        request=request,
+        template_name="vendas/venda/listar_vendas.html",
+        context={"vendas": vendas},
+    )
 
 
 def selecionar_cliente(request: HttpRequest) -> render:
