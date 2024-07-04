@@ -7,8 +7,8 @@ from ..vendedor.models import Vendedor
 from .models import Venda  # noqa
 
 
-def page_vendas(request: HttpRequest) -> render:
-    return render(request, "vendas/venda/vendas.html")
+def nova_venda(request: HttpRequest) -> render:
+    return render(request, "vendas/venda/nova_venda.html")
 
 
 def selecionar_cliente(request: HttpRequest) -> render:

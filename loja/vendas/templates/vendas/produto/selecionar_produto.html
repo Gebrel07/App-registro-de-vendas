@@ -77,7 +77,7 @@
         if (item) {
             item.quantidade++;
             alterarItemlistaItens(item);
-            window.location.href = '{% url 'page_vendas' %}';
+            window.location.href = '{% url 'nova_venda' %}';
         } else {
             const itemVenda = {
                 produtoId: id,
@@ -86,7 +86,7 @@
                 desconto: 0
             };
             alterarItemlistaItens(itemVenda);
-            window.location.href = '{% url 'page_vendas' %}';
+            window.location.href = '{% url 'nova_venda' %}';
         }
     }
 </script>

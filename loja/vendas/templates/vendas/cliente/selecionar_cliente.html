@@ -30,7 +30,7 @@
 <script>
     function selecionarCliente(id) {
         localStorage.setItem('clienteId', id);
-        window.location.href = '{% url 'page_vendas' %}';
+        window.location.href = '{% url 'nova_venda' %}';
     }
 </script>
 {% endblock %}

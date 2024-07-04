@@ -28,7 +28,7 @@
 <script>
     function selecionarVendedor(id) {
         localStorage.setItem('vendedorId', id);
-        window.location.href = '{% url 'page_vendas' %}';
+        window.location.href = '{% url 'nova_venda' %}';
     }
 </script>
 {% endblock %}
