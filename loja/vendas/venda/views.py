@@ -11,6 +11,12 @@ def nova_venda(request: HttpRequest) -> render:
     return render(request, "vendas/venda/nova_venda.html")
 
 
+def nova_venda_v2(request: HttpRequest):
+    return render(
+        request=request, template_name="vendas/venda/nova_venda_v2.html"
+    )
+
+
 def listar_vendas(request: HttpRequest):
     vendas = Venda.objects.all().order_by("-data_venda")
     return render(
