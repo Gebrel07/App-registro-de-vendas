@@ -18,7 +18,7 @@ def nova_venda_v2(request: HttpRequest):
 
 
 def listar_vendas(request: HttpRequest):
-    vendas = Venda.objects.all().order_by("-data_venda")
+    vendas = Venda.objects.all().order_by("-data_venda", "-pk")
     return render(
         request=request,
         template_name="vendas/venda/listar_vendas.html",
