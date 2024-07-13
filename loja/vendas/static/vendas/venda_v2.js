@@ -2,6 +2,10 @@ import { createApp, reactive } from "https://unpkg.com/petite-vue?module";
 
 // escopo global do app venda
 const store = reactive({
+  idVendedor: "",
+  idCliente: "",
+  percentComissao: 0,
+  parcelasPgto: 0,
   itens: [],
   contadorItens: 0,
   adicionarItem() {
@@ -71,6 +75,4 @@ createApp({
     { id: 1, nome: "Cliente 1" },
     { id: 2, nome: "Cliente 2" },
   ],
-  idVendedorSelecionado: null,
-  idClienteSelecionado: null,
 }).mount("#vue-app");
