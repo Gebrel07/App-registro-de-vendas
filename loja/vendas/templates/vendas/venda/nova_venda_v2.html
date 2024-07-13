@@ -2,7 +2,7 @@
 
 {% block head %}
 {% load static %}
-<script type="module" src="{% static 'vendas/venda_v2.js' %}"></script>
+<script type="module" src="{% static 'vendas/venda.js' %}"></script>
 {% endblock head %}
 
 {% block content %}
@@ -35,7 +35,7 @@
 </template>
 
 <div id="vue-app" v-scope>
-    <form action="" method="post" class="border border-gray rounded p-4" @submit.prevent="console.debug(store)">
+    <form action="" method="post" class="border border-gray rounded p-4" @submit.prevent="handlePost">
         {% csrf_token %}
         <div class="d-flex justify-content-between mb-3">
             <div class="w-49">
