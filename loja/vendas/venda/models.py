@@ -6,10 +6,6 @@ from ..vendedor.models import Vendedor
 
 
 class Venda(models.Model):
-    PGTO_AVISTA = 1
-    PGTO_PARCELADO = 2
-    TIPOS_PGTO = {PGTO_AVISTA: "A vista", PGTO_PARCELADO: "Parcelado"}
-
     vendedor = models.ForeignKey(
         to=Vendedor, on_delete=models.SET_NULL, null=True
     )
@@ -17,9 +13,6 @@ class Venda(models.Model):
         to=Cliente, on_delete=models.SET_NULL, null=True
     )
     data_venda = models.DateField(null=False, auto_now_add=True)
-    tipo_pgto = models.IntegerField(
-        null=False, choices=TIPOS_PGTO, default=PGTO_AVISTA
-    )
     parcelas_pgto = models.PositiveIntegerField(null=False, default=0)
     comissao = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
@@ -33,7 +26,10 @@ class Venda(models.Model):
         return self.total_venda() * (self.comissao / 100)
 
     def get_tipo_pgto_str(self):
-        return self.TIPOS_PGTO.get(self.tipo_pgto, "Unknown")
+        if self.parcelas_pgto == 0:
+            return "À vista"
+        else:
+            return "Parcelado"
 
 
 class ItemVenda(models.Model):
