@@ -5,7 +5,6 @@ from ..produto.models import Produto
 from ..vendedor.models import Vendedor
 
 
-# TODO: atualizar diagrama de tabelas
 class Venda(models.Model):
     PGTO_AVISTA = 1
     PGTO_PARCELADO = 2
@@ -37,24 +36,24 @@ class Venda(models.Model):
         return self.TIPOS_PGTO.get(self.tipo_pgto, "Unknown")
 
 
-# NOTE: se o preço de um produto for atualizado, alterará o total
-# de todas as suas vendas anteriores.
-# Necessário registrar preco do produto nesta tabela no momento da venda para evitar isso?
 class ItemVenda(models.Model):
     venda = models.ForeignKey(
         Venda, related_name="itens", on_delete=models.CASCADE, null=False
     )
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, null=False)
-    preco_unitario_venda = models.DecimalField(max_digits=7, decimal_places=2, null=False, default = 0.00)
+    preco_unitario_venda = models.DecimalField(
+        max_digits=7, decimal_places=2, null=False, default=0.00
+    )
     quantidade = models.PositiveIntegerField(null=False, default=1)
     desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
     def __str__(self) -> str:
-        return (f"id: {self.id}, "
-                f"produto_id: {self.produto.id}, "
-                f"quantidade: {self.quantidade}, "
-                f"valor_unitario_venda: {self.preco_unitario_venda}")
-
+        return (
+            f"id: {self.id}, "
+            f"produto_id: {self.produto.id}, "
+            f"quantidade: {self.quantidade}, "
+            f"valor_unitario_venda: {self.preco_unitario_venda}"
+        )
 
     def total_item(self):
         return self.quantidade * self.produto.preco * (1 - self.desconto / 100)
