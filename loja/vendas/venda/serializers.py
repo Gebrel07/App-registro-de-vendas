@@ -14,7 +14,7 @@ class VendaWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Venda
-        fields = "__all__"
+        exclude = ["data_venda"]
 
     def create(self, validated_data):
         items_data = validated_data.pop("itens")

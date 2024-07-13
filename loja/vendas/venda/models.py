@@ -16,7 +16,7 @@ class Venda(models.Model):
     cliente = models.ForeignKey(
         to=Cliente, on_delete=models.SET_NULL, null=True
     )
-    data_venda = models.DateField(null=False)
+    data_venda = models.DateField(null=False, auto_now_add=True)
     tipo_pgto = models.IntegerField(
         null=False, choices=TIPOS_PGTO, default=PGTO_AVISTA
     )
