@@ -59,6 +59,7 @@ function Item({ produtos, idItem }) {
   };
 }
 
+// TODO: criar endpoints de api para listagem das opcoes
 createApp({
   store,
   Item,
@@ -67,12 +68,37 @@ createApp({
     { id: 1, nome: "Vendedor 1" },
     { id: 2, nome: "Vendedor 2" },
   ],
-  produtos: [
-    { id: 1, preco: 10.0, nome: "Produto 1" },
-    { id: 2, preco: 20.0, nome: "Produto 2" },
-  ],
   clientes: [
     { id: 1, nome: "Cliente 1" },
     { id: 2, nome: "Cliente 2" },
   ],
+  produtos: [
+    { id: 1, preco: 10.0, nome: "Produto 1" },
+    { id: 2, preco: 20.0, nome: "Produto 2" },
+  ],
+  handlePost() {
+    const today = new Date();
+
+    const data = {
+      vendedor: store.vendedor,
+      comissao: store.comissao,
+      cliente: store.cliente,
+      tipo_pgto: store.parcelasPgto === 0 ? 1 : 2,
+      parcelas_pgto: store.parcelasPgto,
+      data_venda: `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`,
+      itens: [],
+    };
+
+    for (const item of store.itens) {
+      data.itens.push({ produto: item.idProduto, quantidade: item.qtd, desconto: item.desconto });
+    }
+
+    fetch("/api/vendas/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((resp) => console.log(resp))
+      .catch((error) => console.error(error));
+  },
 }).mount("#vue-app");
