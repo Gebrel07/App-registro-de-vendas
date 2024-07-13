@@ -14,10 +14,6 @@ const store = reactive({
       return item.idItem !== idItem;
     });
   },
-  atualizarItem(idItem, dados) {
-    const index = this.itens.findIndex((item) => item.idItem === idItem);
-    this.itens[index] = { ...this.itens[index], ...dados };
-  },
 });
 
 function Item({ produtos, idItem }) {
