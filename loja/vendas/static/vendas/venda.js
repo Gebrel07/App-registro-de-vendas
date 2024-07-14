@@ -1,4 +1,4 @@
-import { createApp, reactive } from "https://unpkg.com/petite-vue?module";
+import { createApp, reactive } from "./petite-vue-0.4.1/petite-vue.es.js";
 
 // escopo global do app venda
 const store = reactive({
