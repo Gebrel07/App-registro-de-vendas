@@ -2,14 +2,11 @@ import { createApp, reactive } from "https://unpkg.com/petite-vue?module";
 
 // escopo global do app venda
 const store = reactive({
-  idVendedor: "",
-  idCliente: "",
-  percentComissao: 0,
-  parcelasPgto: 0,
   itens: [],
   contadorItens: 0,
   adicionarItem() {
     // usar contador para gerar id unica para cada item que não seja a id do produto
+    // VueJs necessita de idItem unicos para sincronização dos itens em memoria
     this.contadorItens++;
     this.itens.push({ idItem: this.contadorItens, idProduto: "", qtd: 1, desconto: 0 });
   },
@@ -19,10 +16,6 @@ const store = reactive({
     });
   },
   resetStore() {
-    this.idVendedor = "";
-    this.idCliente = "";
-    this.percentComissao = 0;
-    this.parcelasPgto = 0;
     this.itens = [];
     this.contadorItens = 0;
   },
@@ -72,6 +65,8 @@ createApp({
   Item,
   $delimiters: ["[[", "]]"],
   msg: { text: "", class: "" },
+  vendedor: { id: "", percentComissao: 0 },
+  cliente: { id: "", numParcelas: 0 },
   vendedores: [],
   clientes: [],
   produtos: [],
@@ -92,15 +87,22 @@ createApp({
     this.clientes = await this.fetchData("/api/clientes/");
     this.produtos = await this.fetchData("/api/produtos/");
   },
+  resetMsg() {
+    this.msg = { text: "", class: "" };
+  },
+  resetAppData() {
+    this.vendedor = { id: "", percentComissao: 0 };
+    this.cliente = { id: "", numParcelas: 0 };
+    store.resetStore();
+  },
   async handlePost() {
-    // resetar msg
-    this.msg = {};
+    this.resetMsg();
 
     const data = {
-      vendedor: store.idVendedor,
-      comissao: store.percentComissao,
-      cliente: store.idCliente,
-      parcelas_pgto: store.parcelasPgto,
+      vendedor: this.vendedor.id,
+      comissao: this.vendedor.percentComissao,
+      cliente: this.cliente.id,
+      parcelas_pgto: this.cliente.numParcelas,
       itens: [],
     };
 
@@ -116,7 +118,7 @@ createApp({
       });
       if (resp.ok) {
         this.msg = { text: "Venda criada com sucesso!", class: "text-success" };
-        store.resetStore();
+        this.resetAppData();
       } else if (resp.status === 400) {
         this.msg = { text: "Dados da venda inválidos", class: "text-danger" };
       } else {

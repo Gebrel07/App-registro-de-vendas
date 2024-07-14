@@ -41,7 +41,7 @@
         <div class="d-flex justify-content-between mb-3">
             <div class="w-49">
                 <label for="vendedor" class="form-label">Vendedor</label>
-                <select id="vendedor" class="form-control" v-model.number="store.idVendedor">
+                <select id="vendedor" class="form-control" v-model.number="vendedor.id">
                     <option value="">Selecione</option>
                     <option v-for="vendedor in vendedores" :value="vendedor.id">[[ vendedor.nome ]]</option>
                 </select>
@@ -49,14 +49,14 @@
 
             <div class="w-49">
                 <label for="comissao" class="form-label">Comissão Venda %</label>
-                <input type="text" id="comissao" class="form-control" v-model.number="store.percentComissao">
+                <input type="text" id="comissao" class="form-control" v-model.number="vendedor.percentComissao">
             </div>
         </div>
 
         <div class="d-flex justify-content-between mb-3">
             <div class="w-49">
                 <label for="cliente" class="form-label">Cliente</label>
-                <select id="cliente" class="form-control" v-model.number="store.idCliente">
+                <select id="cliente" class="form-control" v-model.number="cliente.id">
                     <option value="">Selecione</option>
                     <option v-for="cliente in clientes" :value="cliente.id">[[ cliente.nome ]]</option>
                 </select>
@@ -64,7 +64,7 @@
 
             <div class="w-49">
                 <label for="parcelas" class="form-label">Parcelas Pagamento</label>
-                <select id="parcelas" class="form-control" v-model.number="store.parcelasPgto">
+                <select id="parcelas" class="form-control" v-model.number="cliente.numParcelas">
                     <option value="0">À vista</option>
                     <option v-for="n in 6" :value="n">[[ n ]]x</option>
                 </select>
