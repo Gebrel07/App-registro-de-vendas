@@ -120,15 +120,15 @@ createApp({
         body: JSON.stringify(data),
       });
       if (resp.ok) {
-        this.msg = { text: "Venda criada com sucesso!", class: "text-success" };
+        this.msg = { text: "Venda criada com sucesso!", class: "alert-success" };
         this.resetAppData();
       } else if (resp.status === 400) {
-        this.msg = { text: "Dados da venda inválidos", class: "text-danger" };
+        this.msg = { text: "Dados da venda inválidos", class: "alert-danger" };
       } else {
-        this.msg = { text: "Erro ao criar venda", class: "text-danger" };
+        this.msg = { text: "Erro ao criar venda", class: "alert-danger" };
       }
     } catch (err) {
-      this.msg = { text: "Erro ao enviar venda", class: "text-danger" };
+      this.msg = { text: "Erro ao enviar venda", class: "alert-danger" };
       console.console.error(err);
     } finally {
       this.isLoading = false;

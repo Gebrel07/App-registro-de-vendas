@@ -35,7 +35,10 @@
 </template>
 
 <div id="vue-app" v-scope @vue:mounted="loadOptions">
-    <span v-if="msg.text" :class="msg.class">[[ msg.text ]]</span>
+    <div v-if="msg.text" :class="`alert alert-dismissible fade show ${msg.class}`" role="alert">
+        [[ msg.text ]]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
     <div v-if="isLoading" class="d-flex justify-content-center mt-5">
         <div class="spinner-border" role="status">
