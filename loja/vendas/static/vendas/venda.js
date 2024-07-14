@@ -77,15 +77,11 @@ createApp({
     { id: 2, preco: 20.0, nome: "Produto 2" },
   ],
   handlePost() {
-    const today = new Date();
-
     const data = {
       vendedor: store.vendedor,
       comissao: store.comissao,
       cliente: store.cliente,
-      tipo_pgto: store.parcelasPgto === 0 ? 1 : 2,
       parcelas_pgto: store.parcelasPgto,
-      data_venda: `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`,
       itens: [],
     };
 
