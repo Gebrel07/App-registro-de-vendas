@@ -18,6 +18,14 @@ const store = reactive({
       return item.idItem !== idItem;
     });
   },
+  resetStore() {
+    this.idVendedor = "";
+    this.idCliente = "";
+    this.percentComissao = 0;
+    this.parcelasPgto = 0;
+    this.itens = [];
+    this.contadorItens = 0;
+  },
 });
 
 function Item({ produtos, idItem }) {
