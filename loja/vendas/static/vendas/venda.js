@@ -67,28 +67,39 @@ function Item({ produtos, idItem }) {
   };
 }
 
-// TODO: criar endpoints de api para listagem das opcoes
 createApp({
   store,
   Item,
   $delimiters: ["[[", "]]"],
-  vendedores: [
-    { id: 1, nome: "Vendedor 1" },
-    { id: 2, nome: "Vendedor 2" },
-  ],
-  clientes: [
-    { id: 1, nome: "Cliente 1" },
-    { id: 2, nome: "Cliente 2" },
-  ],
-  produtos: [
-    { id: 1, preco: 10.0, nome: "Produto 1" },
-    { id: 2, preco: 20.0, nome: "Produto 2" },
-  ],
-  handlePost() {
+  msg: { text: "", class: "" },
+  vendedores: [],
+  clientes: [],
+  produtos: [],
+  async fetchData(url) {
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        throw new Error(resp);
+      }
+      return await resp.json();
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  },
+  async loadOptions() {
+    this.vendedores = await this.fetchData("/api/vendedores/");
+    this.clientes = await this.fetchData("/api/clientes/");
+    this.produtos = await this.fetchData("/api/produtos/");
+  },
+  async handlePost() {
+    // resetar msg
+    this.msg = {};
+
     const data = {
-      vendedor: store.vendedor,
-      comissao: store.comissao,
-      cliente: store.cliente,
+      vendedor: store.idVendedor,
+      comissao: store.percentComissao,
+      cliente: store.idCliente,
       parcelas_pgto: store.parcelasPgto,
       itens: [],
     };
@@ -97,12 +108,23 @@ createApp({
       data.itens.push({ produto: item.idProduto, quantidade: item.qtd, desconto: item.desconto });
     }
 
-    fetch("/api/vendas/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((resp) => console.log(resp))
-      .catch((error) => console.error(error));
+    try {
+      const resp = await fetch("/api/vendas/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (resp.ok) {
+        this.msg = { text: "Venda criada com sucesso!", class: "text-success" };
+        store.resetStore();
+      } else if (resp.status === 400) {
+        this.msg = { text: "Dados da venda inválidos", class: "text-danger" };
+      } else {
+        this.msg = { text: "Erro ao criar venda", class: "text-danger" };
+      }
+    } catch (err) {
+      this.msg = { text: "Erro ao enviar venda", class: "text-danger" };
+      console.console.error(err);
+    }
   },
 }).mount("#vue-app");
