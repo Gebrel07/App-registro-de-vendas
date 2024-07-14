@@ -11,16 +11,6 @@ input[type=number] {
     appearance: textfield;
 }
 
-.btn-vendas i {
-    font-size: 32px;
-    /* Tamanho do ícone */
-}
-
-.btn-vendas {
-    font-size: 18px;
-    /* Tamanho do texto */
-}
-
 .decoration-none {
     text-decoration: none;
 }
@@ -30,17 +20,6 @@ input[type=number] {
     overflow-wrap: break-word;
 }
 
-.form-control-sm {
-    font-size: 0.875rem;
-    /* Font size smaller */
-}
-
-.btn-sm {
-    font-size: 0.875rem;
-    /* Font size smaller */
-}
-
 .w-49 {
     width: 49%;
 }
-
