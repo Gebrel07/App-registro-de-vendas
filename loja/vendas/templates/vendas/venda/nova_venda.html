@@ -36,63 +36,72 @@
 
 <div id="vue-app" v-scope @vue:mounted="loadOptions">
     <span v-if="msg.text" :class="msg.class">[[ msg.text ]]</span>
-    <form action="" method="post" class="border border-gray rounded p-4" @submit.prevent="handlePost">
-        {% csrf_token %}
-        <div class="d-flex justify-content-between mb-3">
-            <div class="w-49">
-                <label for="vendedor" class="form-label">Vendedor</label>
-                <select id="vendedor" class="form-control" v-model.number="vendedor.id">
-                    <option value="">Selecione</option>
-                    <option v-for="vendedor in vendedores" :value="vendedor.id">[[ vendedor.nome ]]</option>
-                </select>
+
+    <div v-if="isLoading" class="d-flex justify-content-center mt-5">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div v-else>
+        <form method="post" @submit.prevent="handlePost" class="border border-gray rounded p-4">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between mb-3">
+                <div class="w-49">
+                    <label for="vendedor" class="form-label">Vendedor</label>
+                    <select id="vendedor" class="form-control" v-model.number="vendedor.id">
+                        <option value="">Selecione</option>
+                        <option v-for="vendedor in vendedores" :value="vendedor.id">[[ vendedor.nome ]]</option>
+                    </select>
+                </div>
+
+                <div class="w-49">
+                    <label for="comissao" class="form-label">Comissão Venda %</label>
+                    <input type="text" id="comissao" class="form-control" v-model.number="vendedor.percentComissao">
+                </div>
             </div>
 
-            <div class="w-49">
-                <label for="comissao" class="form-label">Comissão Venda %</label>
-                <input type="text" id="comissao" class="form-control" v-model.number="vendedor.percentComissao">
+            <div class="d-flex justify-content-between mb-3">
+                <div class="w-49">
+                    <label for="cliente" class="form-label">Cliente</label>
+                    <select id="cliente" class="form-control" v-model.number="cliente.id">
+                        <option value="">Selecione</option>
+                        <option v-for="cliente in clientes" :value="cliente.id">[[ cliente.nome ]]</option>
+                    </select>
+                </div>
+
+                <div class="w-49">
+                    <label for="parcelas" class="form-label">Parcelas Pagamento</label>
+                    <select id="parcelas" class="form-control" v-model.number="cliente.numParcelas">
+                        <option value="0">À vista</option>
+                        <option v-for="n in 6" :value="n">[[ n ]]x</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="d-flex justify-content-between mb-3">
-            <div class="w-49">
-                <label for="cliente" class="form-label">Cliente</label>
-                <select id="cliente" class="form-control" v-model.number="cliente.id">
-                    <option value="">Selecione</option>
-                    <option v-for="cliente in clientes" :value="cliente.id">[[ cliente.nome ]]</option>
-                </select>
+            <table class="table table-bordered">
+                <thead>
+                    <th style="width: 45%;">Produto</th>
+                    <th>Preço Un.</th>
+                    <th>Qtd</th>
+                    <th>Desconto %</th>
+                    <th>Total</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr v-for="item in store.itens" :key="item.idItem"
+                        v-scope="Item({produtos: produtos, idItem: item.idItem})"></tr>
+                </tbody>
+            </table>
+
+            <div class="text-end mb-3">
+                <button type="button" class="btn btn-success" @click="store.adicionarItem">Adicionar</button>
             </div>
 
-            <div class="w-49">
-                <label for="parcelas" class="form-label">Parcelas Pagamento</label>
-                <select id="parcelas" class="form-control" v-model.number="cliente.numParcelas">
-                    <option value="0">À vista</option>
-                    <option v-for="n in 6" :value="n">[[ n ]]x</option>
-                </select>
+            <div>
+                <button type="submit" class="btn btn-primary">Salvar</button>
             </div>
-        </div>
-
-        <table class="table table-bordered">
-            <thead>
-                <th style="width: 45%;">Produto</th>
-                <th>Preço Un.</th>
-                <th>Qtd</th>
-                <th>Desconto %</th>
-                <th>Total</th>
-                <th></th>
-            </thead>
-            <tbody>
-                <tr v-for="item in store.itens" :key="item.idItem"
-                    v-scope="Item({produtos: produtos, idItem: item.idItem})"></tr>
-            </tbody>
-        </table>
-
-        <div class="text-end mb-3">
-            <button type="button" class="btn btn-success" @click="store.adicionarItem">Adicionar</button>
-        </div>
-
-        <div>
-            <button type="submit" class="btn btn-primary">Salvar</button>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 {% endblock content %}

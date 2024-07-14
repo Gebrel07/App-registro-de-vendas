@@ -64,6 +64,7 @@ createApp({
   store,
   Item,
   $delimiters: ["[[", "]]"],
+  isLoading: true,
   msg: { text: "", class: "" },
   vendedor: { id: "", percentComissao: 0 },
   cliente: { id: "", numParcelas: 0 },
@@ -86,6 +87,7 @@ createApp({
     this.vendedores = await this.fetchData("/api/vendedores/");
     this.clientes = await this.fetchData("/api/clientes/");
     this.produtos = await this.fetchData("/api/produtos/");
+    this.isLoading = false;
   },
   resetMsg() {
     this.msg = { text: "", class: "" };
@@ -96,6 +98,7 @@ createApp({
     store.resetStore();
   },
   async handlePost() {
+    this.isLoading = true;
     this.resetMsg();
 
     const data = {
@@ -127,6 +130,8 @@ createApp({
     } catch (err) {
       this.msg = { text: "Erro ao enviar venda", class: "text-danger" };
       console.console.error(err);
+    } finally {
+      this.isLoading = false;
     }
   },
 }).mount("#vue-app");
